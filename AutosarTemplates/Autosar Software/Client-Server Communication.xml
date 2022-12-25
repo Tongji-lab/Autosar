@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.</declaration>
+	<template>
+		<name x="5" y="5">Scenario(4)-Client</name>
+		<declaration>// Place local declarations here.
+clock t;
+bool {invoked};</declaration>
+		<location id="id0" x="-246" y="-17">
+			<name x="-255" y="-51">{initial}</name>
+		</location>
+		<location id="id1" x="-102" y="-17">
+			<name x="-119" y="-51">{running}</name>
+			<label kind="invariant" x="-119" y="-8">t&lt;={wcet}</label>
+		</location>
+		<location id="id2" x="17" y="127">
+			<name x="0" y="93">{waiting}</name>
+			<label kind="invariant" x="34" y="110">t'==0</label>
+		</location>
+		<location id="id3" x="153" y="-17">
+			<name x="136" y="-51">{preempted}</name>
+			<label kind="invariant" x="170" y="-25">t'==0</label>
+		</location>
+		<location id="id4" x="-102" y="127">
+			<name x="-112" y="93">{call}</name>
+			<committed/>
+		</location>
+		<location id="id5" x="153" y="127">
+			<name x="143" y="93">{aftercall}</name>
+			<committed/>
+		</location>
+		<location id="id6" x="-178" y="-51">
+			<name x="-188" y="-85">{read}</name>
+			<committed/>
+		</location>
+		<location id="id7" x="-178" y="17">
+			<name x="-188" y="-17">{write}</name>
+			<committed/>
+		</location>
+		<location id="id8" x="-178" y="-127">
+			<name x="-195" y="-161">{preempted}</name>
+			<label kind="invariant" x="-161" y="-135">t'==0</label>
+		</location>
+		<location id="id9" x="-178" y="136">
+			<name x="-221" y="144">{preempted}</name>
+			<label kind="invariant" x="-161" y="128">t'==0</label>
+		</location>
+		<location id="id10" x="-102" y="255">
+			<name x="-119" y="221">{preempted}</name>
+			<label kind="invariant" x="-85" y="247">t'==0</label>
+		</location>
+		<location id="id11" x="17" y="255">
+			<name x="0" y="221">{preempted}</name>
+			<label kind="invariant" x="34" y="247">t'==0</label>
+		</location>
+		<location id="id12" x="153" y="255">
+			<name x="136" y="221">{preempted}</name>
+			<label kind="invariant" x="170" y="247">t'==0</label>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-212" y="93">Run[{tid}][{rid}]?</label>
+			<nail x="-136" y="76"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-314" y="42">Stop[{tid}][{rid}]?</label>
+			<nail x="-221" y="76"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-153" y="-119">Run[{tid}][{rid}]?</label>
+			<nail x="-144" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-306" y="0">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id1"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="76" y="42">{GoOn}[{tid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="25" y="136">{ResultBack}[{cid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-110" y="136">{InvoketoRTE}[{cid}]!</label>
+			<label kind="assignment" x="-110" y="153">{havewait}[cid]=true</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-170" y="34">!{invoked}</label>
+			<label kind="synchronisation" x="-195" y="51">{Invoke}[{cid}]!</label>
+			<label kind="assignment" x="-195" y="68">{invoked}=true</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-25" y="17">Run[{tid}][{rid}]?</label>
+			<nail x="17" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-25" y="-68">Stop[{tid}][{rid}]?</label>
+			<nail x="17" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-153" y="8">t&gt;={bcet}&amp;&amp;{invoked}</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-365" y="-102">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-365" y="-85">{ShouldEx}[{tid}][{rid}]=false,
+t=0,{invoked}=false</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-280" y="-119">Stop[{tid}][{rid}]?</label>
+			<nail x="-212" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-238" y="195">Stop[{tid}][{rid}]?</label>
+			<nail x="-136" y="195"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-93" y="178">Run[{tid}][{rid}]?</label>
+			<nail x="-68" y="195"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-51" y="195">Stop[{tid}][{rid}]?</label>
+			<nail x="-17" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="51" y="179">Run[{tid}][{rid}]?</label>
+			<nail x="51" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="68" y="196">Stop[{tid}][{rid}]?</label>
+			<nail x="110" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="170" y="170">Run[{tid}][{rid}]?</label>
+			<nail x="195" y="187"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(4)-Server</name>
+		<declaration>clock t;</declaration>
+		<location id="id13" x="187" y="76">
+			<name x="170" y="42">{running}</name>
+			<label kind="invariant" x="170" y="85">t&lt;={wcet}</label>
+		</location>
+		<location id="id14" x="34" y="76">
+			<name x="8" y="42">{initial}</name>
+		</location>
+		<location id="id15" x="348" y="76">
+			<name x="331" y="42">{preempted}</name>
+			<label kind="invariant" x="338" y="93">t'==0</label>
+		</location>
+		<location id="id16" x="110" y="17">
+			<name x="76" y="-17">{beforerunning}</name>
+			<committed/>
+		</location>
+		<location id="id17" x="110" y="136">
+			<name x="68" y="102">{afterrunning}</name>
+			<committed/>
+		</location>
+		<location id="id18" x="110" y="-59">
+			<name x="93" y="-93">{preempted}</name>
+			<label kind="invariant" x="100" y="-42">t'==0</label>
+		</location>
+		<location id="id19" x="110" y="212">
+			<name x="85" y="221">{preempted}</name>
+			<label kind="invariant" x="102" y="238">t'==0</label>
+		</location>
+		<init ref="id14"/>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="144" y="170">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-8" y="170">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="144" y="-34">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-8" y="-34">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id17"/>
+			<label kind="guard" x="153" y="102">t&gt;={bcet}</label>
+			<label kind="synchronisation" x="153" y="119">{Result}[{ServerQueueHead}()]!</label>
+			<label kind="assignment" x="153" y="136">{server}_e={ServerQueueHead}(),{ServerQueueRemove}()</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="128" y="29">{StartServer}!</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="229" y="76">Run[{tid}][{rid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="226" y="12">Stop[{tid}][{rid}]?</label>
+			<nail x="263" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-42" y="93">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-17" y="8">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-238" y="25">{ShouldEx}[{tid}][{rid}]={ShouldEx}[{tid}][{rid}]-1,t=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(5)-Client</name>
+		<declaration>clock t;
+bool {invoked};</declaration>
+		<location id="id20" x="-246" y="-17">
+			<name x="-263" y="-51">{initial}</name>
+		</location>
+		<location id="id21" x="-102" y="-17">
+			<name x="-119" y="-51">{running}</name>
+			<label kind="invariant" x="-119" y="-8">t&lt;={wcet}</label>
+		</location>
+		<location id="id22" x="17" y="136">
+			<name x="0" y="102">{waiting}</name>
+			<label kind="invariant" x="34" y="119">t'==0</label>
+		</location>
+		<location id="id23" x="153" y="-17">
+			<name x="136" y="-51">{preempted}</name>
+			<label kind="invariant" x="170" y="-25">t'==0</label>
+		</location>
+		<location id="id24" x="-102" y="136">
+			<name x="-112" y="102">{call}</name>
+			<committed/>
+		</location>
+		<location id="id25" x="153" y="136">
+			<name x="143" y="102">{aftercall}</name>
+			<committed/>
+		</location>
+		<location id="id26" x="-178" y="-68">
+			<name x="-195" y="-102">{read}</name>
+			<committed/>
+		</location>
+		<location id="id27" x="-178" y="-144">
+			<name x="-195" y="-178">{preempted}</name>
+			<label kind="invariant" x="-161" y="-152">t'==0</label>
+		</location>
+		<location id="id28" x="-178" y="34">
+			<name x="-195" y="0">{write}</name>
+			<committed/>
+		</location>
+		<location id="id29" x="-178" y="162">
+			<name x="-204" y="170">{preempted}</name>
+			<label kind="invariant" x="-161" y="154">t'==0</label>
+		</location>
+		<location id="id30" x="-102" y="272">
+			<name x="-119" y="238">{preempted}</name>
+			<label kind="invariant" x="-85" y="264">t'==0</label>
+		</location>
+		<location id="id31" x="17" y="272">
+			<name x="0" y="238">{preempted}</name>
+			<label kind="invariant" x="34" y="264">t'==0</label>
+		</location>
+		<location id="id32" x="153" y="272">
+			<name x="136" y="238">{preempted}</name>
+			<label kind="invariant" x="170" y="264">t'==0</label>
+		</location>
+		<init ref="id20"/>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="174" y="225">Run[{tid}][{rid}]?</label>
+			<nail x="195" y="213"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id32"/>
+			<label kind="synchronisation" x="68" y="204">Stop[{tid}][{rid}]?</label>
+			<nail x="110" y="213"/>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="38" y="225">Run[{tid}][{rid}]?</label>
+			<nail x="59" y="213"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id31"/>
+			<label kind="synchronisation" x="-59" y="213">Stop[{tid}][{rid}]?</label>
+			<nail x="-25" y="213"/>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id28"/>
+			<label kind="synchronisation" x="-195" y="102">Run[{tid}][{rid}]?</label>
+			<nail x="-144" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-153" y="8">t&gt;={bcet}&amp;&amp;{invoked}</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id21"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-153" y="-136">Run[{tid}][{rid}]?</label>
+			<nail x="-144" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="42" y="187">{Timeout}[{cid}]?</label>
+			<nail x="17" y="187"/>
+			<nail x="153" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="76" y="42">{GoOn}[{tid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="25" y="145">{ResultBack}[{cid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="-119" y="145">{InvoketoRTE}[{cid}]!</label>
+			<label kind="assignment" x="-119" y="162">{havewait}[cid]=true</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-170" y="51">!{invoked}</label>
+			<label kind="synchronisation" x="-195" y="68">{Invoke}[{cid}]!</label>
+			<label kind="assignment" x="-195" y="85">{invoked}=true</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-25" y="17">Run[{tid}][{rid}]?</label>
+			<nail x="17" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-25" y="-68">Stop[{tid}][{rid}]?</label>
+			<nail x="17" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="-306" y="17">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-365" y="-102">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-365" y="-85">{ShouldEx}[{tid}][{rid}]=false,
+t=0,{invoked}=false</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="-280" y="-136">Stop[{tid}][{rid}]?</label>
+			<nail x="-212" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="-297" y="59">Stop[{tid}][{rid}]?</label>
+			<nail x="-212" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="-238" y="204">Stop[{tid}][{rid}]?</label>
+			<nail x="-136" y="213"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="-93" y="196">Run[{tid}][{rid}]?</label>
+			<nail x="-68" y="213"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(5)-Server</name>
+		<declaration>clock t;</declaration>
+		<location id="id33" x="187" y="76">
+			<name x="170" y="42">{running}</name>
+			<label kind="invariant" x="170" y="85">t&lt;={wcet}</label>
+		</location>
+		<location id="id34" x="34" y="76">
+			<name x="8" y="42">{initial}</name>
+		</location>
+		<location id="id35" x="348" y="76">
+			<name x="331" y="42">{preempted}</name>
+			<label kind="invariant" x="338" y="93">t'==0</label>
+		</location>
+		<location id="id36" x="110" y="17">
+			<name x="76" y="-17">{beforerunning}</name>
+			<committed/>
+		</location>
+		<location id="id37" x="110" y="136">
+			<name x="68" y="102">{afterrunning}</name>
+			<committed/>
+		</location>
+		<location id="id38" x="110" y="-59">
+			<name x="93" y="-93">{preempted}</name>
+			<label kind="invariant" x="100" y="-42">t'==0</label>
+		</location>
+		<location id="id39" x="110" y="212">
+			<name x="85" y="221">{preempted}</name>
+			<label kind="invariant" x="102" y="238">t'==0</label>
+		</location>
+		<init ref="id34"/>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id37"/>
+			<label kind="synchronisation" x="144" y="170">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id39"/>
+			<label kind="synchronisation" x="-8" y="170">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="144" y="-34">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id38"/>
+			<label kind="synchronisation" x="-8" y="-34">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id37"/>
+			<label kind="guard" x="153" y="102">t&gt;={bcet}</label>
+			<label kind="synchronisation" x="153" y="119">{Result}[{ServerQueueHead}()]!</label>
+			<label kind="assignment" x="153" y="136">{server}_e={ServerQueueHead}(),{ServerQueueRemove}()</label>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="128" y="29">{StartServer}!</label>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="229" y="76">Run[{tid}][{rid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id35"/>
+			<label kind="synchronisation" x="226" y="12">Stop[{tid}][{rid}]?</label>
+			<nail x="263" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id34"/>
+			<label kind="synchronisation" x="-42" y="93">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-17" y="8">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-238" y="25">{ShouldEx}[{tid}][{rid}]={ShouldEx}[{tid}][{rid}]-1,t=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(6)-Client</name>
+		<declaration>clock t;
+bool {invoked};</declaration>
+		<location id="id40" x="-246" y="-17">
+			<name x="-255" y="-51">{initial}</name>
+		</location>
+		<location id="id41" x="-102" y="-17">
+			<name x="-119" y="-51">{running}</name>
+			<label kind="invariant" x="-119" y="-8">t&lt;={wcet}</label>
+		</location>
+		<location id="id42" x="17" y="144">
+			<name x="0" y="110">{waiting}</name>
+			<label kind="invariant" x="34" y="127">t'==0</label>
+		</location>
+		<location id="id43" x="153" y="-17">
+			<name x="136" y="-51">{preempted}</name>
+			<label kind="invariant" x="170" y="-25">t'==0</label>
+		</location>
+		<location id="id44" x="-102" y="144">
+			<name x="-112" y="110">{call}</name>
+			<committed/>
+		</location>
+		<location id="id45" x="153" y="144">
+			<name x="143" y="110">{aftercall}</name>
+			<committed/>
+		</location>
+		<location id="id46" x="-178" y="-51">
+			<name x="-188" y="-85">{read}</name>
+			<urgent/>
+		</location>
+		<location id="id47" x="-178" y="17">
+			<name x="-188" y="-17">{write}</name>
+			<committed/>
+		</location>
+		<location id="id48" x="-178" y="-127">
+			<name x="-195" y="-161">{preempted}</name>
+			<label kind="invariant" x="-161" y="-135">t'==0</label>
+		</location>
+		<location id="id49" x="-178" y="153">
+			<name x="-221" y="161">{preempted}</name>
+			<label kind="invariant" x="-161" y="145">t'==0</label>
+		</location>
+		<location id="id50" x="-102" y="272">
+			<name x="-119" y="238">{preempted}</name>
+			<label kind="invariant" x="-85" y="264">t'==0</label>
+		</location>
+		<location id="id51" x="17" y="272">
+			<name x="0" y="238">{preempted}</name>
+			<label kind="invariant" x="34" y="264">t'==0</label>
+		</location>
+		<location id="id52" x="153" y="272">
+			<name x="136" y="238">{preempted}</name>
+			<label kind="invariant" x="170" y="264">t'==0</label>
+		</location>
+		<init ref="id40"/>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id47"/>
+			<label kind="synchronisation" x="-195" y="93">Run[{tid}][{rid}]?</label>
+			<nail x="-136" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id49"/>
+			<label kind="synchronisation" x="-314" y="59">Stop[{tid}][{rid}]?</label>
+			<nail x="-221" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id46"/>
+			<label kind="synchronisation" x="-153" y="-119">Run[{tid}][{rid}]?</label>
+			<nail x="-144" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="-306" y="0">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id41"/>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="76" y="42">{GoOn}[{tid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id45"/>
+			<label kind="synchronisation" x="25" y="153">{ResultBack}[{cid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id42"/>
+			<label kind="synchronisation" x="-110" y="153">{InvoketoRTE}[{cid}]!</label>
+			<label kind="assignment" x="-110" y="170">{havewait}[cid]=true</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id44"/>
+			<label kind="guard" x="-170" y="34">!{invoked}</label>
+			<label kind="synchronisation" x="-195" y="51">{Invoke}[{cid}]!</label>
+			<label kind="assignment" x="-195" y="68">{invoked}=true</label>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="-25" y="17">Run[{tid}][{rid}]?</label>
+			<nail x="17" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="-25" y="-68">Stop[{tid}][{rid}]?</label>
+			<nail x="17" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id47"/>
+			<label kind="guard" x="-153" y="8">t&gt;={bcet}&amp;&amp;{invoked}</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id46"/>
+			<label kind="synchronisation" x="-365" y="-102">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-365" y="-85">{ShouldEx}[{tid}][{rid}]=false,
+t=0,{invoked}=false</label>
+		</transition>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id48"/>
+			<label kind="synchronisation" x="-280" y="-119">Stop[{tid}][{rid}]?</label>
+			<nail x="-212" y="-93"/>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id50"/>
+			<label kind="synchronisation" x="-238" y="212">Stop[{tid}][{rid}]?</label>
+			<nail x="-136" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id44"/>
+			<label kind="synchronisation" x="-93" y="195">Run[{tid}][{rid}]?</label>
+			<nail x="-68" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id51"/>
+			<label kind="synchronisation" x="-58" y="212">Stop[{tid}][{rid}]?</label>
+			<nail x="-25" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id51"/>
+			<target ref="id42"/>
+			<label kind="synchronisation" x="51" y="204">Run[{tid}][{rid}]?</label>
+			<nail x="51" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id52"/>
+			<label kind="synchronisation" x="77" y="221">Stop[{tid}][{rid}]?</label>
+			<nail x="119" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id52"/>
+			<target ref="id45"/>
+			<label kind="synchronisation" x="170" y="195">Run[{tid}][{rid}]?</label>
+			<nail x="195" y="212"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(6)-Server</name>
+		<declaration>clock t;</declaration>
+		<location id="id53" x="187" y="76">
+			<name x="170" y="42">{running}</name>
+			<label kind="invariant" x="170" y="85">t&lt;={wcet}</label>
+		</location>
+		<location id="id54" x="34" y="76">
+			<name x="8" y="42">{initial}</name>
+		</location>
+		<location id="id55" x="348" y="76">
+			<name x="331" y="42">{preempted}</name>
+			<label kind="invariant" x="338" y="93">t'==0</label>
+		</location>
+		<location id="id56" x="110" y="17">
+			<name x="76" y="-17">{beforerunning}</name>
+			<committed/>
+		</location>
+		<location id="id57" x="110" y="136">
+			<name x="68" y="102">{afterrunning}</name>
+			<committed/>
+		</location>
+		<location id="id58" x="110" y="-59">
+			<name x="93" y="-93">{preempted}</name>
+			<label kind="invariant" x="100" y="-42">t'==0</label>
+		</location>
+		<location id="id59" x="110" y="212">
+			<name x="85" y="221">{preempted}</name>
+			<label kind="invariant" x="102" y="238">t'==0</label>
+		</location>
+		<init ref="id54"/>
+		<transition>
+			<source ref="id59"/>
+			<target ref="id57"/>
+			<label kind="synchronisation" x="144" y="170">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id57"/>
+			<target ref="id59"/>
+			<label kind="synchronisation" x="-8" y="170">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id58"/>
+			<target ref="id56"/>
+			<label kind="synchronisation" x="144" y="-34">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id56"/>
+			<target ref="id58"/>
+			<label kind="synchronisation" x="-8" y="-34">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id53"/>
+			<target ref="id57"/>
+			<label kind="guard" x="153" y="102">t&gt;={bcet}</label>
+			<label kind="synchronisation" x="153" y="119">{Result}[{ServerQueueHead}()]!</label>
+			<label kind="assignment" x="153" y="136">{server}_e={ServerQueueHead}(),{ServerQueueRemove}()</label>
+		</transition>
+		<transition>
+			<source ref="id56"/>
+			<target ref="id53"/>
+			<label kind="synchronisation" x="128" y="29">{StartServer}!</label>
+		</transition>
+		<transition>
+			<source ref="id55"/>
+			<target ref="id53"/>
+			<label kind="synchronisation" x="229" y="76">Run[{tid}][{rid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id53"/>
+			<target ref="id55"/>
+			<label kind="synchronisation" x="226" y="12">Stop[{tid}][{rid}]?</label>
+			<nail x="263" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id57"/>
+			<target ref="id54"/>
+			<label kind="synchronisation" x="-42" y="93">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id56"/>
+			<label kind="synchronisation" x="-17" y="8">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-238" y="25">{ShouldEx}[{tid}][{rid}]={ShouldEx}[{tid}][{rid}]-1,t=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(7)-Client</name>
+		<declaration>clock t;
+int {times};</declaration>
+		<location id="id60" x="217" y="20">
+			<name x="200" y="-14">{running}</name>
+			<label kind="invariant" x="195" y="34">t&lt;={wcet}</label>
+		</location>
+		<location id="id61" x="64" y="20">
+			<name x="51" y="-17">{initial}</name>
+		</location>
+		<location id="id62" x="345" y="20">
+			<name x="335" y="-14">{preempted}</name>
+			<label kind="invariant" x="335" y="37">t'==0</label>
+		</location>
+		<location id="id63" x="144" y="-110">
+			<name x="134" y="-144">{preempted}</name>
+			<label kind="invariant" x="134" y="-93">t'==0</label>
+		</location>
+		<location id="id64" x="144" y="-25">
+			<name x="134" y="-59">{read}</name>
+			<urgent/>
+		</location>
+		<location id="id65" x="144" y="68">
+			<name x="134" y="34">{write}</name>
+			<committed/>
+		</location>
+		<location id="id66" x="144" y="144">
+			<name x="134" y="110">{preempted}</name>
+			<label kind="invariant" x="134" y="161">t'==0</label>
+		</location>
+		<init ref="id61"/>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id65"/>
+			<label kind="synchronisation" x="178" y="76">Run[{tid}][{rid}]?</label>
+			<nail x="187" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id60"/>
+			<target ref="id65"/>
+			<label kind="guard" x="170" y="51">t&gt;={bcet}&amp;&amp;{times}==1</label>
+		</transition>
+		<transition>
+			<source ref="id64"/>
+			<target ref="id60"/>
+		</transition>
+		<transition>
+			<source ref="id63"/>
+			<target ref="id64"/>
+			<label kind="synchronisation" x="25" y="-102">Run[{tid}][{rid}]?</label>
+			<nail x="102" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id60"/>
+			<target ref="id60"/>
+			<label kind="guard" x="187" y="-85">{times}&lt;1</label>
+			<label kind="synchronisation" x="187" y="-68">{InvoketoRTE}[{cid}]!</label>
+			<label kind="assignment" x="187" y="-51">{times}={times}+1</label>
+			<nail x="204" y="-34"/>
+			<nail x="229" y="-34"/>
+		</transition>
+		<transition>
+			<source ref="id62"/>
+			<target ref="id60"/>
+			<label kind="synchronisation" x="234" y="20">Run[{tid}][{rid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id60"/>
+			<target ref="id62"/>
+			<label kind="synchronisation" x="238" y="-25">Stop[{tid}][{rid}]?</label>
+			<nail x="280" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id65"/>
+			<target ref="id61"/>
+			<label kind="synchronisation" x="17" y="51">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id61"/>
+			<target ref="id64"/>
+			<label kind="synchronisation" x="42" y="-51">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-136" y="-34">{ShouldEx}[{tid}][{rid}]=false,t=0,{times}=0</label>
+		</transition>
+		<transition>
+			<source ref="id64"/>
+			<target ref="id63"/>
+			<label kind="synchronisation" x="170" y="-102">Stop[{tid}][{rid}]?</label>
+			<nail x="187" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id65"/>
+			<target ref="id66"/>
+			<label kind="synchronisation" x="17" y="76">Stop[{tid}][{rid}]?</label>
+			<nail x="102" y="102"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(7)-Server</name>
+		<declaration>clock t;</declaration>
+		<location id="id67" x="187" y="76">
+			<name x="170" y="42">{running}</name>
+			<label kind="invariant" x="170" y="85">t&lt;={wcet}</label>
+		</location>
+		<location id="id68" x="34" y="76">
+			<name x="8" y="42">{initial}</name>
+		</location>
+		<location id="id69" x="348" y="76">
+			<name x="331" y="42">{preempted}</name>
+			<label kind="invariant" x="338" y="93">t'==0</label>
+		</location>
+		<location id="id70" x="110" y="17">
+			<name x="76" y="-17">{beforerunning}</name>
+			<committed/>
+		</location>
+		<location id="id71" x="110" y="136">
+			<name x="68" y="102">{afterrunning}</name>
+			<committed/>
+		</location>
+		<location id="id72" x="110" y="-59">
+			<name x="93" y="-93">{preempted}</name>
+			<label kind="invariant" x="100" y="-42">t'==0</label>
+		</location>
+		<location id="id73" x="110" y="212">
+			<name x="85" y="221">{preempted}</name>
+			<label kind="invariant" x="102" y="238">t'==0</label>
+		</location>
+		<init ref="id68"/>
+		<transition>
+			<source ref="id73"/>
+			<target ref="id71"/>
+			<label kind="synchronisation" x="144" y="170">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id73"/>
+			<label kind="synchronisation" x="-8" y="170">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id72"/>
+			<target ref="id70"/>
+			<label kind="synchronisation" x="144" y="-34">Run[{tid}][{rid}]?</label>
+			<nail x="144" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id70"/>
+			<target ref="id72"/>
+			<label kind="synchronisation" x="-8" y="-34">Stop[{tid}][{rid}]?</label>
+			<nail x="76" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id67"/>
+			<target ref="id71"/>
+			<label kind="guard" x="144" y="102">t&gt;={bcet}</label>
+			<label kind="synchronisation" x="144" y="119">{Result}[{ServerQueueHead}()]!</label>
+			<label kind="assignment" x="144" y="136">{server}_e={ServerQueueHead}(),{ServerQueueRemove}()</label>
+		</transition>
+		<transition>
+			<source ref="id70"/>
+			<target ref="id67"/>
+			<label kind="synchronisation" x="128" y="29">{StartServer}!</label>
+		</transition>
+		<transition>
+			<source ref="id69"/>
+			<target ref="id67"/>
+			<label kind="synchronisation" x="229" y="76">Run[{tid}][{rid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id67"/>
+			<target ref="id69"/>
+			<label kind="synchronisation" x="226" y="12">Stop[{tid}][{rid}]?</label>
+			<nail x="263" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id68"/>
+			<label kind="synchronisation" x="-17" y="102">Finish[{tid}][{rid}]!</label>
+		</transition>
+		<transition>
+			<source ref="id68"/>
+			<target ref="id70"/>
+			<label kind="synchronisation" x="0" y="8">Run[{tid}][{rid}]?</label>
+			<label kind="assignment" x="-238" y="25">{ShouldEx}[{tid}][{rid}]={ShouldEx}[{tid}][{rid}]-1,t=0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

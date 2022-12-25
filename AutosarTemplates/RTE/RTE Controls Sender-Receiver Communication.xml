@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.</declaration>
+	<template>
+		<name>Scenario(9)</name>
+		<declaration>int i;</declaration>
+		<location id="id0" x="130" y="107">
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="110" y="178">i&lt;=0</label>
+			<label kind="synchronisation" x="110" y="195">{Receive}?</label>
+			<nail x="102" y="178"/>
+			<nail x="161" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="12" y="81">i&gt;0</label>
+			<label kind="synchronisation" x="12" y="98">{Receive}?</label>
+			<label kind="assignment" x="12" y="115">i=i-1</label>
+			<nail x="54" y="82"/>
+			<nail x="54" y="132"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="221" y="94">i&gt;={maxlenghth}</label>
+			<label kind="synchronisation" x="221" y="111">{Send}?</label>
+			<nail x="212" y="136"/>
+			<nail x="212" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="106" y="-12">i&lt;{maxlength}</label>
+			<label kind="synchronisation" x="106" y="5">{Send}?</label>
+			<label kind="assignment" x="106" y="22">i=i+1</label>
+			<nail x="97" y="39"/>
+			<nail x="157" y="39"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(10)</name>
+		<declaration>int i;</declaration>
+		<location id="id1" x="632" y="85">
+		</location>
+		<location id="id2" x="632" y="0">
+			<committed/>
+		</location>
+		<init ref="id1"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="657" y="8">{DataSendCompleted}!</label>
+			<nail x="666" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="620" y="153">i&lt;=0</label>
+			<label kind="synchronisation" x="620" y="170">{Receive}?</label>
+			<nail x="607" y="153"/>
+			<nail x="657" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="509" y="59">i&gt;0</label>
+			<label kind="synchronisation" x="509" y="76">{Receive}?</label>
+			<label kind="assignment" x="509" y="93">i=i-1</label>
+			<nail x="556" y="60"/>
+			<nail x="556" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="731" y="68">i&gt;={maxlength}</label>
+			<label kind="synchronisation" x="731" y="85">{Send}?</label>
+			<nail x="725" y="119"/>
+			<nail x="725" y="60"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="543" y="-1">i&lt;{maxlength}</label>
+			<label kind="synchronisation" x="543" y="16">{Send}?</label>
+			<label kind="assignment" x="543" y="33">i=i+1</label>
+			<nail x="598" y="42"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Scenario(11)</name>
+		<declaration>// Place local declarations here.
+int i;</declaration>
+		<location id="id3" x="246" y="119">
+		</location>
+		<location id="id4" x="246" y="34">
+			<committed/>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="271" y="42">{DataReceived}!</label>
+			<nail x="280" y="76"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="234" y="187">i&lt;=0</label>
+			<label kind="synchronisation" x="234" y="204">{Receive}?</label>
+			<nail x="221" y="187"/>
+			<nail x="271" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="123" y="93">i&gt;0</label>
+			<label kind="synchronisation" x="123" y="110">{Receive}?</label>
+			<label kind="assignment" x="123" y="127">i=i-1</label>
+			<nail x="170" y="94"/>
+			<nail x="170" y="144"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="348" y="102">i&gt;={maxlength}</label>
+			<label kind="synchronisation" x="348" y="119">{Send}?</label>
+			<nail x="339" y="153"/>
+			<nail x="339" y="94"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="157" y="33">i&lt;{maxlength}</label>
+			<label kind="synchronisation" x="157" y="50">{Send}?</label>
+			<label kind="assignment" x="157" y="67">i=i+1</label>
+			<nail x="212" y="76"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(12)</name>
+		<declaration>int i;
+clock t;</declaration>
+		<location id="id5" x="449" y="119">
+		</location>
+		<location id="id6" x="544" y="178">
+			<committed/>
+		</location>
+		<location id="id7" x="450" y="238">
+		</location>
+		<location id="id8" x="314" y="119">
+			<committed/>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="425" y="280">{Receive}?</label>
+			<label kind="assignment" x="425" y="297">t=0</label>
+			<nail x="416" y="280"/>
+			<nail x="484" y="280"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="323" y="136">{DatatoReceiver}!</label>
+			<nail x="382" y="144"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
+			<label kind="guard" x="450" y="161">t&gt;={timeout}</label>
+			<label kind="synchronisation" x="450" y="178">{Send}?</label>
+			<label kind="assignment" x="450" y="195">i=i+1</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="501" y="204">t&lt;{timeout}</label>
+			<label kind="synchronisation" x="501" y="221">{Send}?</label>
+			<label kind="assignment" x="501" y="238">i=i+1</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="510" y="127">{DatatoReceiver}!</label>
+			<label kind="assignment" x="510" y="144">i=i-1</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="guard" x="331" y="178">i&lt;=0</label>
+			<label kind="synchronisation" x="331" y="195">{Receive}?</label>
+			<label kind="assignment" x="331" y="212">t=0</label>
+			<nail x="365" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id8"/>
+			<label kind="guard" x="331" y="59">i&gt;0</label>
+			<label kind="synchronisation" x="331" y="76">{Receive}?</label>
+			<label kind="assignment" x="331" y="93">i=i-1</label>
+			<nail x="382" y="93"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="544" y="93">i&gt;={maxlenghth}</label>
+			<label kind="synchronisation" x="544" y="110">{Send}?</label>
+			<nail x="535" y="136"/>
+			<nail x="535" y="93"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="425" y="0">i&lt;{maxlength}</label>
+			<label kind="synchronisation" x="425" y="17">{Send}?</label>
+			<label kind="assignment" x="425" y="34">i=i+1</label>
+			<nail x="416" y="51"/>
+			<nail x="476" y="51"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(13)</name>
+		<location id="id9" x="0" y="0">
+		</location>
+		<init ref="id9"/>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-42" y="59">{Write}?/{Send}?</label>
+			<nail x="34" y="59"/>
+			<nail x="-34" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-51" y="-76">{Read}?/{Receive}?</label>
+			<nail x="-34" y="-59"/>
+			<nail x="42" y="-59"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(14)</name>
+		<location id="id10" x="76" y="110">
+		</location>
+		<location id="id11" x="76" y="25">
+			<committed/>
+		</location>
+		<init ref="id10"/>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="110" y="59">{DataWriteCompleted}!</label>
+			<nail x="110" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="17" y="153">{Read}?/{Receive}?</label>
+			<nail x="110" y="153"/>
+			<nail x="42" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-59" y="59">{Write}?/{Send}?</label>
+			<nail x="42" y="68"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(15)</name>
+		<location id="id12" x="93" y="77">
+		</location>
+		<location id="id13" x="93" y="0">
+			<committed/>
+		</location>
+		<init ref="id12"/>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="127" y="34">{DataReceived}!</label>
+			<nail x="127" y="43"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-42" y="34">{Write}?/{Send}?</label>
+			<nail x="59" y="43"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="42" y="136">{Read}?/{Receive}?</label>
+			<nail x="127" y="136"/>
+			<nail x="59" y="136"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
