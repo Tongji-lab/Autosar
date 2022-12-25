@@ -1,0 +1,4371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>int len_8 = 0;
+int queue_8[1];
+int len_7 = 0;
+int queue_7[1];
+int len_6 = 0;
+int queue_6[2];
+int len_5 = 0;
+int queue_5[2];
+int len_4 = 0;
+int queue_4[1];
+int len_3 = 0;
+int queue_3[1];
+int len_2 = 0;
+int queue_2[1];
+int len_1 = 0;
+int queue_1[1];
+int runnable_should_execute[11][2];
+chan Finish[11][2];
+chan Release[11];
+int activation_count[11];
+chan Wakeup[11];
+chan Run[11][2];
+chan Stop[11][2];
+broadcast chan block;
+chan Terminate;
+chan task_run;
+chan Wait;
+chan Activate;
+int DeadLine[11]={0,0,0,50,0,0,0,50,0,0,0};
+chan LightManager_LeftDoorStatus_read;
+chan LeftDoorSensor_LeftDoorStatus_write;
+chan Data_LeftDoorStatus_dataReceived;
+chan FrontLightActuator_LightStatus_read;
+chan LightManager_LightStatus_write;
+chan Data_LightStatus_dataReceived;
+chan LightManager_RightDoorStatus_read;
+chan RightDoorSensor_RightDoorStatus_write;
+chan Data_RightDoorStatus_dataReceived;
+int ioHWAb_RDigitalServiceWrite_n = 2;
+int ioHWAb_RDigitalServiceWrite_e = 2;
+clock ioHWAb_RDigitalServiceWrite_timer[2];
+bool ioHWAb_RDigitalServiceWrite_c[2];
+int ioHWAb_RDigitalServiceWrite_r[2] = {0,1};
+int ioHWAb_RDigitalServiceWrite_queue[2];
+int ioHWAb_RDigitalServiceWrite_len = 0;
+int ioHWAb_RDigitalServiceWrite_actived[2];
+chan ioHWAb_RDigitalServiceWrite_add_server_task;
+int ioHWAb_RDigitalServiceWrite_request[2] = {1,1};
+bool ioHWAb_RDigitalServiceWrite_have_wait[2];
+broadcast chan ioHWAb_RDigitalServiceWrite_start_server;
+chan ioHWAb_RDigitalServiceWrite_finish[2];
+chan ioHWAb_RDigitalServiceWrite_Invoke[2];
+chan ioHWAb_RDigitalServiceWrite_Invoke_to_RTE[2];
+chan ioHWAb_RDigitalServiceWrite_result_return[2];
+broadcast chan ioHWAb_RDigitalServiceWrite_valid_invoke_server[2];
+chan ioHWAb_RDigitalServiceWrite_start_timer[2];
+chan ioHWAb_RDigitalServiceWrite_stop_timer[2];
+int ioHWAb_RDigitalServiceReadLeft_n = 2;
+int ioHWAb_RDigitalServiceReadLeft_e = 2;
+clock ioHWAb_RDigitalServiceReadLeft_timer[2];
+bool ioHWAb_RDigitalServiceReadLeft_c[2];
+int ioHWAb_RDigitalServiceReadLeft_r[2] = {0,1};
+int ioHWAb_RDigitalServiceReadLeft_queue[2];
+int ioHWAb_RDigitalServiceReadLeft_len = 0;
+int ioHWAb_RDigitalServiceReadLeft_actived[2];
+chan ioHWAb_RDigitalServiceReadLeft_add_server_task;
+int ioHWAb_RDigitalServiceReadLeft_request[2] = {1,1};
+broadcast chan ioHWAb_RDigitalServiceReadLeft_start_server;
+chan ioHWAb_RDigitalServiceReadLeft_finish[2];
+chan ioHWAb_RDigitalServiceReadLeft_Invoke[2];
+chan ioHWAb_RDigitalServiceReadLeft_result_return[2];
+broadcast chan ioHWAb_RDigitalServiceReadLeft_valid_invoke_server[2];
+chan ioHWAb_RDigitalServiceReadLeft_start_timer[2];
+chan ioHWAb_RDigitalServiceReadLeft_stop_timer[2];
+int ioHWAb_RDigitalServiceReadRight_n = 2;
+int ioHWAb_RDigitalServiceReadRight_e = 2;
+clock ioHWAb_RDigitalServiceReadRight_timer[2];
+bool ioHWAb_RDigitalServiceReadRight_c[2];
+int ioHWAb_RDigitalServiceReadRight_r[2] = {0,1};
+int ioHWAb_RDigitalServiceReadRight_queue[2];
+int ioHWAb_RDigitalServiceReadRight_len = 0;
+int ioHWAb_RDigitalServiceReadRight_actived[2];
+chan ioHWAb_RDigitalServiceReadRight_add_server_task;
+int ioHWAb_RDigitalServiceReadRight_request[2] = {1,1};
+broadcast chan ioHWAb_RDigitalServiceReadRight_start_server;
+chan ioHWAb_RDigitalServiceReadRight_finish[2];
+chan ioHWAb_RDigitalServiceReadRight_Invoke[2];
+chan ioHWAb_RDigitalServiceReadRight_result_return[2];
+broadcast chan ioHWAb_RDigitalServiceReadRight_valid_invoke_server[2];
+chan ioHWAb_RDigitalServiceReadRight_start_timer[2];
+chan ioHWAb_RDigitalServiceReadRight_stop_timer[2];
+chan ioHWAb_RDigitalServiceReadLeft_has_run[2];
+chan ioHWAb_RDigitalServiceReadRight_has_run[2];
+broadcast chan TaskRightDoorSensorTimingEvent_jitter_first_time;
+chan RightDoorSensor_RRightDoorSensor_jitter_run;
+broadcast chan TaskLeftDoorSensorTimingEvent_jitter_first_time;
+chan LeftDoorSensor_RLeftDoorSensor_jitter_run;
+bool isEmpty_8()
+{
+   return len_8==0;
+}
+ 
+bool find_task_8(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_8;++i){
+      if(queue_8[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue8_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_8; ++i) {
+      if (queue_8[i]==id) {
+         for(j = i; j+1 &lt; len_8; ++j) {
+            queue_8[j] = queue_8[j+1];
+         }
+      }
+   }
+   queue_8[--len_8] = 0;
+}
+ 
+bool isEmpty_7()
+{
+   return len_7==0;
+}
+ 
+bool find_task_7(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_7;++i){
+      if(queue_7[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue7_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_7; ++i) {
+      if (queue_7[i]==id) {
+         for(j = i; j+1 &lt; len_7; ++j) {
+            queue_7[j] = queue_7[j+1];
+         }
+      }
+   }
+   queue_7[--len_7] = 0;
+}
+ 
+bool isEmpty_6()
+{
+   return len_6==0;
+}
+ 
+bool find_task_6(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_6;++i){
+      if(queue_6[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue6_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_6; ++i) {
+      if (queue_6[i]==id) {
+         for(j = i; j+1 &lt; len_6; ++j) {
+            queue_6[j] = queue_6[j+1];
+         }
+      }
+   }
+   queue_6[--len_6] = 0;
+}
+ 
+bool isEmpty_5()
+{
+   return len_5==0;
+}
+ 
+bool find_task_5(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_5;++i){
+      if(queue_5[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue5_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_5; ++i) {
+      if (queue_5[i]==id) {
+         for(j = i; j+1 &lt; len_5; ++j) {
+            queue_5[j] = queue_5[j+1];
+         }
+      }
+   }
+   queue_5[--len_5] = 0;
+}
+ 
+bool isEmpty_4()
+{
+   return len_4==0;
+}
+ 
+bool find_task_4(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_4;++i){
+      if(queue_4[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue4_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_4; ++i) {
+      if (queue_4[i]==id) {
+         for(j = i; j+1 &lt; len_4; ++j) {
+            queue_4[j] = queue_4[j+1];
+         }
+      }
+   }
+   queue_4[--len_4] = 0;
+}
+ 
+bool isEmpty_3()
+{
+   return len_3==0;
+}
+ 
+bool find_task_3(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_3;++i){
+      if(queue_3[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue3_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_3; ++i) {
+      if (queue_3[i]==id) {
+         for(j = i; j+1 &lt; len_3; ++j) {
+            queue_3[j] = queue_3[j+1];
+         }
+      }
+   }
+   queue_3[--len_3] = 0;
+}
+ 
+bool isEmpty_2()
+{
+   return len_2==0;
+}
+ 
+bool find_task_2(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_2;++i){
+      if(queue_2[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue2_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_2; ++i) {
+      if (queue_2[i]==id) {
+         for(j = i; j+1 &lt; len_2; ++j) {
+            queue_2[j] = queue_2[j+1];
+         }
+      }
+   }
+   queue_2[--len_2] = 0;
+}
+ 
+bool isEmpty_1()
+{
+   return len_1==0;
+}
+ 
+bool find_task_1(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_1;++i){
+      if(queue_1[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue1_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_1; ++i) {
+      if (queue_1[i]==id) {
+         for(j = i; j+1 &lt; len_1; ++j) {
+            queue_1[j] = queue_1[j+1];
+         }
+      }
+   }
+   queue_1[--len_1] = 0;
+}
+ 
+void scheduler_queue8_add(int id)
+{
+   if(!find_task_8(id)){
+      queue_8[len_8] = id;
+      len_8++;
+   }
+}
+ 
+void scheduler_queue7_add(int id)
+{
+   if(!find_task_7(id)){
+      queue_7[len_7] = id;
+      len_7++;
+   }
+}
+ 
+void scheduler_queue6_add(int id)
+{
+   if(!find_task_6(id)){
+      queue_6[len_6] = id;
+      len_6++;
+   }
+}
+ 
+void scheduler_queue5_add(int id)
+{
+   if(!find_task_5(id)){
+      queue_5[len_5] = id;
+      len_5++;
+   }
+}
+ 
+void scheduler_queue4_add(int id)
+{
+   if(!find_task_4(id)){
+      queue_4[len_4] = id;
+      len_4++;
+   }
+}
+ 
+void scheduler_queue3_add(int id)
+{
+   if(!find_task_3(id)){
+      queue_3[len_3] = id;
+      len_3++;
+   }
+}
+ 
+void scheduler_queue2_add(int id)
+{
+   if(!find_task_2(id)){
+      queue_2[len_2] = id;
+      len_2++;
+   }
+}
+ 
+void scheduler_queue1_add(int id)
+{
+   if(!find_task_1(id)){
+      queue_1[len_1] = id;
+      len_1++;
+   }
+}
+ 
+bool isEmpty()
+{
+return (isEmpty_8())&amp;&amp;(isEmpty_7())&amp;&amp;(isEmpty_6())&amp;&amp;(isEmpty_5())&amp;&amp;(isEmpty_4())&amp;&amp;(isEmpty_3())&amp;&amp;(isEmpty_2())&amp;&amp;(isEmpty_1());
+}
+ 
+int scheduler_queue_head()
+{
+if(!isEmpty_8()){return queue_8[0];}
+else if (!isEmpty_7()){return queue_7[0];}
+else if (!isEmpty_6()){return queue_6[0];}
+else if (!isEmpty_5()){return queue_5[0];}
+else if (!isEmpty_4()){return queue_4[0];}
+else if (!isEmpty_3()){return queue_3[0];}
+else if (!isEmpty_2()){return queue_2[0];}
+return queue_1[0];
+}
+ 
+int ioHWAb_RDigitalServiceWrite_head()
+{
+   return ioHWAb_RDigitalServiceWrite_queue[0];
+}
+ 
+void ioHWAb_RDigitalServiceWrite_remove()
+{
+   int i;
+   for(i = 0; i+1 &lt;ioHWAb_RDigitalServiceWrite_len; ++i){
+       ioHWAb_RDigitalServiceWrite_queue[i] = ioHWAb_RDigitalServiceWrite_queue[i+1];
+   }
+   ioHWAb_RDigitalServiceWrite_queue[--ioHWAb_RDigitalServiceWrite_len] = 0;
+}
+ 
+void ioHWAb_RDigitalServiceWrite_add(int id)
+{
+   ioHWAb_RDigitalServiceWrite_queue[ioHWAb_RDigitalServiceWrite_len] = id;
+   ioHWAb_RDigitalServiceWrite_len++;
+}
+ 
+bool ioHWAb_RDigitalServiceWrite_ServerQueueisEmpty()
+{
+return ioHWAb_RDigitalServiceWrite_len == 0;
+}
+ 
+bool ioHWAb_RDigitalServiceWrite_Inbuff(int id)
+{
+   int j = -1;
+   int i;
+   for(i = 0; i &lt; ioHWAb_RDigitalServiceWrite_len;++i)
+   {
+       if (ioHWAb_RDigitalServiceWrite_queue[i]==id)
+       {
+           j = i;
+       }
+   }
+   if (j == -1)
+   {
+       return false;
+   }
+   else
+   {
+       return true;
+   }
+}
+ 
+int ioHWAb_RDigitalServiceReadLeft_head()
+{
+   return ioHWAb_RDigitalServiceReadLeft_queue[0];
+}
+ 
+void ioHWAb_RDigitalServiceReadLeft_remove()
+{
+   int i;
+   for(i = 0; i+1 &lt;ioHWAb_RDigitalServiceReadLeft_len; ++i){
+       ioHWAb_RDigitalServiceReadLeft_queue[i] = ioHWAb_RDigitalServiceReadLeft_queue[i+1];
+   }
+   ioHWAb_RDigitalServiceReadLeft_queue[--ioHWAb_RDigitalServiceReadLeft_len] = 0;
+}
+ 
+void ioHWAb_RDigitalServiceReadLeft_add(int id)
+{
+   ioHWAb_RDigitalServiceReadLeft_queue[ioHWAb_RDigitalServiceReadLeft_len] = id;
+   ioHWAb_RDigitalServiceReadLeft_len++;
+}
+ 
+bool ioHWAb_RDigitalServiceReadLeft_ServerQueueisEmpty()
+{
+return ioHWAb_RDigitalServiceReadLeft_len == 0;
+}
+ 
+bool ioHWAb_RDigitalServiceReadLeft_Inbuff(int id)
+{
+   int j = -1;
+   int i;
+   for(i = 0; i &lt; ioHWAb_RDigitalServiceReadLeft_len;++i)
+   {
+       if (ioHWAb_RDigitalServiceReadLeft_queue[i]==id)
+       {
+           j = i;
+       }
+   }
+   if (j == -1)
+   {
+       return false;
+   }
+   else
+   {
+       return true;
+   }
+}
+ 
+int ioHWAb_RDigitalServiceReadRight_head()
+{
+   return ioHWAb_RDigitalServiceReadRight_queue[0];
+}
+ 
+void ioHWAb_RDigitalServiceReadRight_remove()
+{
+   int i;
+   for(i = 0; i+1 &lt;ioHWAb_RDigitalServiceReadRight_len; ++i){
+       ioHWAb_RDigitalServiceReadRight_queue[i] = ioHWAb_RDigitalServiceReadRight_queue[i+1];
+   }
+   ioHWAb_RDigitalServiceReadRight_queue[--ioHWAb_RDigitalServiceReadRight_len] = 0;
+}
+ 
+void ioHWAb_RDigitalServiceReadRight_add(int id)
+{
+   ioHWAb_RDigitalServiceReadRight_queue[ioHWAb_RDigitalServiceReadRight_len] = id;
+   ioHWAb_RDigitalServiceReadRight_len++;
+}
+ 
+bool ioHWAb_RDigitalServiceReadRight_ServerQueueisEmpty()
+{
+return ioHWAb_RDigitalServiceReadRight_len == 0;
+}
+ 
+bool ioHWAb_RDigitalServiceReadRight_Inbuff(int id)
+{
+   int j = -1;
+   int i;
+   for(i = 0; i &lt; ioHWAb_RDigitalServiceReadRight_len;++i)
+   {
+       if (ioHWAb_RDigitalServiceReadRight_queue[i]==id)
+       {
+           j = i;
+       }
+   }
+   if (j == -1)
+   {
+       return false;
+   }
+   else
+   {
+       return true;
+   }
+}
+ 
+</declaration>
+	<template>
+		<name>TaskReceiveLeftDoor</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id0" x="1025" y="325">
+			<name x="1015" y="295">Ready</name>
+		</location>
+		<location id="id1" x="1465" y="530">
+			<name x="1455" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id2" x="1335" y="895">
+			<name x="1325" y="865">Running</name>
+		</location>
+		<location id="id3" x="1305" y="1230">
+			<name x="1300" y="1198">wait</name>
+		</location>
+		<location id="id4" x="1340" y="1525">
+			<name x="1330" y="1495">Ready2</name>
+		</location>
+		<location id="id5" x="1025" y="1205">
+			<name x="1015" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id6" x="1180" y="545">
+			<name x="1170" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id7" x="1830" y="360">
+			<name x="1820" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id8" x="1640" y="1205">
+			<name x="1630" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id9" x="1210" y="90">
+			<name x="1200" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="1258" y="437">scheduler_queue_head()==2</label>
+			<label kind="synchronisation" x="1258" y="427">task_run?</label>
+			<label kind="assignment" x="1266" y="467">activation_count[2]=activation_count[2]-1</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="1465" y="530">!runnable_should_execute[2][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1465" y="540">rid=rid+1</label>
+			<nail x="1435" y="500"/>
+			<nail x="1495" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="1428" y="697">runnable_should_execute[2][rid]</label>
+			<label kind="synchronisation" x="1428" y="680">Run[2][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="1411" y="731">rid!=1</label>
+			<label kind="synchronisation" x="1411" y="722">Finish[2][rid]?</label>
+			<label kind="assignment" x="1411" y="739">rid=rid+1</label>
+			<nail x="1376" y="806"/>
+			<nail x="1441" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="1333" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="1335" y="1377">Release[2]?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="guard" x="1195" y="1387">scheduler_queue_head()==2</label>
+			<label kind="synchronisation" x="1195" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="1193" y="1050">Run[2][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id6"/>
+			<label kind="guard" x="1270" y="772">rid==1</label>
+			<label kind="synchronisation" x="1270" y="762">Finish[2][rid]?</label>
+			<label kind="assignment" x="1270" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id6"/>
+			<label kind="guard" x="1335" y="550">!runnable_should_execute[2][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1335" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="1115" y="447">Terminate!</label>
+			<label kind="assignment" x="1115" y="457">scheduler_queue5_remove(2)</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="1660" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id1"/>
+			<label kind="guard" x="1660" y="487">scheduler_queue_head()==2</label>
+			<label kind="synchronisation" x="1660" y="477">task_run?</label>
+			<nail x="1733" y="392"/>
+			<nail x="1551" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="1500" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="1470" y="1394">Stop[2][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="1195" y="1407">block?</label>
+			<nail x="1095" y="1292"/>
+			<nail x="1253" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="1208" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id6"/>
+			<label kind="guard" x="1208" y="337">scheduler_queue_head()==2</label>
+			<label kind="synchronisation" x="1208" y="327">task_run?</label>
+			<nail x="1192" y="202"/>
+			<nail x="1177" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceWriteintra_non_schedule</name>
+		<declaration>int d;
+</declaration>
+		<location id="id10" x="1450" y="430">
+		</location>
+		<location id="id11" x="1330" y="90">
+			<committed/>
+		</location>
+		<location id="id12" x="1670" y="715">
+			<committed/>
+		</location>
+		<init ref="id10"/>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id10"/>
+			<label kind="guard" x="1450" y="440">ioHWAb_RDigitalServiceWrite_len&gt;=1</label>
+			<label kind="synchronisation" x="1450" y="430">ioHWAb_RDigitalServiceWrite_Invoke_to_RTE[1]?</label>
+			<nail x="1420" y="400"/>
+			<nail x="1480" y="400"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id12"/>
+			<label kind="select" x="1496" y="552">a:int[1,1]</label>
+			<label kind="synchronisation" x="1300" y="569">ioHWAb_RDigitalServiceWrite_finish[a]?</label>
+			<label kind="assignment" x="1530" y="586">d=a</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="guard" x="1403" y="270">ioHWAb_RDigitalServiceWrite_len&lt;1</label>
+			<label kind="synchronisation" x="1403" y="260">ioHWAb_RDigitalServiceWrite_Invoke_to_RTE[1]?</label>
+			<label kind="assignment" x="1403" y="280">d=1,ioHWAb_RDigitalServiceWrite_add(1)</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="1403" y="290">ioHWAb_RDigitalServiceWrite_valid_invoke_server[d]!</label>
+			<nail x="1350" y="178"/>
+			<nail x="1410" y="348"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="1573" y="592">ioHWAb_RDigitalServiceWrite_result_return[d]!</label>
+			<nail x="1622" y="636"/>
+			<nail x="1512" y="494"/>
+		</transition>
+	</template>
+	<template>
+		<name>Data_LightStatus_buffer</name>
+		<location id="id13" x="670" y="140">
+		</location>
+		<location id="id14" x="1025" y="90">
+			<committed/>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="670" y="140">FrontLightActuator_LightStatus_read?</label>
+			<nail x="640" y="110"/>
+			<nail x="700" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="860" y="115">LightManager_LightStatus_write?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="860" y="125">Data_LightStatus_dataReceived!</label>
+			<nail x="934" y="92"/>
+			<nail x="756" y="117"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceReadLeft_server_rte</name>
+		<location id="id15" x="1390" y="430">
+		</location>
+		<location id="id16" x="1610" y="715">
+			<committed/>
+		</location>
+		<location id="id17" x="1270" y="90">
+			<committed/>
+		</location>
+		<init ref="id15"/>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id15"/>
+			<label kind="guard" x="1405" y="495">runnable_should_execute[9][1]==0</label>
+			<label kind="synchronisation" x="1390" y="480">ioHWAb_RDigitalServiceReadLeft_start_server?</label>
+			<nail x="1390" y="480"/>
+			<nail x="1440" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="1487" y="535">ioHWAb_RDigitalServiceReadLeft_add_server_task!</label>
+			<label kind="assignment" x="1487" y="552">runnable_should_execute[9][1]=1</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id17"/>
+			<label kind="guard" x="1343" y="270">runnable_should_execute[9][1]!=0</label>
+			<label kind="synchronisation" x="1343" y="260">ioHWAb_RDigitalServiceReadLeft_start_server?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="1343" y="280">ioHWAb_RDigitalServiceReadLeft_add_server_task!</label>
+			<nail x="1290" y="178"/>
+			<nail x="1350" y="348"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id15"/>
+			<label kind="select" x="1402" y="365">a:int[1,1]</label>
+			<label kind="guard" x="1405" y="395">runnable_should_execute[9][1]!=0</label>
+			<label kind="synchronisation" x="1390" y="380">ioHWAb_RDigitalServiceReadLeft_valid_invoke_server[a]?</label>
+			<label kind="assignment" x="1420" y="410">runnable_should_execute[9][1]=runnable_should_execute[9][1]+1</label>
+			<nail x="1390" y="380"/>
+			<nail x="1340" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="select" x="1513" y="578">a:int[1,1]</label>
+			<label kind="guard" x="1513" y="603">runnable_should_execute[9][1]==0</label>
+			<label kind="synchronisation" x="1513" y="592">ioHWAb_RDigitalServiceReadLeft_valid_invoke_server[a]?</label>
+			<nail x="1437" y="507"/>
+			<nail x="1547" y="649"/>
+		</transition>
+	</template>
+	<template>
+		<name>FrontLightActuator_RFrontLightActuator</name>
+		<declaration>clock t;
+int Data_LightStatus_call_times = 0;
+int ioHWAb_RDigitalServiceWrite_DigitalServiceWrite_call_times;
+</declaration>
+		<location id="id18" x="2255" y="1370">
+			<name x="2245" y="1340">FrontLightActuator_RFrontLightActuator_initial</name>
+		</location>
+		<location id="id19" x="2660" y="1370">
+			<name x="2650" y="1340">FrontLightActuator_RFrontLightActuator_read</name>
+			<urgent/>
+		</location>
+		<location id="id20" x="2750" y="950">
+			<name x="2740" y="920">FrontLightActuator_RFrontLightActuator_running</name>
+			<label kind="invariant" x="2740" y="965">t &lt;=2</label>
+		</location>
+		<location id="id21" x="2330" y="970">
+			<name x="2320" y="940">FrontLightActuator_RFrontLightActuator_write</name>
+			<committed/>
+		</location>
+		<location id="id22" x="2735" y="1760">
+			<name x="2725" y="1730">FrontLightActuator_RFrontLightActuator_read_preempted</name>
+			<label kind="invariant" x="2725" y="1775">t'==0</label>
+		</location>
+		<location id="id23" x="3160" y="1025">
+			<name x="3150" y="995">FrontLightActuator_RFrontLightActuator_running_preempted</name>
+			<label kind="invariant" x="3150" y="1040">t'==0</label>
+		</location>
+		<location id="id24" x="1955" y="825">
+			<name x="1945" y="795">FrontLightActuator_RFrontLightActuator_write_preempted</name>
+			<label kind="invariant" x="1945" y="840">t'==0</label>
+		</location>
+		<location id="id25" x="2665" y="185">
+			<name x="2655" y="155">callUrgent_preempted</name>
+			<label kind="invariant" x="2655" y="200">t'==0</label>
+		</location>
+		<location id="id26" x="3465" y="90">
+			<name x="3455" y="60">wait_preempted</name>
+			<label kind="invariant" x="3455" y="105">t'==0</label>
+		</location>
+		<location id="id27" x="3855" y="880">
+			<name x="3845" y="850">afterCall_block</name>
+			<label kind="invariant" x="3845" y="895">t'==0</label>
+		</location>
+		<location id="id28" x="2870" y="540">
+			<name x="2860" y="510">callUrgent</name>
+			<committed/>
+		</location>
+		<location id="id29" x="3275" y="435">
+			<name x="3265" y="405">wait</name>
+			<label kind="invariant" x="3265" y="450">t'==0</label>
+		</location>
+		<location id="id30" x="3475" y="785">
+			<name x="3465" y="755">afterCall</name>
+			<committed/>
+		</location>
+		<init ref="id18"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="2457" y="1370">Run[10][1]?</label>
+			<label kind="assignment" x="2457" y="1380">runnable_should_execute[10][1]=false,t=0,Data_LightStatus_call_times = 0,ioHWAb_RDigitalServiceWrite_DigitalServiceWrite_call_times = false</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id20"/>
+			<label kind="guard" x="2718" y="1160">Data_LightStatus_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="guard" x="2553" y="960">t &gt;=1&amp;&amp;ioHWAb_RDigitalServiceWrite_DigitalServiceWrite_call_times</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="2305" y="1171">Finish[10][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id19"/>
+			<label kind="guard" x="2660" y="1400">Data_LightStatus_call_times&lt;1</label>
+			<label kind="synchronisation" x="2660" y="1390">FrontLightActuator_LightStatus_read!</label>
+			<label kind="assignment" x="2660" y="1410">Data_LightStatus_call_times=Data_LightStatus_call_times+1</label>
+			<nail x="2630" y="1340"/>
+			<nail x="2690" y="1340"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="2710" y="1565">Stop[10][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="2710" y="1575">Run[10][1]?</label>
+			<nail x="2725" y="1660"/>
+			<nail x="2687" y="1465"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="2968" y="987">Stop[10][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="2968" y="997">Run[10][1]?</label>
+			<nail x="3058" y="996"/>
+			<nail x="2853" y="958"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id24"/>
+			<label kind="synchronisation" x="2155" y="897">Stop[10][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="2155" y="907">Run[10][1]?</label>
+			<nail x="2044" y="870"/>
+			<nail x="2232" y="942"/>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id25"/>
+			<label kind="synchronisation" x="2780" y="362">Stop[10][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id28"/>
+			<label kind="synchronisation" x="2780" y="372">Run[10][1]?</label>
+			<nail x="2707" y="277"/>
+			<nail x="2809" y="455"/>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="3383" y="262">Stop[10][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="3383" y="272">Run[10][1]?</label>
+			<nail x="3408" y="171"/>
+			<nail x="3313" y="343"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="3678" y="832">Stop[10][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="3678" y="842">Run[10][1]?</label>
+			<nail x="3762" y="846"/>
+			<nail x="3572" y="798"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id28"/>
+			<label kind="guard" x="2823" y="755">!ioHWAb_RDigitalServiceWrite_DigitalServiceWrite_call_times</label>
+			<label kind="synchronisation" x="2823" y="745">ioHWAb_RDigitalServiceWrite_Invoke[1]!</label>
+			<label kind="assignment" x="2823" y="765">ioHWAb_RDigitalServiceWrite_DigitalServiceWrite_call_times=true</label>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="3085" y="487">ioHWAb_RDigitalServiceWrite_Invoke_to_RTE[1]!</label>
+			<label kind="assignment" x="3085" y="497">ioHWAb_RDigitalServiceWrite_have_wait[1]=true</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="3388" y="610">ioHWAb_RDigitalServiceWrite_result_return[1]?</label>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="3330" y="917">Wakeup[10]!</label>
+		</transition>
+	</template>
+	<template>
+		<name>Data_LeftDoorStatus_buffer</name>
+		<location id="id31" x="745" y="140">
+		</location>
+		<location id="id32" x="1100" y="90">
+			<committed/>
+		</location>
+		<init ref="id31"/>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id31"/>
+			<label kind="synchronisation" x="745" y="140">LightManager_LeftDoorStatus_read?</label>
+			<nail x="715" y="110"/>
+			<nail x="775" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id32"/>
+			<label kind="synchronisation" x="935" y="115">LeftDoorSensor_LeftDoorStatus_write?</label>
+		</transition>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id31"/>
+			<label kind="synchronisation" x="935" y="125">Data_LeftDoorStatus_dataReceived!</label>
+			<nail x="1009" y="92"/>
+			<nail x="831" y="117"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceWrite_server_rte</name>
+		<location id="id33" x="1320" y="430">
+		</location>
+		<location id="id34" x="1540" y="715">
+			<committed/>
+		</location>
+		<location id="id35" x="1200" y="90">
+			<committed/>
+		</location>
+		<init ref="id33"/>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id33"/>
+			<label kind="guard" x="1335" y="495">runnable_should_execute[6][1]==0</label>
+			<label kind="synchronisation" x="1320" y="480">ioHWAb_RDigitalServiceWrite_start_server?</label>
+			<nail x="1320" y="480"/>
+			<nail x="1370" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="1443" y="572">ioHWAb_RDigitalServiceWrite_add_server_task!</label>
+			<label kind="assignment" x="1443" y="582">runnable_should_execute[6][1]=1</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id35"/>
+			<label kind="guard" x="1273" y="270">runnable_should_execute[6][1]!=0</label>
+			<label kind="synchronisation" x="1273" y="260">ioHWAb_RDigitalServiceWrite_start_server?</label>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="1273" y="280">ioHWAb_RDigitalServiceWrite_add_server_task!</label>
+			<nail x="1220" y="178"/>
+			<nail x="1280" y="348"/>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id33"/>
+			<label kind="select" x="1317" y="357">a:int[1,1]</label>
+			<label kind="guard" x="1335" y="395">runnable_should_execute[6][1]!=0</label>
+			<label kind="synchronisation" x="1320" y="380">ioHWAb_RDigitalServiceWrite_valid_invoke_server[a]?</label>
+			<label kind="assignment" x="1350" y="410">runnable_should_execute[6][1]=runnable_should_execute[6][1]+1</label>
+			<nail x="1320" y="380"/>
+			<nail x="1270" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id34"/>
+			<label kind="select" x="1368" y="612">a:int[1,1]</label>
+			<label kind="guard" x="1368" y="646">runnable_should_execute[6][1]==0</label>
+			<label kind="synchronisation" x="1368" y="629">ioHWAb_RDigitalServiceWrite_valid_invoke_server[a]?</label>
+			<nail x="1367" y="507"/>
+			<nail x="1477" y="649"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceReadRight_server_rte</name>
+		<location id="id36" x="1415" y="430">
+		</location>
+		<location id="id37" x="1635" y="715">
+			<committed/>
+		</location>
+		<location id="id38" x="1295" y="90">
+			<committed/>
+		</location>
+		<init ref="id36"/>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id36"/>
+			<label kind="guard" x="1430" y="495">runnable_should_execute[1][1]==0</label>
+			<label kind="synchronisation" x="1415" y="480">ioHWAb_RDigitalServiceReadRight_start_server?</label>
+			<nail x="1415" y="480"/>
+			<nail x="1465" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="1538" y="572">ioHWAb_RDigitalServiceReadRight_add_server_task!</label>
+			<label kind="assignment" x="1538" y="582">runnable_should_execute[1][1]=1</label>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id38"/>
+			<label kind="guard" x="1368" y="270">runnable_should_execute[1][1]!=0</label>
+			<label kind="synchronisation" x="1368" y="260">ioHWAb_RDigitalServiceReadRight_start_server?</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="1368" y="280">ioHWAb_RDigitalServiceReadRight_add_server_task!</label>
+			<nail x="1315" y="178"/>
+			<nail x="1375" y="348"/>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id36"/>
+			<label kind="select" x="1415" y="354">a:int[1,1]</label>
+			<label kind="guard" x="1430" y="395">runnable_should_execute[1][1]!=0</label>
+			<label kind="synchronisation" x="1415" y="380">ioHWAb_RDigitalServiceReadRight_valid_invoke_server[a]?</label>
+			<label kind="assignment" x="1445" y="410">runnable_should_execute[1][1]=runnable_should_execute[1][1]+1</label>
+			<nail x="1415" y="380"/>
+			<nail x="1365" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id37"/>
+			<label kind="select" x="1445" y="552">a:int[1,1]</label>
+			<label kind="guard" x="1300" y="569">runnable_should_execute[1][1]==0</label>
+			<label kind="synchronisation" x="1147" y="586">ioHWAb_RDigitalServiceReadRight_valid_invoke_server[a]?</label>
+			<nail x="1462" y="507"/>
+			<nail x="1572" y="649"/>
+		</transition>
+	</template>
+	<template>
+		<name>RightDoorSensor_RGetResultDigitalServiceReadRight</name>
+		<declaration>clock t;
+int Data_RightDoorStatus_call_times = 0;
+</declaration>
+		<location id="id39" x="3165" y="90">
+			<name x="3155" y="60">RightDoorSensor_RGetResultDigitalServiceReadRight_initial</name>
+		</location>
+		<location id="id40" x="3435" y="390">
+			<name x="3425" y="360">RightDoorSensor_RGetResultDigitalServiceReadRight_read</name>
+			<urgent/>
+		</location>
+		<location id="id41" x="3115" y="635">
+			<name x="3034" y="595">RightDoorSensor_RGetResultDigitalServiceReadRight_running</name>
+			<label kind="invariant" x="3105" y="650">t &lt;=2</label>
+		</location>
+		<location id="id42" x="2845" y="335">
+			<name x="2835" y="305">RightDoorSensor_RGetResultDigitalServiceReadRight_write</name>
+			<committed/>
+		</location>
+		<location id="id43" x="3815" y="375">
+			<name x="3805" y="345">RightDoorSensor_RGetResultDigitalServiceReadRight_read_preempted</name>
+			<label kind="invariant" x="3805" y="390">t'==0</label>
+		</location>
+		<location id="id44" x="3075" y="1025">
+			<name x="3065" y="995">RightDoorSensor_RGetResultDigitalServiceReadRight_running_preempted</name>
+			<label kind="invariant" x="3065" y="1040">t'==0</label>
+		</location>
+		<location id="id45" x="2475" y="235">
+			<name x="2465" y="205">RightDoorSensor_RGetResultDigitalServiceReadRight_write_preempted</name>
+			<label kind="invariant" x="2465" y="250">t'==0</label>
+		</location>
+		<init ref="id39"/>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="3313" y="240">Run[4][1]?</label>
+			<label kind="assignment" x="3313" y="250">runnable_should_execute[4][1]=false,t=0,Data_RightDoorStatus_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="3288" y="512">ioHWAb_RDigitalServiceReadRight_has_run[0]!</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id42"/>
+			<label kind="guard" x="2993" y="485">t &gt;=1</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id39"/>
+			<label kind="guard" x="3018" y="222">Data_RightDoorStatus_call_times==1</label>
+			<label kind="synchronisation" x="3018" y="212">Finish[4][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id42"/>
+			<label kind="guard" x="2845" y="345">Data_RightDoorStatus_call_times&lt;1</label>
+			<label kind="synchronisation" x="2845" y="335">RightDoorSensor_RightDoorStatus_write!</label>
+			<label kind="assignment" x="2845" y="355">Data_RightDoorStatus_call_times=Data_RightDoorStatus_call_times+1</label>
+			<nail x="2815" y="305"/>
+			<nail x="2875" y="305"/>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="3638" y="382">Stop[4][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="3638" y="392">Run[4][1]?</label>
+			<nail x="3719" y="368"/>
+			<nail x="3529" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id44"/>
+			<label kind="synchronisation" x="3108" y="830">Stop[4][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id41"/>
+			<label kind="synchronisation" x="3108" y="840">Run[4][1]?</label>
+			<nail x="3094" y="928"/>
+			<nail x="3114" y="733"/>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id45"/>
+			<label kind="synchronisation" x="2673" y="285">Stop[4][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id42"/>
+			<label kind="synchronisation" x="2673" y="295">Run[4][1]?</label>
+			<nail x="2564" y="269"/>
+			<nail x="2749" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceWrite</name>
+		<declaration>clock t;
+</declaration>
+		<location id="id46" x="1595" y="90">
+			<name x="1585" y="60">Ready</name>
+		</location>
+		<location id="id47" x="1865" y="390">
+			<name x="1855" y="360">beforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id48" x="1540" y="635">
+			<name x="1530" y="605">Running</name>
+			<label kind="invariant" x="1530" y="650">t &lt;=2</label>
+		</location>
+		<location id="id49" x="1275" y="335">
+			<name x="1265" y="305">tmp</name>
+			<committed/>
+		</location>
+		<location id="id50" x="2245" y="375">
+			<name x="2235" y="345">beforeRunning_preemted</name>
+			<label kind="invariant" x="2235" y="390">t'==0</label>
+		</location>
+		<location id="id51" x="1505" y="1025">
+			<name x="1495" y="995">Running_preemted</name>
+			<label kind="invariant" x="1495" y="1040">t'==0</label>
+		</location>
+		<location id="id52" x="905" y="235">
+			<name x="895" y="205">tmp_preemted</name>
+			<label kind="invariant" x="895" y="250">t'==0</label>
+		</location>
+		<init ref="id46"/>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id47"/>
+			<label kind="synchronisation" x="1743" y="240">Run[6][1]?</label>
+			<label kind="assignment" x="1743" y="250">runnable_should_execute[6][1]=runnable_should_execute[6][1]-1,t=0</label>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id48"/>
+			<label kind="synchronisation" x="1715" y="512">ioHWAb_RDigitalServiceWrite_start_server!</label>
+		</transition>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id46"/>
+			<label kind="synchronisation" x="1448" y="212">Finish[6][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id49"/>
+			<label kind="guard" x="1420" y="495">t &gt;=1</label>
+			<label kind="synchronisation" x="1420" y="485">ioHWAb_RDigitalServiceWrite_finish[ioHWAb_RDigitalServiceWrite_head()]!</label>
+			<label kind="assignment" x="1420" y="522">ioHWAb_RDigitalServiceWrite_e=ioHWAb_RDigitalServiceWrite_head(),ioHWAb_RDigitalServiceWrite_remove()</label>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id50"/>
+			<label kind="synchronisation" x="2068" y="382">Stop[6][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id47"/>
+			<label kind="synchronisation" x="2068" y="392">Run[6][1]?</label>
+			<nail x="2149" y="368"/>
+			<nail x="1959" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id51"/>
+			<label kind="synchronisation" x="1535" y="830">Stop[6][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id51"/>
+			<target ref="id48"/>
+			<label kind="synchronisation" x="1535" y="840">Run[6][1]?</label>
+			<nail x="1522" y="927"/>
+			<nail x="1540" y="732"/>
+		</transition>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id52"/>
+			<label kind="synchronisation" x="1103" y="285">Stop[6][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id52"/>
+			<target ref="id49"/>
+			<label kind="synchronisation" x="1103" y="295">Run[6][1]?</label>
+			<nail x="994" y="269"/>
+			<nail x="1179" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>LightManager_RLightManagerReceiveRightDoor</name>
+		<declaration>clock t;
+int Data_LightStatus_call_times = 0;
+int Data_RightDoorStatus_call_times = 0;
+</declaration>
+		<location id="id53" x="2965" y="90">
+			<name x="2955" y="60">LightManager_RLightManagerReceiveRightDoor_initial</name>
+		</location>
+		<location id="id54" x="3230" y="390">
+			<name x="3220" y="360">LightManager_RLightManagerReceiveRightDoor_read</name>
+			<urgent/>
+		</location>
+		<location id="id55" x="2910" y="635">
+			<name x="2900" y="605">LightManager_RLightManagerReceiveRightDoor_running</name>
+			<label kind="invariant" x="2900" y="650">t &lt;=2</label>
+		</location>
+		<location id="id56" x="2640" y="335">
+			<name x="2630" y="305">LightManager_RLightManagerReceiveRightDoor_write</name>
+			<committed/>
+		</location>
+		<location id="id57" x="3610" y="375">
+			<name x="3595" y="348">LightManager_RLightManagerReceiveRightDoor_read_preemted</name>
+			<label kind="invariant" x="3600" y="390">t'==0</label>
+		</location>
+		<location id="id58" x="2870" y="1025">
+			<name x="2860" y="995">LightManager_RLightManagerReceiveRightDoor_running_preempted</name>
+			<label kind="invariant" x="2860" y="1040">t'==0</label>
+		</location>
+		<location id="id59" x="2275" y="235">
+			<name x="2265" y="205">LightManager_RLightManagerReceiveRightDoor_write_preempted</name>
+			<label kind="invariant" x="2265" y="250">t'==0</label>
+		</location>
+		<init ref="id53"/>
+		<transition>
+			<source ref="id53"/>
+			<target ref="id54"/>
+			<label kind="synchronisation" x="3110" y="240">Run[8][1]?</label>
+			<label kind="assignment" x="3110" y="250">runnable_should_execute[8][1]=false,t=0,Data_LightStatus_call_times = 0,Data_RightDoorStatus_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id55"/>
+			<label kind="guard" x="3083" y="512">Data_RightDoorStatus_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id55"/>
+			<target ref="id56"/>
+			<label kind="guard" x="2788" y="485">t &gt;=1</label>
+		</transition>
+		<transition>
+			<source ref="id56"/>
+			<target ref="id53"/>
+			<label kind="guard" x="2815" y="222">Data_LightStatus_call_times==1</label>
+			<label kind="synchronisation" x="2815" y="212">Finish[8][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id56"/>
+			<target ref="id56"/>
+			<label kind="guard" x="2640" y="345">Data_LightStatus_call_times&lt;1</label>
+			<label kind="synchronisation" x="2640" y="335">LightManager_LightStatus_write!</label>
+			<label kind="assignment" x="2640" y="355">Data_LightStatus_call_times=Data_LightStatus_call_times+1</label>
+			<nail x="2610" y="305"/>
+			<nail x="2670" y="305"/>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id57"/>
+			<label kind="synchronisation" x="3433" y="382">Stop[8][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id57"/>
+			<target ref="id54"/>
+			<label kind="synchronisation" x="3433" y="392">Run[8][1]?</label>
+			<nail x="3514" y="368"/>
+			<nail x="3324" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id55"/>
+			<target ref="id58"/>
+			<label kind="synchronisation" x="2903" y="830">Stop[8][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id58"/>
+			<target ref="id55"/>
+			<label kind="synchronisation" x="2903" y="840">Run[8][1]?</label>
+			<nail x="2889" y="928"/>
+			<nail x="2909" y="733"/>
+		</transition>
+		<transition>
+			<source ref="id56"/>
+			<target ref="id59"/>
+			<label kind="synchronisation" x="2470" y="285">Stop[8][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id59"/>
+			<target ref="id56"/>
+			<label kind="synchronisation" x="2470" y="295">Run[8][1]?</label>
+			<nail x="2363" y="269"/>
+			<nail x="2545" y="319"/>
+		</transition>
+		<transition>
+			<source ref="id54"/>
+			<target ref="id54"/>
+			<label kind="guard" x="3230" y="412">Data_RightDoorStatus_call_times&lt;1</label>
+			<label kind="synchronisation" x="3230" y="402">LightManager_RightDoorStatus_read!</label>
+			<label kind="assignment" x="3230" y="422">Data_RightDoorStatus_call_times=Data_RightDoorStatus_call_times+1</label>
+			<nail x="3200" y="360"/>
+			<nail x="3260" y="360"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskReadRight</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id60" x="1060" y="325">
+			<name x="1050" y="295">Ready</name>
+		</location>
+		<location id="id61" x="1500" y="530">
+			<name x="1490" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id62" x="1370" y="895">
+			<name x="1360" y="865">Running</name>
+		</location>
+		<location id="id63" x="1340" y="1230">
+			<name x="1330" y="1200">wait</name>
+		</location>
+		<location id="id64" x="1375" y="1525">
+			<name x="1365" y="1495">Ready2</name>
+		</location>
+		<location id="id65" x="1060" y="1205">
+			<name x="1050" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id66" x="1210" y="545">
+			<name x="1200" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id67" x="1860" y="360">
+			<name x="1850" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id68" x="1670" y="1205">
+			<name x="1660" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id69" x="1245" y="90">
+			<name x="1235" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id60"/>
+		<transition>
+			<source ref="id60"/>
+			<target ref="id61"/>
+			<label kind="guard" x="1293" y="437">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="1293" y="427">task_run?</label>
+			<label kind="assignment" x="1300" y="467">activation_count[1]=activation_count[1]-1</label>
+		</transition>
+		<transition>
+			<source ref="id61"/>
+			<target ref="id61"/>
+			<label kind="guard" x="1500" y="530">!runnable_should_execute[1][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1500" y="540">rid=rid+1</label>
+			<nail x="1470" y="500"/>
+			<nail x="1530" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id61"/>
+			<target ref="id62"/>
+			<label kind="guard" x="1462" y="680">runnable_should_execute[1][rid]</label>
+			<label kind="synchronisation" x="1462" y="697">Run[1][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id62"/>
+			<target ref="id61"/>
+			<label kind="guard" x="1448" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1448" y="732">Finish[1][rid]?</label>
+			<label kind="assignment" x="1448" y="752">rid=rid+1</label>
+			<nail x="1411" y="806"/>
+			<nail x="1476" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id62"/>
+			<target ref="id63"/>
+			<label kind="synchronisation" x="1368" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id63"/>
+			<target ref="id64"/>
+			<label kind="synchronisation" x="1370" y="1377">Release[1]?</label>
+		</transition>
+		<transition>
+			<source ref="id64"/>
+			<target ref="id65"/>
+			<label kind="guard" x="1230" y="1387">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="1230" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id65"/>
+			<target ref="id62"/>
+			<label kind="synchronisation" x="1228" y="1050">Run[1][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id62"/>
+			<target ref="id66"/>
+			<label kind="guard" x="1303" y="772">rid==1</label>
+			<label kind="synchronisation" x="1303" y="762">Finish[1][rid]?</label>
+			<label kind="assignment" x="1303" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id61"/>
+			<target ref="id66"/>
+			<label kind="guard" x="1368" y="550">!runnable_should_execute[1][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1368" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id60"/>
+			<label kind="synchronisation" x="1148" y="447">Terminate!</label>
+			<label kind="assignment" x="1148" y="457">scheduler_queue6_remove(1)</label>
+		</transition>
+		<transition>
+			<source ref="id61"/>
+			<target ref="id67"/>
+			<label kind="synchronisation" x="1693" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id67"/>
+			<target ref="id61"/>
+			<label kind="guard" x="1693" y="487">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="1693" y="477">task_run?</label>
+			<nail x="1765" y="392"/>
+			<nail x="1585" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id62"/>
+			<target ref="id68"/>
+			<label kind="synchronisation" x="1533" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id68"/>
+			<target ref="id64"/>
+			<label kind="synchronisation" x="1535" y="1397">Stop[1][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id65"/>
+			<target ref="id64"/>
+			<label kind="synchronisation" x="1230" y="1407">block?</label>
+			<nail x="1130" y="1292"/>
+			<nail x="1288" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id66"/>
+			<target ref="id69"/>
+			<label kind="synchronisation" x="1240" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id69"/>
+			<target ref="id66"/>
+			<label kind="guard" x="1240" y="337">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="1240" y="327">task_run?</label>
+			<nail x="1226" y="202"/>
+			<nail x="1208" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskGetResultLeft</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id70" x="1225" y="325">
+			<name x="1215" y="295">Ready</name>
+		</location>
+		<location id="id71" x="1665" y="530">
+			<name x="1655" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id72" x="1535" y="895">
+			<name x="1525" y="865">Running</name>
+		</location>
+		<location id="id73" x="1505" y="1230">
+			<name x="1495" y="1200">wait</name>
+		</location>
+		<location id="id74" x="1540" y="1525">
+			<name x="1530" y="1495">Ready2</name>
+		</location>
+		<location id="id75" x="1225" y="1205">
+			<name x="1215" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id76" x="1380" y="545">
+			<name x="1370" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id77" x="2025" y="360">
+			<name x="2015" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id78" x="1840" y="1205">
+			<name x="1830" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id79" x="1410" y="90">
+			<name x="1400" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id70"/>
+		<transition>
+			<source ref="id70"/>
+			<target ref="id71"/>
+			<label kind="guard" x="1458" y="437">scheduler_queue_head()==5</label>
+			<label kind="synchronisation" x="1458" y="427">task_run?</label>
+			<label kind="assignment" x="1470" y="467">activation_count[5]=activation_count[5]-1</label>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id71"/>
+			<label kind="guard" x="1665" y="530">!runnable_should_execute[5][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1665" y="540">rid=rid+1</label>
+			<nail x="1635" y="500"/>
+			<nail x="1695" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id72"/>
+			<label kind="guard" x="1615" y="697">runnable_should_execute[5][rid]</label>
+			<label kind="synchronisation" x="1615" y="688">Run[5][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id72"/>
+			<target ref="id71"/>
+			<label kind="guard" x="1613" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1613" y="732">Finish[5][rid]?</label>
+			<label kind="assignment" x="1613" y="752">rid=rid+1</label>
+			<nail x="1576" y="806"/>
+			<nail x="1641" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id72"/>
+			<target ref="id73"/>
+			<label kind="synchronisation" x="1533" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id73"/>
+			<target ref="id74"/>
+			<label kind="synchronisation" x="1535" y="1377">Release[5]?</label>
+		</transition>
+		<transition>
+			<source ref="id74"/>
+			<target ref="id75"/>
+			<label kind="guard" x="1395" y="1387">scheduler_queue_head()==5</label>
+			<label kind="synchronisation" x="1395" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id75"/>
+			<target ref="id72"/>
+			<label kind="synchronisation" x="1393" y="1050">Run[5][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id72"/>
+			<target ref="id76"/>
+			<label kind="guard" x="1470" y="772">rid==1</label>
+			<label kind="synchronisation" x="1470" y="762">Finish[5][rid]?</label>
+			<label kind="assignment" x="1470" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id76"/>
+			<label kind="guard" x="1535" y="550">!runnable_should_execute[5][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1535" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id76"/>
+			<target ref="id70"/>
+			<label kind="synchronisation" x="1315" y="447">Terminate!</label>
+			<label kind="assignment" x="1315" y="457">scheduler_queue2_remove(5)</label>
+		</transition>
+		<transition>
+			<source ref="id71"/>
+			<target ref="id77"/>
+			<label kind="synchronisation" x="1858" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id77"/>
+			<target ref="id71"/>
+			<label kind="guard" x="1858" y="487">scheduler_queue_head()==5</label>
+			<label kind="synchronisation" x="1858" y="477">task_run?</label>
+			<nail x="1930" y="392"/>
+			<nail x="1750" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id72"/>
+			<target ref="id78"/>
+			<label kind="synchronisation" x="1700" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id78"/>
+			<target ref="id74"/>
+			<label kind="synchronisation" x="1703" y="1397">Stop[5][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id75"/>
+			<target ref="id74"/>
+			<label kind="synchronisation" x="1395" y="1407">block?</label>
+			<nail x="1295" y="1292"/>
+			<nail x="1453" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id76"/>
+			<target ref="id79"/>
+			<label kind="synchronisation" x="1408" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id79"/>
+			<target ref="id76"/>
+			<label kind="guard" x="1408" y="337">scheduler_queue_head()==5</label>
+			<label kind="synchronisation" x="1408" y="327">task_run?</label>
+			<nail x="1392" y="202"/>
+			<nail x="1377" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>RightDoorSensor_RRightDoorSensor</name>
+		<declaration>clock t;
+int ioHWAb_RDigitalServiceReadRight_DigitalServiceReadRight_call_times;
+</declaration>
+		<location id="id80" x="2485" y="90">
+			<name x="2473" y="59">RightDoorSensor_RRightDoorSensor_initial</name>
+		</location>
+		<location id="id81" x="2755" y="390">
+			<name x="2745" y="360">RightDoorSensor_RRightDoorSensor_read</name>
+			<urgent/>
+		</location>
+		<location id="id82" x="2430" y="635">
+			<name x="2420" y="605">RightDoorSensor_RRightDoorSensor_running</name>
+			<label kind="invariant" x="2420" y="650">t &lt;=2</label>
+		</location>
+		<location id="id83" x="2165" y="335">
+			<name x="2155" y="305">RightDoorSensor_RRightDoorSensor_write</name>
+			<committed/>
+		</location>
+		<location id="id84" x="3135" y="375">
+			<name x="3125" y="345">RightDoorSensor_RRightDoorSensor_read_preempted</name>
+			<label kind="invariant" x="3125" y="390">t'==0</label>
+		</location>
+		<location id="id85" x="2395" y="1025">
+			<name x="2385" y="995">RightDoorSensor_RRightDoorSensor_running_preempted</name>
+			<label kind="invariant" x="2385" y="1040">t'==0</label>
+		</location>
+		<location id="id86" x="1795" y="235">
+			<name x="1785" y="205">RightDoorSensor_RRightDoorSensor_write_preempted</name>
+			<label kind="invariant" x="1785" y="250">t'==0</label>
+		</location>
+		<init ref="id80"/>
+		<transition>
+			<source ref="id80"/>
+			<target ref="id81"/>
+			<label kind="synchronisation" x="2633" y="240">Run[3][1]?</label>
+			<label kind="assignment" x="2633" y="250">runnable_should_execute[3][1]=false,t=0,ioHWAb_RDigitalServiceReadRight_DigitalServiceReadRight_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id81"/>
+			<target ref="id82"/>
+			<label kind="synchronisation" x="2605" y="512">RightDoorSensor_RRightDoorSensor_jitter_run!</label>
+		</transition>
+		<transition>
+			<source ref="id82"/>
+			<target ref="id83"/>
+			<label kind="guard" x="2310" y="485">t &gt;=1&amp;&amp;ioHWAb_RDigitalServiceReadRight_DigitalServiceReadRight_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id83"/>
+			<target ref="id80"/>
+			<label kind="synchronisation" x="2337" y="212">Finish[3][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id82"/>
+			<target ref="id82"/>
+			<label kind="guard" x="2430" y="645">ioHWAb_RDigitalServiceReadRight_DigitalServiceReadRight_call_times&lt;1</label>
+			<label kind="synchronisation" x="2430" y="635">ioHWAb_RDigitalServiceReadRight_Invoke[1]!</label>
+			<label kind="assignment" x="2430" y="655">ioHWAb_RDigitalServiceReadRight_DigitalServiceReadRight_call_times=ioHWAb_RDigitalServiceReadRight_DigitalServiceReadRight_call_times+1</label>
+			<nail x="2400" y="605"/>
+			<nail x="2460" y="605"/>
+		</transition>
+		<transition>
+			<source ref="id81"/>
+			<target ref="id84"/>
+			<label kind="synchronisation" x="2958" y="382">Stop[3][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id84"/>
+			<target ref="id81"/>
+			<label kind="synchronisation" x="2958" y="392">Run[3][1]?</label>
+			<nail x="3039" y="368"/>
+			<nail x="2849" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id82"/>
+			<target ref="id85"/>
+			<label kind="synchronisation" x="2425" y="830">Stop[3][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id85"/>
+			<target ref="id82"/>
+			<label kind="synchronisation" x="2425" y="840">Run[3][1]?</label>
+			<nail x="2412" y="927"/>
+			<nail x="2430" y="732"/>
+		</transition>
+		<transition>
+			<source ref="id83"/>
+			<target ref="id86"/>
+			<label kind="synchronisation" x="1993" y="285">Stop[3][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id86"/>
+			<target ref="id83"/>
+			<label kind="synchronisation" x="1993" y="295">Run[3][1]?</label>
+			<nail x="1884" y="269"/>
+			<nail x="2069" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceReadRightintra_non_schedule</name>
+		<declaration>int d;
+</declaration>
+		<location id="id87" x="1555" y="430">
+		</location>
+		<location id="id88" x="1775" y="715">
+			<committed/>
+		</location>
+		<location id="id89" x="1435" y="90">
+			<committed/>
+		</location>
+		<init ref="id87"/>
+		<transition>
+			<source ref="id87"/>
+			<target ref="id87"/>
+			<label kind="guard" x="1555" y="440">ioHWAb_RDigitalServiceReadRight_len&gt;=1||ioHWAb_RDigitalServiceReadRight_Inbuff(1)</label>
+			<label kind="synchronisation" x="1555" y="430">ioHWAb_RDigitalServiceReadRight_Invoke[1]?</label>
+			<nail x="1525" y="400"/>
+			<nail x="1585" y="400"/>
+		</transition>
+		<transition>
+			<source ref="id87"/>
+			<target ref="id88"/>
+			<label kind="select" x="1674" y="561">a:int[1,1]</label>
+			<label kind="synchronisation" x="1678" y="572">ioHWAb_RDigitalServiceReadRight_finish[a]?</label>
+			<label kind="assignment" x="1678" y="582">d=a</label>
+		</transition>
+		<transition>
+			<source ref="id87"/>
+			<target ref="id89"/>
+			<label kind="guard" x="1508" y="270">ioHWAb_RDigitalServiceReadRight_len&lt;1&amp;&amp;!ioHWAb_RDigitalServiceReadRight_Inbuff(1)</label>
+			<label kind="synchronisation" x="1508" y="260">ioHWAb_RDigitalServiceReadRight_Invoke[1]?</label>
+			<label kind="assignment" x="1508" y="280">d=1,ioHWAb_RDigitalServiceReadRight_add(1)</label>
+		</transition>
+		<transition>
+			<source ref="id88"/>
+			<target ref="id87"/>
+			<label kind="synchronisation" x="1678" y="592">ioHWAb_RDigitalServiceReadRight_result_return[d]!</label>
+			<nail x="1727" y="636"/>
+			<nail x="1617" y="494"/>
+		</transition>
+		<transition>
+			<source ref="id89"/>
+			<target ref="id87"/>
+			<label kind="synchronisation" x="1508" y="290">ioHWAb_RDigitalServiceReadRight_valid_invoke_server[d]!</label>
+			<nail x="1455" y="178"/>
+			<nail x="1515" y="348"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskReceiveRightDoor</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id90" x="1050" y="325">
+			<name x="1040" y="295">Ready</name>
+		</location>
+		<location id="id91" x="1495" y="530">
+			<name x="1485" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id92" x="1365" y="895">
+			<name x="1355" y="865">Running</name>
+		</location>
+		<location id="id93" x="1335" y="1230">
+			<name x="1326" y="1198">wait</name>
+		</location>
+		<location id="id94" x="1370" y="1525">
+			<name x="1360" y="1495">Ready2</name>
+		</location>
+		<location id="id95" x="1055" y="1205">
+			<name x="1045" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id96" x="1205" y="545">
+			<name x="1195" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id97" x="1855" y="360">
+			<name x="1845" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id98" x="1665" y="1205">
+			<name x="1657" y="1173">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id99" x="1240" y="90">
+			<name x="1230" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id90"/>
+		<transition>
+			<source ref="id90"/>
+			<target ref="id91"/>
+			<label kind="guard" x="1285" y="437">scheduler_queue_head()==8</label>
+			<label kind="synchronisation" x="1285" y="427">task_run?</label>
+			<label kind="assignment" x="1275" y="476">activation_count[8]=activation_count[8]-1</label>
+		</transition>
+		<transition>
+			<source ref="id91"/>
+			<target ref="id91"/>
+			<label kind="guard" x="1495" y="530">!runnable_should_execute[8][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1495" y="540">rid=rid+1</label>
+			<nail x="1465" y="500"/>
+			<nail x="1525" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id91"/>
+			<target ref="id92"/>
+			<label kind="guard" x="1445" y="714">runnable_should_execute[8][rid]</label>
+			<label kind="synchronisation" x="1445" y="697">Run[8][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id92"/>
+			<target ref="id91"/>
+			<label kind="guard" x="1443" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1443" y="732">Finish[8][rid]?</label>
+			<label kind="assignment" x="1443" y="752">rid=rid+1</label>
+			<nail x="1406" y="806"/>
+			<nail x="1471" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id92"/>
+			<target ref="id93"/>
+			<label kind="synchronisation" x="1363" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id93"/>
+			<target ref="id94"/>
+			<label kind="synchronisation" x="1365" y="1377">Release[8]?</label>
+		</transition>
+		<transition>
+			<source ref="id94"/>
+			<target ref="id95"/>
+			<label kind="guard" x="1225" y="1387">scheduler_queue_head()==8</label>
+			<label kind="synchronisation" x="1225" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id95"/>
+			<target ref="id92"/>
+			<label kind="synchronisation" x="1223" y="1050">Run[8][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id92"/>
+			<target ref="id96"/>
+			<label kind="guard" x="1298" y="772">rid==1</label>
+			<label kind="synchronisation" x="1298" y="762">Finish[8][rid]?</label>
+			<label kind="assignment" x="1298" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id91"/>
+			<target ref="id96"/>
+			<label kind="guard" x="1363" y="550">!runnable_should_execute[8][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1363" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id96"/>
+			<target ref="id90"/>
+			<label kind="synchronisation" x="1140" y="447">Terminate!</label>
+			<label kind="assignment" x="1140" y="457">scheduler_queue5_remove(8)</label>
+		</transition>
+		<transition>
+			<source ref="id91"/>
+			<target ref="id97"/>
+			<label kind="synchronisation" x="1688" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id97"/>
+			<target ref="id91"/>
+			<label kind="guard" x="1688" y="487">scheduler_queue_head()==8</label>
+			<label kind="synchronisation" x="1688" y="477">task_run?</label>
+			<nail x="1760" y="392"/>
+			<nail x="1580" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id92"/>
+			<target ref="id98"/>
+			<label kind="synchronisation" x="1528" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id98"/>
+			<target ref="id94"/>
+			<label kind="synchronisation" x="1530" y="1397">Stop[8][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id95"/>
+			<target ref="id94"/>
+			<label kind="synchronisation" x="1225" y="1407">block?</label>
+			<nail x="1125" y="1292"/>
+			<nail x="1283" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id96"/>
+			<target ref="id99"/>
+			<label kind="synchronisation" x="1235" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id99"/>
+			<target ref="id96"/>
+			<label kind="guard" x="1235" y="337">scheduler_queue_head()==8</label>
+			<label kind="synchronisation" x="1235" y="327">task_run?</label>
+			<nail x="1221" y="202"/>
+			<nail x="1203" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>LeftDoorSensor_RGetResultDigitalServiceReadLeft</name>
+		<declaration>clock t;
+int Data_LeftDoorStatus_call_times = 0;
+</declaration>
+		<location id="id100" x="3060" y="90">
+			<name x="3050" y="60">LeftDoorSensor_RGetResultDigitalServiceReadLeft_initial</name>
+		</location>
+		<location id="id101" x="3325" y="390">
+			<name x="3315" y="360">LeftDoorSensor_RGetResultDigitalServiceReadLeft_read</name>
+			<urgent/>
+		</location>
+		<location id="id102" x="3005" y="635">
+			<name x="2995" y="605">LeftDoorSensor_RGetResultDigitalServiceReadLeft_running</name>
+			<label kind="invariant" x="2995" y="650">t &lt;=2</label>
+		</location>
+		<location id="id103" x="2740" y="335">
+			<name x="2730" y="305">LeftDoorSensor_RGetResultDigitalServiceReadLeft_write</name>
+			<committed/>
+		</location>
+		<location id="id104" x="3710" y="375">
+			<name x="3700" y="345">LeftDoorSensor_RGetResultDigitalServiceReadLeft_read_preempted</name>
+			<label kind="invariant" x="3700" y="390">t'==0</label>
+		</location>
+		<location id="id105" x="2970" y="1025">
+			<name x="2960" y="995">LeftDoorSensor_RGetResultDigitalServiceReadLeft_running_preempted</name>
+			<label kind="invariant" x="2960" y="1040">t'==0</label>
+		</location>
+		<location id="id106" x="2370" y="235">
+			<name x="2360" y="205">LeftDoorSensor_RGetResultDigitalServiceReadLeft_write_preempted</name>
+			<label kind="invariant" x="2360" y="250">t'==0</label>
+		</location>
+		<init ref="id100"/>
+		<transition>
+			<source ref="id100"/>
+			<target ref="id101"/>
+			<label kind="synchronisation" x="3205" y="240">Run[5][1]?</label>
+			<label kind="assignment" x="3205" y="250">runnable_should_execute[5][1]=false,t=0,Data_LeftDoorStatus_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id101"/>
+			<target ref="id102"/>
+			<label kind="synchronisation" x="3178" y="512">ioHWAb_RDigitalServiceReadLeft_has_run[0]!</label>
+		</transition>
+		<transition>
+			<source ref="id102"/>
+			<target ref="id103"/>
+			<label kind="guard" x="2885" y="485">t &gt;=1</label>
+		</transition>
+		<transition>
+			<source ref="id103"/>
+			<target ref="id100"/>
+			<label kind="guard" x="2913" y="222">Data_LeftDoorStatus_call_times==1</label>
+			<label kind="synchronisation" x="2913" y="212">Finish[5][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id103"/>
+			<target ref="id103"/>
+			<label kind="guard" x="2740" y="345">Data_LeftDoorStatus_call_times&lt;1</label>
+			<label kind="synchronisation" x="2740" y="335">LeftDoorSensor_LeftDoorStatus_write!</label>
+			<label kind="assignment" x="2740" y="355">Data_LeftDoorStatus_call_times=Data_LeftDoorStatus_call_times+1</label>
+			<nail x="2710" y="305"/>
+			<nail x="2770" y="305"/>
+		</transition>
+		<transition>
+			<source ref="id101"/>
+			<target ref="id104"/>
+			<label kind="synchronisation" x="3530" y="382">Stop[5][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id104"/>
+			<target ref="id101"/>
+			<label kind="synchronisation" x="3530" y="392">Run[5][1]?</label>
+			<nail x="3612" y="368"/>
+			<nail x="3420" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id102"/>
+			<target ref="id105"/>
+			<label kind="synchronisation" x="3000" y="830">Stop[5][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id105"/>
+			<target ref="id102"/>
+			<label kind="synchronisation" x="3000" y="840">Run[5][1]?</label>
+			<nail x="2987" y="927"/>
+			<nail x="3005" y="732"/>
+		</transition>
+		<transition>
+			<source ref="id103"/>
+			<target ref="id106"/>
+			<label kind="synchronisation" x="2568" y="285">Stop[5][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id106"/>
+			<target ref="id103"/>
+			<label kind="synchronisation" x="2568" y="295">Run[5][1]?</label>
+			<nail x="2459" y="269"/>
+			<nail x="2644" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>Tester_RightDoorSensor_RGetResultDigitalServiceReadRight_execute_time</name>
+		<declaration>clock t;
+</declaration>
+		<location id="id107" x="1685" y="395">
+			<name x="1675" y="365">initial</name>
+			<label kind="invariant" x="1675" y="410">t'==0</label>
+		</location>
+		<location id="id108" x="2045" y="400">
+			<name x="2035" y="370">timing</name>
+		</location>
+		<init ref="id107"/>
+		<transition>
+			<source ref="id107"/>
+			<target ref="id108"/>
+			<label kind="synchronisation" x="1878" y="397">ioHWAb_RDigitalServiceReadRight_valid_invoke_server[1]?</label>
+		</transition>
+		<transition>
+			<source ref="id108"/>
+			<target ref="id107"/>
+			<label kind="synchronisation" x="1788" y="255">ioHWAb_RDigitalServiceReadRight_has_run[0]?</label>
+			<label kind="assignment" x="1788" y="265">t=0</label>
+			<nail x="1861" y="348"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceReadLeftintra_non_schedule</name>
+		<declaration>int d;
+</declaration>
+		<location id="id109" x="1525" y="430">
+		</location>
+		<location id="id110" x="1745" y="715">
+			<committed/>
+		</location>
+		<location id="id111" x="1405" y="90">
+			<committed/>
+		</location>
+		<init ref="id109"/>
+		<transition>
+			<source ref="id109"/>
+			<target ref="id109"/>
+			<label kind="guard" x="1525" y="440">ioHWAb_RDigitalServiceReadLeft_len&gt;=1||ioHWAb_RDigitalServiceReadLeft_Inbuff(1)</label>
+			<label kind="synchronisation" x="1525" y="430">ioHWAb_RDigitalServiceReadLeft_Invoke[1]?</label>
+			<nail x="1495" y="400"/>
+			<nail x="1555" y="400"/>
+		</transition>
+		<transition>
+			<source ref="id109"/>
+			<target ref="id110"/>
+			<label kind="select" x="1649" y="561">a:int[1,1]</label>
+			<label kind="synchronisation" x="1648" y="572">ioHWAb_RDigitalServiceReadLeft_finish[a]?</label>
+			<label kind="assignment" x="1648" y="582">d=a</label>
+		</transition>
+		<transition>
+			<source ref="id109"/>
+			<target ref="id111"/>
+			<label kind="guard" x="1478" y="270">ioHWAb_RDigitalServiceReadLeft_len&lt;1&amp;&amp;!ioHWAb_RDigitalServiceReadLeft_Inbuff(1)</label>
+			<label kind="synchronisation" x="1478" y="260">ioHWAb_RDigitalServiceReadLeft_Invoke[1]?</label>
+			<label kind="assignment" x="1478" y="280">d=1,ioHWAb_RDigitalServiceReadLeft_add(1)</label>
+		</transition>
+		<transition>
+			<source ref="id110"/>
+			<target ref="id109"/>
+			<label kind="synchronisation" x="1648" y="592">ioHWAb_RDigitalServiceReadLeft_result_return[d]!</label>
+			<nail x="1697" y="636"/>
+			<nail x="1587" y="494"/>
+		</transition>
+		<transition>
+			<source ref="id111"/>
+			<target ref="id109"/>
+			<label kind="synchronisation" x="1478" y="290">ioHWAb_RDigitalServiceReadLeft_valid_invoke_server[d]!</label>
+			<nail x="1425" y="178"/>
+			<nail x="1485" y="348"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceReadLeft</name>
+		<declaration>clock t;
+</declaration>
+		<location id="id112" x="1665" y="90">
+			<name x="1655" y="60">Ready</name>
+		</location>
+		<location id="id113" x="1930" y="390">
+			<name x="1920" y="360">beforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id114" x="1610" y="635">
+			<name x="1600" y="605">Running</name>
+			<label kind="invariant" x="1600" y="650">t &lt;=2</label>
+		</location>
+		<location id="id115" x="1345" y="335">
+			<name x="1335" y="305">tmp</name>
+			<committed/>
+		</location>
+		<location id="id116" x="2315" y="375">
+			<name x="2305" y="345">beforeRunning_preempted</name>
+			<label kind="invariant" x="2305" y="390">t'==0</label>
+		</location>
+		<location id="id117" x="1575" y="1025">
+			<name x="1565" y="995">Running_preempted</name>
+			<label kind="invariant" x="1565" y="1040">t'==0</label>
+		</location>
+		<location id="id118" x="975" y="235">
+			<name x="965" y="205">tmp_preempted</name>
+			<label kind="invariant" x="965" y="250">t'==0</label>
+		</location>
+		<init ref="id112"/>
+		<transition>
+			<source ref="id112"/>
+			<target ref="id113"/>
+			<label kind="synchronisation" x="1810" y="240">Run[9][1]?</label>
+			<label kind="assignment" x="1810" y="250">runnable_should_execute[9][1]=runnable_should_execute[9][1]-1,t=0</label>
+		</transition>
+		<transition>
+			<source ref="id113"/>
+			<target ref="id114"/>
+			<label kind="synchronisation" x="1783" y="512">ioHWAb_RDigitalServiceReadLeft_start_server!</label>
+		</transition>
+		<transition>
+			<source ref="id115"/>
+			<target ref="id112"/>
+			<label kind="synchronisation" x="1518" y="212">Finish[9][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id114"/>
+			<target ref="id115"/>
+			<label kind="guard" x="1490" y="495">t &gt;=1</label>
+			<label kind="synchronisation" x="1490" y="485">ioHWAb_RDigitalServiceReadLeft_finish[ioHWAb_RDigitalServiceReadLeft_head()]!</label>
+			<label kind="assignment" x="1490" y="522">ioHWAb_RDigitalServiceReadLeft_e=ioHWAb_RDigitalServiceReadLeft_head(),ioHWAb_RDigitalServiceReadLeft_remove()</label>
+		</transition>
+		<transition>
+			<source ref="id113"/>
+			<target ref="id116"/>
+			<label kind="synchronisation" x="2135" y="382">Stop[9][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id116"/>
+			<target ref="id113"/>
+			<label kind="synchronisation" x="2135" y="392">Run[9][1]?</label>
+			<nail x="2217" y="368"/>
+			<nail x="2025" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id114"/>
+			<target ref="id117"/>
+			<label kind="synchronisation" x="1605" y="830">Stop[9][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id117"/>
+			<target ref="id114"/>
+			<label kind="synchronisation" x="1605" y="840">Run[9][1]?</label>
+			<nail x="1592" y="927"/>
+			<nail x="1610" y="732"/>
+		</transition>
+		<transition>
+			<source ref="id115"/>
+			<target ref="id118"/>
+			<label kind="synchronisation" x="1173" y="285">Stop[9][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id118"/>
+			<target ref="id115"/>
+			<label kind="synchronisation" x="1173" y="295">Run[9][1]?</label>
+			<nail x="1064" y="269"/>
+			<nail x="1249" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskRightDoorSensor</name>
+		<declaration>int rid = 1;
+clock Alarm;
+const int start_time = 1;
+const int counter_base = 1;
+const int cycle_time = 50;
+int offset[2] = {0,0};
+int rperiod[2] = {0,100};
+int cycle[2] = {1,1};
+bool haveoffset[2] = {false,false};
+int Offset=start_time*counter_base;
+int period=cycle_time*counter_base;
+</declaration>
+		<location id="id119" x="1040" y="1045">
+			<name x="1030" y="1015">suspended</name>
+			<label kind="invariant" x="1030" y="1060">Alarm&lt;=Offset</label>
+		</location>
+		<location id="id120" x="1405" y="950">
+			<name x="1395" y="920">suspended2</name>
+			<label kind="invariant" x="1395" y="965">Alarm&lt;=period</label>
+		</location>
+		<location id="id121" x="1745" y="760">
+			<name x="1735" y="730">ready</name>
+			<label kind="invariant" x="1735" y="775">Alarm&lt;=DeadLine[3]</label>
+		</location>
+		<location id="id122" x="2080" y="925">
+			<committed/>
+		</location>
+		<location id="id123" x="1940" y="540">
+			<name x="1930" y="510">running</name>
+			<label kind="invariant" x="1930" y="555">Alarm&lt;=DeadLine[3]</label>
+		</location>
+		<location id="id124" x="2200" y="615">
+			<name x="2190" y="585">error</name>
+		</location>
+		<location id="id125" x="1775" y="1010">
+			<committed/>
+		</location>
+		<location id="id126" x="2385" y="405">
+			<name x="2375" y="375">waiting</name>
+			<label kind="invariant" x="2375" y="420">Alarm&lt;=DeadLine[3]</label>
+		</location>
+		<location id="id127" x="2190" y="165">
+			<name x="2180" y="135">ready2</name>
+			<label kind="invariant" x="2180" y="180">Alarm&lt;=DeadLine[3]</label>
+		</location>
+		<location id="id128" x="1920" y="90">
+			<committed/>
+		</location>
+		<location id="id129" x="2465" y="920">
+			<name x="2455" y="890">ready4</name>
+			<label kind="invariant" x="2455" y="935">Alarm&lt;=DeadLine[3]</label>
+		</location>
+		<location id="id130" x="1740" y="215">
+			<committed/>
+		</location>
+		<location id="id131" x="1810" y="1425">
+			<name x="1800" y="1395">ready3</name>
+			<label kind="invariant" x="1800" y="1442">Alarm&lt;=DeadLine[3]</label>
+		</location>
+		<init ref="id119"/>
+		<transition>
+			<source ref="id131"/>
+			<target ref="id124"/>
+			<label kind="guard" x="1938" y="1164">Alarm==DeadLine[3]</label>
+		</transition>
+		<transition>
+			<source ref="id124"/>
+			<target ref="id124"/>
+			<label kind="synchronisation" x="2218" y="562">Finish[3][rid]?</label>
+			<nail x="2337" y="544"/>
+			<nail x="2346" y="578"/>
+		</transition>
+		<transition>
+			<source ref="id124"/>
+			<target ref="id124"/>
+			<label kind="synchronisation" x="2218" y="600">task_run?</label>
+			<nail x="2346" y="620"/>
+			<nail x="2320" y="663"/>
+		</transition>
+		<transition>
+			<source ref="id124"/>
+			<target ref="id124"/>
+			<nail x="2286" y="569"/>
+			<nail x="2286" y="603"/>
+		</transition>
+		<transition>
+			<source ref="id119"/>
+			<target ref="id120"/>
+			<label kind="guard" x="1235" y="1007">Alarm==Offset</label>
+			<label kind="synchronisation" x="1235" y="997">TaskRightDoorSensorTimingEvent_jitter_first_time!</label>
+			<label kind="assignment" x="1235" y="1017">Alarm=period</label>
+		</transition>
+		<transition>
+			<source ref="id120"/>
+			<target ref="id121"/>
+			<label kind="guard" x="1588" y="865">Alarm==period</label>
+			<label kind="synchronisation" x="1588" y="855">Activate!</label>
+			<label kind="assignment" x="1588" y="875">scheduler_queue4_add(3),Alarm=0</label>
+		</transition>
+		<transition>
+			<source ref="id121"/>
+			<target ref="id122"/>
+			<label kind="guard" x="1925" y="885">scheduler_queue_head()==3</label>
+			<label kind="synchronisation" x="1925" y="842">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id121"/>
+			<target ref="id124"/>
+			<label kind="guard" x="1985" y="687">Alarm==DeadLine[3]</label>
+		</transition>
+		<transition>
+			<source ref="id122"/>
+			<target ref="id122"/>
+			<label kind="guard" x="2080" y="925">((rid!=1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0
+&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid!=1)&amp;&amp;(haveoffset[rid]
+&amp;&amp;cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="2080" y="935">cycle[rid]=cycle[rid]+1,rid=rid+1</label>
+			<nail x="2050" y="895"/>
+			<nail x="2110" y="895"/>
+		</transition>
+		<transition>
+			<source ref="id122"/>
+			<target ref="id123"/>
+			<label kind="guard" x="2023" y="742">haveoffset[rid]&amp;&amp;
+cycle[rid]==(rperiod[rid]/(period))</label>
+			<label kind="synchronisation" x="2023" y="731">Run[3][rid]!</label>
+			<label kind="assignment" x="2023" y="752">cycle[rid]=1</label>
+		</transition>
+		<transition>
+			<source ref="id122"/>
+			<target ref="id123"/>
+			<label kind="guard" x="2023" y="772">!haveoffset[rid]&amp;&amp;offset[rid]==0||
+!haveoffset[rid]&amp;&amp;offset[rid]!=0&amp;&amp;
+cycle[rid]==(offset[rid]/(period))</label>
+			<label kind="synchronisation" x="2023" y="762">Run[3][rid]!</label>
+			<label kind="assignment" x="2023" y="782">cycle[rid]=1,haveoffset[rid]=true</label>
+			<nail x="2054" y="824"/>
+			<nail x="1984" y="632"/>
+		</transition>
+		<transition>
+			<source ref="id122"/>
+			<target ref="id125"/>
+			<label kind="guard" x="1802" y="1003">((rid==1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid==1)&amp;&amp;(haveoffset[rid]&amp;&amp;
+cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="1802" y="1088">cycle[rid]=cycle[rid]+1,rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id122"/>
+			<label kind="guard" x="2023" y="802">rid!=1</label>
+			<label kind="synchronisation" x="2023" y="792">Finish[3][rid]?</label>
+			<label kind="assignment" x="2023" y="812">rid=rid+1</label>
+			<nail x="1993" y="629"/>
+			<nail x="2063" y="821"/>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id125"/>
+			<label kind="guard" x="1870" y="832">rid==1</label>
+			<label kind="synchronisation" x="1870" y="822">Finish[3][rid]?</label>
+			<label kind="assignment" x="1870" y="895">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id124"/>
+			<label kind="guard" x="2083" y="577">Alarm==DeadLine[3]</label>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id126"/>
+			<label kind="synchronisation" x="2175" y="472">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id126"/>
+			<target ref="id127"/>
+			<label kind="synchronisation" x="2300" y="285">Release[3]?</label>
+		</transition>
+		<transition>
+			<source ref="id126"/>
+			<target ref="id124"/>
+			<label kind="guard" x="2305" y="510">Alarm==DeadLine[3]</label>
+		</transition>
+		<transition>
+			<source ref="id127"/>
+			<target ref="id128"/>
+			<label kind="guard" x="2068" y="137">scheduler_queue_head()==3</label>
+			<label kind="synchronisation" x="2068" y="127">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id127"/>
+			<target ref="id124"/>
+			<label kind="guard" x="2208" y="390">Alarm==DeadLine[3]</label>
+		</transition>
+		<transition>
+			<source ref="id128"/>
+			<target ref="id123"/>
+			<label kind="synchronisation" x="1943" y="315">Run[3][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id125"/>
+			<target ref="id120"/>
+			<label kind="synchronisation" x="1603" y="987">Terminate!</label>
+			<label kind="assignment" x="1603" y="1027">scheduler_queue4_remove(3)</label>
+		</transition>
+		<transition>
+			<source ref="id122"/>
+			<target ref="id129"/>
+			<label kind="synchronisation" x="2285" y="945">block?</label>
+		</transition>
+		<transition>
+			<source ref="id129"/>
+			<target ref="id122"/>
+			<label kind="guard" x="2285" y="1037">scheduler_queue_head()==3</label>
+			<label kind="synchronisation" x="2285" y="955">task_run?</label>
+			<nail x="2367" y="911"/>
+			<nail x="2175" y="913"/>
+		</transition>
+		<transition>
+			<source ref="id129"/>
+			<target ref="id124"/>
+			<label kind="guard" x="2346" y="901">Alarm==DeadLine[3]</label>
+		</transition>
+		<transition>
+			<source ref="id123"/>
+			<target ref="id130"/>
+			<label kind="synchronisation" x="1853" y="377">block?</label>
+		</transition>
+		<transition>
+			<source ref="id130"/>
+			<target ref="id127"/>
+			<label kind="synchronisation" x="1978" y="190">Stop[3][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id128"/>
+			<target ref="id127"/>
+			<label kind="synchronisation" x="2068" y="147">block?</label>
+			<nail x="1984" y="117"/>
+			<nail x="2119" y="155"/>
+		</transition>
+		<transition>
+			<source ref="id125"/>
+			<target ref="id131"/>
+			<label kind="synchronisation" x="1805" y="1217">block?</label>
+		</transition>
+		<transition>
+			<source ref="id131"/>
+			<target ref="id125"/>
+			<label kind="guard" x="1805" y="1237">scheduler_queue_head()==3</label>
+			<label kind="synchronisation" x="1805" y="1227">task_run?</label>
+			<nail x="1810" y="1320"/>
+			<nail x="1792" y="1112"/>
+		</transition>
+	</template>
+	<template>
+		<name>Tester_RightDoorSensor_RRightDoorSensor_jitter</name>
+		<declaration>clock t;
+const int jitter =4;
+const int period = 100;
+bool haveoccurred;
+</declaration>
+		<location id="id132" x="1180" y="715">
+			<name x="1170" y="685">initial</name>
+		</location>
+		<location id="id133" x="1400" y="430">
+			<name x="1390" y="400">timing</name>
+			<label kind="invariant" x="1390" y="445">t&lt;=period</label>
+		</location>
+		<location id="id134" x="1520" y="90">
+			<name x="1510" y="60">error</name>
+			<label kind="invariant" x="1521" y="110">t'==0</label>
+		</location>
+		<init ref="id132"/>
+		<transition>
+			<source ref="id132"/>
+			<target ref="id133"/>
+			<label kind="synchronisation" x="1303" y="572">TaskRightDoorSensorTimingEvent_jitter_first_time?</label>
+			<label kind="assignment" x="1303" y="582">t=0</label>
+		</transition>
+		<transition>
+			<source ref="id133"/>
+			<target ref="id133"/>
+			<label kind="guard" x="1415" y="495">t&lt;=jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="1400" y="480">RightDoorSensor_RRightDoorSensor_jitter_run?</label>
+			<label kind="assignment" x="1430" y="510">haveoccurred=true</label>
+			<nail x="1400" y="480"/>
+			<nail x="1450" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id133"/>
+			<target ref="id133"/>
+			<label kind="guard" x="1400" y="380">t==period&amp;&amp;haveoccurred</label>
+			<label kind="assignment" x="1415" y="395">t=0,haveoccurred=false</label>
+			<nail x="1400" y="380"/>
+			<nail x="1350" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id133"/>
+			<target ref="id134"/>
+			<label kind="guard" x="1473" y="270">t&gt;jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="1473" y="260">RightDoorSensor_RRightDoorSensor_jitter_run?</label>
+		</transition>
+		<transition>
+			<source ref="id133"/>
+			<target ref="id134"/>
+			<label kind="guard" x="1473" y="280">t==period&amp;&amp;!haveoccurred</label>
+			<nail x="1439" y="348"/>
+			<nail x="1499" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id134"/>
+			<target ref="id134"/>
+			<label kind="synchronisation" x="1520" y="90">RightDoorSensor_RRightDoorSensor_jitter_run?</label>
+			<nail x="1490" y="60"/>
+			<nail x="1550" y="60"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskGetResultRight</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id135" x="1250" y="325">
+			<name x="1240" y="295">Ready</name>
+		</location>
+		<location id="id136" x="1690" y="530">
+			<name x="1680" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id137" x="1560" y="895">
+			<name x="1550" y="865">Running</name>
+		</location>
+		<location id="id138" x="1535" y="1230">
+			<name x="1525" y="1200">wait</name>
+		</location>
+		<location id="id139" x="1570" y="1525">
+			<name x="1560" y="1495">Ready2</name>
+		</location>
+		<location id="id140" x="1250" y="1205">
+			<name x="1240" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id141" x="1405" y="545">
+			<name x="1395" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id142" x="2055" y="360">
+			<name x="2045" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id143" x="1865" y="1205">
+			<name x="1855" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id144" x="1435" y="90">
+			<name x="1425" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id135"/>
+		<transition>
+			<source ref="id135"/>
+			<target ref="id136"/>
+			<label kind="guard" x="1483" y="437">scheduler_queue_head()==4</label>
+			<label kind="synchronisation" x="1483" y="427">task_run?</label>
+			<label kind="assignment" x="1470" y="476">activation_count[4]=activation_count[4]-1</label>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id136"/>
+			<label kind="guard" x="1690" y="530">!runnable_should_execute[4][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1690" y="540">rid=rid+1</label>
+			<nail x="1660" y="500"/>
+			<nail x="1720" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id137"/>
+			<label kind="guard" x="1640" y="705">runnable_should_execute[4][rid]</label>
+			<label kind="synchronisation" x="1640" y="688">Run[4][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id137"/>
+			<target ref="id136"/>
+			<label kind="guard" x="1638" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1638" y="732">Finish[4][rid]?</label>
+			<label kind="assignment" x="1638" y="752">rid=rid+1</label>
+			<nail x="1601" y="806"/>
+			<nail x="1666" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id137"/>
+			<target ref="id138"/>
+			<label kind="synchronisation" x="1560" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id138"/>
+			<target ref="id139"/>
+			<label kind="synchronisation" x="1565" y="1377">Release[4]?</label>
+		</transition>
+		<transition>
+			<source ref="id139"/>
+			<target ref="id140"/>
+			<label kind="guard" x="1423" y="1387">scheduler_queue_head()==4</label>
+			<label kind="synchronisation" x="1423" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id140"/>
+			<target ref="id137"/>
+			<label kind="synchronisation" x="1418" y="1050">Run[4][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id137"/>
+			<target ref="id141"/>
+			<label kind="guard" x="1495" y="772">rid==1</label>
+			<label kind="synchronisation" x="1495" y="762">Finish[4][rid]?</label>
+			<label kind="assignment" x="1495" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id141"/>
+			<label kind="guard" x="1560" y="550">!runnable_should_execute[4][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1560" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id141"/>
+			<target ref="id135"/>
+			<label kind="synchronisation" x="1340" y="447">Terminate!</label>
+			<label kind="assignment" x="1340" y="457">scheduler_queue1_remove(4)</label>
+		</transition>
+		<transition>
+			<source ref="id136"/>
+			<target ref="id142"/>
+			<label kind="synchronisation" x="1885" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id142"/>
+			<target ref="id136"/>
+			<label kind="guard" x="1885" y="487">scheduler_queue_head()==4</label>
+			<label kind="synchronisation" x="1885" y="477">task_run?</label>
+			<nail x="1958" y="392"/>
+			<nail x="1776" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id137"/>
+			<target ref="id143"/>
+			<label kind="synchronisation" x="1725" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id143"/>
+			<target ref="id139"/>
+			<label kind="synchronisation" x="1734" y="1394">Stop[4][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id140"/>
+			<target ref="id139"/>
+			<label kind="synchronisation" x="1423" y="1407">block?</label>
+			<nail x="1322" y="1292"/>
+			<nail x="1482" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id141"/>
+			<target ref="id144"/>
+			<label kind="synchronisation" x="1433" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id144"/>
+			<target ref="id141"/>
+			<label kind="guard" x="1433" y="337">scheduler_queue_head()==4</label>
+			<label kind="synchronisation" x="1433" y="327">task_run?</label>
+			<nail x="1417" y="202"/>
+			<nail x="1402" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>ioHWAb_RDigitalServiceReadRight</name>
+		<declaration>clock t;
+</declaration>
+		<location id="id145" x="1690" y="90">
+			<name x="1680" y="60">Ready</name>
+		</location>
+		<location id="id146" x="1960" y="390">
+			<name x="1950" y="360">beforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id147" x="1640" y="635">
+			<name x="1630" y="605">Running</name>
+			<label kind="invariant" x="1632" y="646">t &lt;=2</label>
+		</location>
+		<location id="id148" x="1370" y="335">
+			<name x="1360" y="305">tmp</name>
+			<committed/>
+		</location>
+		<location id="id149" x="2340" y="375">
+			<name x="2330" y="345">beforeRunning_preempted</name>
+			<label kind="invariant" x="2330" y="390">t'==0</label>
+		</location>
+		<location id="id150" x="1600" y="1025">
+			<name x="1590" y="995">Running_preempted</name>
+			<label kind="invariant" x="1590" y="1040">t'==0</label>
+		</location>
+		<location id="id151" x="1000" y="235">
+			<name x="990" y="205">tmp_preempted</name>
+			<label kind="invariant" x="990" y="250">t'==0</label>
+		</location>
+		<init ref="id145"/>
+		<transition>
+			<source ref="id145"/>
+			<target ref="id146"/>
+			<label kind="synchronisation" x="1838" y="240">Run[1][1]?</label>
+			<label kind="assignment" x="1838" y="250">runnable_should_execute[1][1]=runnable_should_execute[1][1]-1,t=0</label>
+		</transition>
+		<transition>
+			<source ref="id146"/>
+			<target ref="id147"/>
+			<label kind="synchronisation" x="1813" y="512">ioHWAb_RDigitalServiceReadRight_start_server!</label>
+		</transition>
+		<transition>
+			<source ref="id148"/>
+			<target ref="id145"/>
+			<label kind="synchronisation" x="1543" y="212">Finish[1][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id147"/>
+			<target ref="id148"/>
+			<label kind="guard" x="1518" y="495">t &gt;=1</label>
+			<label kind="synchronisation" x="1518" y="485">ioHWAb_RDigitalServiceReadRight_finish[ioHWAb_RDigitalServiceReadRight_head()]!</label>
+			<label kind="assignment" x="1518" y="522">ioHWAb_RDigitalServiceReadRight_e=ioHWAb_RDigitalServiceReadRight_head(),ioHWAb_RDigitalServiceReadRight_remove()</label>
+		</transition>
+		<transition>
+			<source ref="id146"/>
+			<target ref="id149"/>
+			<label kind="synchronisation" x="2163" y="382">Stop[1][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id149"/>
+			<target ref="id146"/>
+			<label kind="synchronisation" x="2163" y="392">Run[1][1]?</label>
+			<nail x="2244" y="368"/>
+			<nail x="2054" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id147"/>
+			<target ref="id150"/>
+			<label kind="synchronisation" x="1633" y="830">Stop[1][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id150"/>
+			<target ref="id147"/>
+			<label kind="synchronisation" x="1632" y="841">Run[1][1]?</label>
+			<nail x="1619" y="928"/>
+			<nail x="1639" y="733"/>
+		</transition>
+		<transition>
+			<source ref="id148"/>
+			<target ref="id151"/>
+			<label kind="synchronisation" x="1198" y="285">Stop[1][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id151"/>
+			<target ref="id148"/>
+			<label kind="synchronisation" x="1198" y="295">Run[1][1]?</label>
+			<nail x="1089" y="269"/>
+			<nail x="1274" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>Tester_LeftDoorSensor_RGetResultDigitalServiceReadLeft_execute_time</name>
+		<declaration>clock t;
+</declaration>
+		<location id="id152" x="1630" y="395">
+			<name x="1620" y="365">initial</name>
+			<label kind="invariant" x="1620" y="410">t'==0</label>
+		</location>
+		<location id="id153" x="1990" y="400">
+			<name x="1980" y="370">timing</name>
+		</location>
+		<init ref="id152"/>
+		<transition>
+			<source ref="id152"/>
+			<target ref="id153"/>
+			<label kind="synchronisation" x="1823" y="397">ioHWAb_RDigitalServiceReadLeft_valid_invoke_server[1]?</label>
+		</transition>
+		<transition>
+			<source ref="id153"/>
+			<target ref="id152"/>
+			<label kind="synchronisation" x="1733" y="255">ioHWAb_RDigitalServiceReadLeft_has_run[0]?</label>
+			<label kind="assignment" x="1733" y="265">t=0</label>
+			<nail x="1810" y="306"/>
+		</transition>
+	</template>
+	<template>
+		<name>LightManager_RLightManagerReceiveLeftDoor</name>
+		<declaration>clock t;
+int Data_LeftDoorStatus_call_times = 0;
+int Data_LightStatus_call_times = 0;</declaration>
+		<location id="id154" x="2910" y="90">
+			<name x="2900" y="60">LightManager_RLightManagerReceiveLeftDoor_initial</name>
+		</location>
+		<location id="id155" x="3175" y="390">
+			<name x="3165" y="360">LightManager_RLightManagerReceiveLeftDoor_read</name>
+			<urgent/>
+		</location>
+		<location id="id156" x="2855" y="635">
+			<name x="2845" y="605">LightManager_RLightManagerReceiveLeftDoor_running</name>
+			<label kind="invariant" x="2845" y="650">t &lt;=2</label>
+		</location>
+		<location id="id157" x="2590" y="335">
+			<name x="2580" y="305">LightManager_RLightManagerReceiveLeftDoor_write</name>
+			<committed/>
+		</location>
+		<location id="id158" x="3560" y="375">
+			<name x="3550" y="345">LightManager_RLightManagerReceiveLeftDoor_read_preempted</name>
+			<label kind="invariant" x="3550" y="390">t'==0</label>
+		</location>
+		<location id="id159" x="2820" y="1025">
+			<name x="2810" y="995">LightManager_RLightManagerReceiveLeftDoor_running_preempted</name>
+			<label kind="invariant" x="2810" y="1040">t'==0</label>
+		</location>
+		<location id="id160" x="2220" y="235">
+			<name x="2210" y="205">LightManager_RLightManagerReceiveLeftDoor_write_preempted</name>
+			<label kind="invariant" x="2210" y="250">t'==0</label>
+		</location>
+		<init ref="id154"/>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id157"/>
+			<label kind="guard" x="2568" y="246">Data_LightStatus_call_times &lt;1</label>
+			<label kind="synchronisation" x="2568" y="263">LightManager_LightStatus_write!</label>
+			<label kind="assignment" x="2568" y="280">Data_LightStatus_call_times=Data_LightStatus_call_times+1</label>
+			<nail x="2550" y="280"/>
+			<nail x="2626" y="280"/>
+		</transition>
+		<transition>
+			<source ref="id154"/>
+			<target ref="id155"/>
+			<label kind="synchronisation" x="3055" y="240">Run[2][1]?</label>
+			<label kind="assignment" x="3055" y="250">runnable_should_execute[2][1]=false,t=0,Data_LightStatus_call_times = 0,Data_LeftDoorStatus_call_times =0</label>
+		</transition>
+		<transition>
+			<source ref="id155"/>
+			<target ref="id156"/>
+			<label kind="guard" x="3028" y="512">Data_LeftDoorStatus_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id156"/>
+			<target ref="id157"/>
+			<label kind="guard" x="2735" y="485">t &gt;=1</label>
+		</transition>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id154"/>
+			<label kind="guard" x="2608" y="178">Data_LightStatus_call_times ==1</label>
+			<label kind="synchronisation" x="2763" y="212">Finish[2][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id155"/>
+			<target ref="id155"/>
+			<label kind="guard" x="3175" y="400">Data_LeftDoorStatus_call_times&lt;1</label>
+			<label kind="synchronisation" x="3175" y="390">LightManager_LeftDoorStatus_read!</label>
+			<label kind="assignment" x="3175" y="410">Data_LeftDoorStatus_call_times=Data_LeftDoorStatus_call_times+1</label>
+			<nail x="3145" y="360"/>
+			<nail x="3205" y="360"/>
+		</transition>
+		<transition>
+			<source ref="id155"/>
+			<target ref="id158"/>
+			<label kind="synchronisation" x="3380" y="420">Stop[2][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id158"/>
+			<target ref="id155"/>
+			<label kind="synchronisation" x="3380" y="430">Run[2][1]?</label>
+			<nail x="3462" y="368"/>
+			<nail x="3270" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id156"/>
+			<target ref="id159"/>
+			<label kind="synchronisation" x="2850" y="830">Stop[2][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id159"/>
+			<target ref="id156"/>
+			<label kind="synchronisation" x="2850" y="840">Run[2][1]?</label>
+			<nail x="2837" y="927"/>
+			<nail x="2855" y="732"/>
+		</transition>
+		<transition>
+			<source ref="id157"/>
+			<target ref="id160"/>
+			<label kind="synchronisation" x="2418" y="285">Stop[2][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id160"/>
+			<target ref="id157"/>
+			<label kind="synchronisation" x="2418" y="295">Run[2][1]?</label>
+			<nail x="2309" y="269"/>
+			<nail x="2494" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskWrite</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id161" x="960" y="325">
+			<name x="950" y="295">Ready</name>
+		</location>
+		<location id="id162" x="1400" y="530">
+			<name x="1390" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id163" x="1270" y="895">
+			<name x="1260" y="865">Running</name>
+		</location>
+		<location id="id164" x="1245" y="1230">
+			<name x="1235" y="1200">wait</name>
+		</location>
+		<location id="id165" x="1280" y="1525">
+			<name x="1270" y="1495">Ready2</name>
+		</location>
+		<location id="id166" x="960" y="1205">
+			<name x="950" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id167" x="1115" y="545">
+			<name x="1105" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id168" x="1765" y="360">
+			<name x="1755" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id169" x="1575" y="1205">
+			<name x="1565" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id170" x="1145" y="90">
+			<name x="1135" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id161"/>
+		<transition>
+			<source ref="id161"/>
+			<target ref="id162"/>
+			<label kind="guard" x="1193" y="437">scheduler_queue_head()==6</label>
+			<label kind="synchronisation" x="1193" y="427">task_run?</label>
+			<label kind="assignment" x="1190" y="467">activation_count[6]=activation_count[6]-1</label>
+		</transition>
+		<transition>
+			<source ref="id162"/>
+			<target ref="id162"/>
+			<label kind="guard" x="1400" y="530">!runnable_should_execute[6][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1400" y="540">rid=rid+1</label>
+			<nail x="1370" y="500"/>
+			<nail x="1430" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id162"/>
+			<target ref="id163"/>
+			<label kind="guard" x="1348" y="722">runnable_should_execute[6][rid]</label>
+			<label kind="synchronisation" x="1348" y="712">Run[6][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id163"/>
+			<target ref="id162"/>
+			<label kind="guard" x="1348" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1348" y="732">Finish[6][rid]?</label>
+			<label kind="assignment" x="1348" y="752">rid=rid+1</label>
+			<nail x="1311" y="806"/>
+			<nail x="1376" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id163"/>
+			<target ref="id164"/>
+			<label kind="synchronisation" x="1270" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id164"/>
+			<target ref="id165"/>
+			<label kind="synchronisation" x="1275" y="1377">Release[6]?</label>
+		</transition>
+		<transition>
+			<source ref="id165"/>
+			<target ref="id166"/>
+			<label kind="guard" x="1133" y="1387">scheduler_queue_head()==6</label>
+			<label kind="synchronisation" x="1133" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id166"/>
+			<target ref="id163"/>
+			<label kind="synchronisation" x="1128" y="1050">Run[6][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id163"/>
+			<target ref="id167"/>
+			<label kind="guard" x="1205" y="772">rid==1</label>
+			<label kind="synchronisation" x="1205" y="762">Finish[6][rid]?</label>
+			<label kind="assignment" x="1205" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id162"/>
+			<target ref="id167"/>
+			<label kind="guard" x="1270" y="550">!runnable_should_execute[6][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1270" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id167"/>
+			<target ref="id161"/>
+			<label kind="synchronisation" x="1050" y="447">Terminate!</label>
+			<label kind="assignment" x="1050" y="457">scheduler_queue8_remove(6)</label>
+		</transition>
+		<transition>
+			<source ref="id162"/>
+			<target ref="id168"/>
+			<label kind="synchronisation" x="1595" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id168"/>
+			<target ref="id162"/>
+			<label kind="guard" x="1595" y="487">scheduler_queue_head()==6</label>
+			<label kind="synchronisation" x="1595" y="477">task_run?</label>
+			<nail x="1668" y="392"/>
+			<nail x="1486" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id163"/>
+			<target ref="id169"/>
+			<label kind="synchronisation" x="1435" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id169"/>
+			<target ref="id165"/>
+			<label kind="synchronisation" x="1440" y="1397">Stop[6][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id166"/>
+			<target ref="id165"/>
+			<label kind="synchronisation" x="1133" y="1407">block?</label>
+			<nail x="1032" y="1292"/>
+			<nail x="1192" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id167"/>
+			<target ref="id170"/>
+			<label kind="synchronisation" x="1143" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id170"/>
+			<target ref="id167"/>
+			<label kind="guard" x="1143" y="337">scheduler_queue_head()==6</label>
+			<label kind="synchronisation" x="1143" y="327">task_run?</label>
+			<nail x="1127" y="202"/>
+			<nail x="1112" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskLeftDoorSensor</name>
+		<declaration>int rid = 1;
+clock Alarm;
+const int start_time = 1;
+const int counter_base = 1;
+const int cycle_time = 50;
+int offset[2] = {0,0};
+int rperiod[2] = {0,100};
+int cycle[2] = {1,1};
+bool haveoffset[2] = {false,false};
+int Offset=start_time*counter_base;
+int period=cycle_time*counter_base;
+</declaration>
+		<location id="id171" x="1015" y="1045">
+			<name x="1005" y="1015">suspended</name>
+			<label kind="invariant" x="1003" y="1062">Alarm&lt;=Offset</label>
+		</location>
+		<location id="id172" x="1380" y="950">
+			<name x="1370" y="920">suspended2</name>
+			<label kind="invariant" x="1370" y="965">Alarm&lt;=period</label>
+		</location>
+		<location id="id173" x="1720" y="760">
+			<name x="1710" y="730">ready</name>
+			<label kind="invariant" x="1708" y="773">Alarm&lt;=DeadLine[7]</label>
+		</location>
+		<location id="id174" x="2055" y="925">
+			<committed/>
+		</location>
+		<location id="id175" x="1910" y="540">
+			<name x="1900" y="510">running</name>
+			<label kind="invariant" x="1900" y="555">Alarm&lt;=DeadLine[7]</label>
+		</location>
+		<location id="id176" x="2175" y="615">
+			<name x="2165" y="585">error</name>
+		</location>
+		<location id="id177" x="1745" y="1010">
+			<committed/>
+		</location>
+		<location id="id178" x="2355" y="405">
+			<name x="2345" y="375">waiting</name>
+			<label kind="invariant" x="2345" y="420">Alarm&lt;=DeadLine[7]</label>
+		</location>
+		<location id="id179" x="2165" y="165">
+			<name x="2155" y="135">ready2</name>
+			<label kind="invariant" x="2155" y="180">Alarm&lt;=DeadLine[7]</label>
+		</location>
+		<location id="id180" x="1890" y="90">
+			<committed/>
+		</location>
+		<location id="id181" x="2435" y="920">
+			<name x="2425" y="890">ready4</name>
+			<label kind="invariant" x="2425" y="935">Alarm&lt;=DeadLine[7]</label>
+		</location>
+		<location id="id182" x="1715" y="215">
+			<committed/>
+		</location>
+		<location id="id183" x="1780" y="1425">
+			<name x="1770" y="1395">ready3</name>
+			<label kind="invariant" x="1770" y="1442">Alarm&lt;=DeadLine[7]</label>
+		</location>
+		<init ref="id171"/>
+		<transition>
+			<source ref="id183"/>
+			<target ref="id176"/>
+			<label kind="guard" x="1929" y="1130">Alarm==DeadLine[7]</label>
+		</transition>
+		<transition>
+			<source ref="id176"/>
+			<target ref="id176"/>
+			<label kind="synchronisation" x="2193" y="600">task_run?</label>
+			<nail x="2312" y="620"/>
+			<nail x="2312" y="671"/>
+		</transition>
+		<transition>
+			<source ref="id176"/>
+			<target ref="id176"/>
+			<nail x="2269" y="612"/>
+			<nail x="2269" y="637"/>
+		</transition>
+		<transition>
+			<source ref="id176"/>
+			<target ref="id176"/>
+			<label kind="synchronisation" x="2193" y="571">Finish[7][rid]?</label>
+			<nail x="2269" y="561"/>
+			<nail x="2269" y="603"/>
+		</transition>
+		<transition>
+			<source ref="id171"/>
+			<target ref="id172"/>
+			<label kind="guard" x="1210" y="1007">Alarm==Offset</label>
+			<label kind="synchronisation" x="1210" y="997">TaskLeftDoorSensorTimingEvent_jitter_first_time!</label>
+			<label kind="assignment" x="1210" y="1017">Alarm=period</label>
+		</transition>
+		<transition>
+			<source ref="id172"/>
+			<target ref="id173"/>
+			<label kind="guard" x="1563" y="865">Alarm==period</label>
+			<label kind="synchronisation" x="1563" y="855">Activate!</label>
+			<label kind="assignment" x="1563" y="875">scheduler_queue3_add(7),Alarm=0</label>
+		</transition>
+		<transition>
+			<source ref="id173"/>
+			<target ref="id174"/>
+			<label kind="guard" x="1900" y="885">scheduler_queue_head()==7</label>
+			<label kind="synchronisation" x="1900" y="842">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id173"/>
+			<target ref="id176"/>
+			<label kind="guard" x="1960" y="687">Alarm==DeadLine[7]</label>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id174"/>
+			<label kind="guard" x="2055" y="925">((rid!=1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0
+&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid!=1)&amp;&amp;(haveoffset[rid]
+&amp;&amp;cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="2055" y="935">cycle[rid]=cycle[rid]+1,rid=rid+1</label>
+			<nail x="2025" y="895"/>
+			<nail x="2085" y="895"/>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id175"/>
+			<label kind="guard" x="1995" y="742">haveoffset[rid]&amp;&amp;
+cycle[rid]==(rperiod[rid]/(period))</label>
+			<label kind="synchronisation" x="1995" y="732">Run[7][rid]!</label>
+			<label kind="assignment" x="1995" y="752">cycle[rid]=1</label>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id175"/>
+			<label kind="guard" x="1995" y="772">!haveoffset[rid]&amp;&amp;offset[rid]==0||
+!haveoffset[rid]&amp;&amp;offset[rid]!=0&amp;&amp;
+cycle[rid]==(offset[rid]/(period))</label>
+			<label kind="synchronisation" x="1995" y="762">Run[7][rid]!</label>
+			<label kind="assignment" x="1995" y="782">cycle[rid]=1,haveoffset[rid]=true</label>
+			<nail x="2027" y="824"/>
+			<nail x="1955" y="632"/>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id177"/>
+			<label kind="guard" x="1776" y="1003">((rid==1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid==1)&amp;&amp;(haveoffset[rid]&amp;&amp;
+cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="1776" y="1079">cycle[rid]=cycle[rid]+1,rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id174"/>
+			<label kind="guard" x="1995" y="802">rid!=1</label>
+			<label kind="synchronisation" x="1995" y="792">Finish[7][rid]?</label>
+			<label kind="assignment" x="1995" y="812">rid=rid+1</label>
+			<nail x="1964" y="628"/>
+			<nail x="2036" y="820"/>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id177"/>
+			<label kind="guard" x="1840" y="832">rid==1</label>
+			<label kind="synchronisation" x="1840" y="822">Finish[7][rid]?</label>
+			<label kind="assignment" x="1840" y="895">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id176"/>
+			<label kind="guard" x="2055" y="577">Alarm==DeadLine[7]</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id178"/>
+			<label kind="synchronisation" x="2145" y="472">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id178"/>
+			<target ref="id179"/>
+			<label kind="synchronisation" x="2273" y="285">Release[7]?</label>
+		</transition>
+		<transition>
+			<source ref="id178"/>
+			<target ref="id176"/>
+			<label kind="guard" x="2278" y="510">Alarm==DeadLine[7]</label>
+		</transition>
+		<transition>
+			<source ref="id179"/>
+			<target ref="id180"/>
+			<label kind="guard" x="2040" y="137">scheduler_queue_head()==7</label>
+			<label kind="synchronisation" x="2040" y="127">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id179"/>
+			<target ref="id176"/>
+			<label kind="guard" x="2183" y="390">Alarm==DeadLine[7]</label>
+		</transition>
+		<transition>
+			<source ref="id180"/>
+			<target ref="id175"/>
+			<label kind="synchronisation" x="1913" y="315">Run[7][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id177"/>
+			<target ref="id172"/>
+			<label kind="synchronisation" x="1575" y="987">Terminate!</label>
+			<label kind="assignment" x="1575" y="1027">scheduler_queue3_remove(7)</label>
+		</transition>
+		<transition>
+			<source ref="id174"/>
+			<target ref="id181"/>
+			<label kind="synchronisation" x="2258" y="945">block?</label>
+		</transition>
+		<transition>
+			<source ref="id181"/>
+			<target ref="id174"/>
+			<label kind="guard" x="2258" y="1037">scheduler_queue_head()==7</label>
+			<label kind="synchronisation" x="2258" y="955">task_run?</label>
+			<nail x="2339" y="911"/>
+			<nail x="2149" y="913"/>
+		</transition>
+		<transition>
+			<source ref="id181"/>
+			<target ref="id176"/>
+			<label kind="guard" x="2318" y="905">Alarm==DeadLine[7]</label>
+		</transition>
+		<transition>
+			<source ref="id175"/>
+			<target ref="id182"/>
+			<label kind="synchronisation" x="1825" y="377">block?</label>
+		</transition>
+		<transition>
+			<source ref="id182"/>
+			<target ref="id179"/>
+			<label kind="synchronisation" x="1953" y="190">Stop[7][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id180"/>
+			<target ref="id179"/>
+			<label kind="synchronisation" x="2040" y="147">block?</label>
+			<nail x="1955" y="117"/>
+			<nail x="2093" y="155"/>
+		</transition>
+		<transition>
+			<source ref="id177"/>
+			<target ref="id183"/>
+			<label kind="synchronisation" x="1775" y="1217">block?</label>
+		</transition>
+		<transition>
+			<source ref="id183"/>
+			<target ref="id177"/>
+			<label kind="guard" x="1775" y="1237">scheduler_queue_head()==7</label>
+			<label kind="synchronisation" x="1775" y="1227">task_run?</label>
+			<nail x="1780" y="1320"/>
+			<nail x="1762" y="1112"/>
+		</transition>
+	</template>
+	<template>
+		<name>Tester_LeftDoorSensor_RLeftDoorSensor_jitter</name>
+		<declaration>clock t;
+const int jitter = 10;
+const int period = 100;
+bool haveoccurred;
+</declaration>
+		<location id="id184" x="1130" y="715">
+			<name x="1120" y="685">initial</name>
+		</location>
+		<location id="id185" x="1350" y="430">
+			<name x="1340" y="400">timing</name>
+			<label kind="invariant" x="1340" y="445">t&lt;=period</label>
+		</location>
+		<location id="id186" x="1470" y="90">
+			<name x="1460" y="60">error</name>
+			<label kind="invariant" x="1460" y="107">t'==0</label>
+		</location>
+		<init ref="id184"/>
+		<transition>
+			<source ref="id184"/>
+			<target ref="id185"/>
+			<label kind="synchronisation" x="1198" y="637">TaskLeftDoorSensorTimingEvent_jitter_first_time?</label>
+			<label kind="assignment" x="1198" y="654">t=0</label>
+		</transition>
+		<transition>
+			<source ref="id185"/>
+			<target ref="id185"/>
+			<label kind="guard" x="1365" y="495">t&lt;=jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="1350" y="480">LeftDoorSensor_RLeftDoorSensor_jitter_run?</label>
+			<label kind="assignment" x="1380" y="510">haveoccurred=true</label>
+			<nail x="1350" y="480"/>
+			<nail x="1400" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id185"/>
+			<target ref="id185"/>
+			<label kind="guard" x="1350" y="380">t==period&amp;&amp;haveoccurred</label>
+			<label kind="assignment" x="1368" y="391">t=0,haveoccurred=false</label>
+			<nail x="1350" y="380"/>
+			<nail x="1300" y="430"/>
+		</transition>
+		<transition>
+			<source ref="id185"/>
+			<target ref="id186"/>
+			<label kind="guard" x="1423" y="270">t&gt;jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="1423" y="260">LeftDoorSensor_RLeftDoorSensor_jitter_run?</label>
+		</transition>
+		<transition>
+			<source ref="id185"/>
+			<target ref="id186"/>
+			<label kind="guard" x="1423" y="280">t==period&amp;&amp;!haveoccurred</label>
+			<nail x="1389" y="348"/>
+			<nail x="1449" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id186"/>
+			<target ref="id186"/>
+			<label kind="synchronisation" x="1470" y="90">LeftDoorSensor_RLeftDoorSensor_jitter_run?</label>
+			<nail x="1440" y="60"/>
+			<nail x="1500" y="60"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskReadLeft</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id187" x="1030" y="325">
+			<name x="1020" y="295">Ready</name>
+		</location>
+		<location id="id188" x="1470" y="530">
+			<name x="1460" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id189" x="1340" y="895">
+			<name x="1330" y="865">Running</name>
+		</location>
+		<location id="id190" x="1315" y="1230">
+			<name x="1305" y="1200">wait</name>
+		</location>
+		<location id="id191" x="1350" y="1525">
+			<name x="1340" y="1495">Ready2</name>
+		</location>
+		<location id="id192" x="1030" y="1205">
+			<name x="1020" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id193" x="1185" y="545">
+			<name x="1175" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id194" x="1835" y="360">
+			<name x="1825" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id195" x="1645" y="1205">
+			<name x="1635" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id196" x="1215" y="90">
+			<name x="1205" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id187"/>
+		<transition>
+			<source ref="id187"/>
+			<target ref="id188"/>
+			<label kind="guard" x="1263" y="437">scheduler_queue_head()==9</label>
+			<label kind="synchronisation" x="1263" y="427">task_run?</label>
+			<label kind="assignment" x="1224" y="476">activation_count[9]=activation_count[9]-1</label>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id188"/>
+			<label kind="guard" x="1470" y="530">!runnable_should_execute[9][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1470" y="540">rid=rid+1</label>
+			<nail x="1440" y="500"/>
+			<nail x="1500" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id189"/>
+			<label kind="guard" x="1418" y="722">runnable_should_execute[9][rid]</label>
+			<label kind="synchronisation" x="1418" y="712">Run[9][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id188"/>
+			<label kind="guard" x="1418" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1418" y="732">Finish[9][rid]?</label>
+			<label kind="assignment" x="1418" y="752">rid=rid+1</label>
+			<nail x="1381" y="806"/>
+			<nail x="1446" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id190"/>
+			<label kind="synchronisation" x="1340" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id190"/>
+			<target ref="id191"/>
+			<label kind="synchronisation" x="1345" y="1377">Release[9]?</label>
+		</transition>
+		<transition>
+			<source ref="id191"/>
+			<target ref="id192"/>
+			<label kind="guard" x="1203" y="1387">scheduler_queue_head()==9</label>
+			<label kind="synchronisation" x="1203" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id192"/>
+			<target ref="id189"/>
+			<label kind="synchronisation" x="1198" y="1050">Run[9][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id193"/>
+			<label kind="guard" x="1275" y="773">rid==1</label>
+			<label kind="synchronisation" x="1275" y="762">Finish[9][rid]?</label>
+			<label kind="assignment" x="1275" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id193"/>
+			<label kind="guard" x="1340" y="550">!runnable_should_execute[9][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1340" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id193"/>
+			<target ref="id187"/>
+			<label kind="synchronisation" x="1120" y="447">Terminate!</label>
+			<label kind="assignment" x="1120" y="457">scheduler_queue7_remove(9)</label>
+		</transition>
+		<transition>
+			<source ref="id188"/>
+			<target ref="id194"/>
+			<label kind="synchronisation" x="1665" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id194"/>
+			<target ref="id188"/>
+			<label kind="guard" x="1665" y="487">scheduler_queue_head()==9</label>
+			<label kind="synchronisation" x="1665" y="477">task_run?</label>
+			<nail x="1738" y="392"/>
+			<nail x="1556" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id189"/>
+			<target ref="id195"/>
+			<label kind="synchronisation" x="1505" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id195"/>
+			<target ref="id191"/>
+			<label kind="synchronisation" x="1510" y="1397">Stop[9][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id192"/>
+			<target ref="id191"/>
+			<label kind="synchronisation" x="1203" y="1407">block?</label>
+			<nail x="1102" y="1292"/>
+			<nail x="1262" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id193"/>
+			<target ref="id196"/>
+			<label kind="synchronisation" x="1213" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id196"/>
+			<target ref="id193"/>
+			<label kind="guard" x="1213" y="337">scheduler_queue_head()==9</label>
+			<label kind="synchronisation" x="1213" y="327">task_run?</label>
+			<nail x="1197" y="202"/>
+			<nail x="1182" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskReceiveLightStatus</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id197" x="950" y="325">
+			<name x="940" y="295">Ready</name>
+		</location>
+		<location id="id198" x="1390" y="530">
+			<name x="1380" y="500">BeforeRunning</name>
+			<committed/>
+		</location>
+		<location id="id199" x="1260" y="895">
+			<name x="1250" y="865">Running</name>
+		</location>
+		<location id="id200" x="1230" y="1230">
+			<name x="1220" y="1200">wait</name>
+		</location>
+		<location id="id201" x="1265" y="1525">
+			<name x="1255" y="1495">Ready2</name>
+		</location>
+		<location id="id202" x="950" y="1205">
+			<name x="940" y="1175">ReadyRunning</name>
+			<committed/>
+		</location>
+		<location id="id203" x="1105" y="545">
+			<name x="1095" y="515">BeforeReady</name>
+			<committed/>
+		</location>
+		<location id="id204" x="1755" y="360">
+			<name x="1745" y="330">BeforeRunningReady</name>
+		</location>
+		<location id="id205" x="1565" y="1205">
+			<name x="1555" y="1175">AfterRunningReady</name>
+			<committed/>
+		</location>
+		<location id="id206" x="1135" y="90">
+			<name x="1125" y="60">beforeReadyReady</name>
+		</location>
+		<init ref="id197"/>
+		<transition>
+			<source ref="id197"/>
+			<target ref="id198"/>
+			<label kind="guard" x="1183" y="437">scheduler_queue_head()==10</label>
+			<label kind="synchronisation" x="1183" y="427">task_run?</label>
+			<label kind="assignment" x="1181" y="467">activation_count[10]=activation_count[10]-1</label>
+		</transition>
+		<transition>
+			<source ref="id198"/>
+			<target ref="id198"/>
+			<label kind="guard" x="1390" y="530">!runnable_should_execute[10][rid]&amp;&amp;rid!=1</label>
+			<label kind="assignment" x="1390" y="540">rid=rid+1</label>
+			<nail x="1360" y="500"/>
+			<nail x="1420" y="500"/>
+		</transition>
+		<transition>
+			<source ref="id198"/>
+			<target ref="id199"/>
+			<label kind="guard" x="1338" y="722">runnable_should_execute[10][rid]</label>
+			<label kind="synchronisation" x="1338" y="712">Run[10][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id199"/>
+			<target ref="id198"/>
+			<label kind="guard" x="1338" y="742">rid!=1</label>
+			<label kind="synchronisation" x="1338" y="732">Finish[10][rid]?</label>
+			<label kind="assignment" x="1338" y="752">rid=rid+1</label>
+			<nail x="1301" y="806"/>
+			<nail x="1366" y="624"/>
+		</transition>
+		<transition>
+			<source ref="id199"/>
+			<target ref="id200"/>
+			<label kind="synchronisation" x="1258" y="1062">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id200"/>
+			<target ref="id201"/>
+			<label kind="synchronisation" x="1260" y="1377">Release[10]?</label>
+		</transition>
+		<transition>
+			<source ref="id201"/>
+			<target ref="id202"/>
+			<label kind="guard" x="1120" y="1387">scheduler_queue_head()==10</label>
+			<label kind="synchronisation" x="1120" y="1365">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id202"/>
+			<target ref="id199"/>
+			<label kind="synchronisation" x="1118" y="1050">Run[10][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id199"/>
+			<target ref="id203"/>
+			<label kind="guard" x="1195" y="772">rid==1</label>
+			<label kind="synchronisation" x="1195" y="762">Finish[10][rid]?</label>
+			<label kind="assignment" x="1195" y="782">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id198"/>
+			<target ref="id203"/>
+			<label kind="guard" x="1260" y="550">!runnable_should_execute[10][rid]&amp;&amp;rid==1</label>
+			<label kind="assignment" x="1260" y="560">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id203"/>
+			<target ref="id197"/>
+			<label kind="synchronisation" x="1040" y="447">Terminate!</label>
+			<label kind="assignment" x="1040" y="457">scheduler_queue6_remove(10)</label>
+		</transition>
+		<transition>
+			<source ref="id198"/>
+			<target ref="id204"/>
+			<label kind="synchronisation" x="1585" y="467">block?</label>
+		</transition>
+		<transition>
+			<source ref="id204"/>
+			<target ref="id198"/>
+			<label kind="guard" x="1585" y="487">scheduler_queue_head()==10</label>
+			<label kind="synchronisation" x="1585" y="477">task_run?</label>
+			<nail x="1658" y="392"/>
+			<nail x="1476" y="477"/>
+		</transition>
+		<transition>
+			<source ref="id199"/>
+			<target ref="id205"/>
+			<label kind="synchronisation" x="1425" y="1072">block?</label>
+		</transition>
+		<transition>
+			<source ref="id205"/>
+			<target ref="id201"/>
+			<label kind="synchronisation" x="1428" y="1397">Stop[10][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id202"/>
+			<target ref="id201"/>
+			<label kind="synchronisation" x="1120" y="1407">block?</label>
+			<nail x="1020" y="1292"/>
+			<nail x="1178" y="1452"/>
+		</transition>
+		<transition>
+			<source ref="id203"/>
+			<target ref="id206"/>
+			<label kind="synchronisation" x="1133" y="317">block?</label>
+		</transition>
+		<transition>
+			<source ref="id206"/>
+			<target ref="id203"/>
+			<label kind="guard" x="1133" y="337">scheduler_queue_head()==10</label>
+			<label kind="synchronisation" x="1133" y="327">task_run?</label>
+			<nail x="1117" y="202"/>
+			<nail x="1102" y="430"/>
+		</transition>
+	</template>
+	<template>
+		<name>LeftDoorSensor_RLeftDoorSensor</name>
+		<declaration>clock t;
+int ioHWAb_RDigitalServiceReadLeft_DigitalServiceReadLeft_call_times;
+</declaration>
+		<location id="id207" x="2380" y="90">
+			<name x="2370" y="60">LeftDoorSensor_RLeftDoorSensor_initial</name>
+		</location>
+		<location id="id208" x="2645" y="390">
+			<name x="2635" y="360">LeftDoorSensor_RLeftDoorSensor_read</name>
+			<urgent/>
+		</location>
+		<location id="id209" x="2325" y="635">
+			<name x="2315" y="605">LeftDoorSensor_RLeftDoorSensor_running</name>
+			<label kind="invariant" x="2315" y="650">t &lt;=2</label>
+		</location>
+		<location id="id210" x="2055" y="335">
+			<name x="2045" y="305">LeftDoorSensor_RLeftDoorSensor_write</name>
+			<committed/>
+		</location>
+		<location id="id211" x="3025" y="375">
+			<name x="3015" y="345">LeftDoorSensor_RLeftDoorSensor_read_preempted</name>
+			<label kind="invariant" x="3015" y="390">t'==0</label>
+		</location>
+		<location id="id212" x="2285" y="1025">
+			<name x="2275" y="995">LeftDoorSensor_RLeftDoorSensor_running_preempted</name>
+			<label kind="invariant" x="2275" y="1040">t'==0</label>
+		</location>
+		<location id="id213" x="1690" y="235">
+			<name x="1680" y="205">LeftDoorSensor_RLeftDoorSensor_write_preempted</name>
+			<label kind="invariant" x="1680" y="250">t'==0</label>
+		</location>
+		<init ref="id207"/>
+		<transition>
+			<source ref="id207"/>
+			<target ref="id208"/>
+			<label kind="synchronisation" x="2525" y="240">Run[7][1]?</label>
+			<label kind="assignment" x="2516" y="263">runnable_should_execute[7][1]=false,t=0,ioHWAb_RDigitalServiceReadLeft_DigitalServiceReadLeft_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id208"/>
+			<target ref="id209"/>
+			<label kind="synchronisation" x="2498" y="512">LeftDoorSensor_RLeftDoorSensor_jitter_run!</label>
+		</transition>
+		<transition>
+			<source ref="id209"/>
+			<target ref="id210"/>
+			<label kind="guard" x="2203" y="485">t &gt;=1&amp;&amp;ioHWAb_RDigitalServiceReadLeft_DigitalServiceReadLeft_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id210"/>
+			<target ref="id207"/>
+			<label kind="synchronisation" x="2230" y="212">Finish[7][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id209"/>
+			<target ref="id209"/>
+			<label kind="guard" x="2325" y="645">ioHWAb_RDigitalServiceReadLeft_DigitalServiceReadLeft_call_times&lt;1</label>
+			<label kind="synchronisation" x="2325" y="635">ioHWAb_RDigitalServiceReadLeft_Invoke[1]!</label>
+			<label kind="assignment" x="2325" y="655">ioHWAb_RDigitalServiceReadLeft_DigitalServiceReadLeft_call_times=ioHWAb_RDigitalServiceReadLeft_DigitalServiceReadLeft_call_times+1</label>
+			<nail x="2295" y="605"/>
+			<nail x="2355" y="605"/>
+		</transition>
+		<transition>
+			<source ref="id208"/>
+			<target ref="id211"/>
+			<label kind="synchronisation" x="2848" y="382">Stop[7][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id211"/>
+			<target ref="id208"/>
+			<label kind="synchronisation" x="2848" y="392">Run[7][1]?</label>
+			<nail x="2929" y="368"/>
+			<nail x="2739" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id209"/>
+			<target ref="id212"/>
+			<label kind="synchronisation" x="2318" y="830">Stop[7][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id212"/>
+			<target ref="id209"/>
+			<label kind="synchronisation" x="2318" y="840">Run[7][1]?</label>
+			<nail x="2304" y="928"/>
+			<nail x="2324" y="733"/>
+		</transition>
+		<transition>
+			<source ref="id210"/>
+			<target ref="id213"/>
+			<label kind="synchronisation" x="1885" y="285">Stop[7][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id213"/>
+			<target ref="id210"/>
+			<label kind="synchronisation" x="1885" y="295">Run[7][1]?</label>
+			<nail x="1778" y="269"/>
+			<nail x="1960" y="319"/>
+		</transition>
+	</template>
+	<template>
+		<name>FULL_SCHEDULE</name>
+		<declaration>int d;
+</declaration>
+		<location id="id214" x="1990" y="520">
+			<name x="1980" y="490">free</name>
+			<committed/>
+		</location>
+		<location id="id215" x="1295" y="600">
+			<committed/>
+		</location>
+		<location id="id216" x="1610" y="780">
+			<name x="1600" y="750">wait_task_running</name>
+		</location>
+		<location id="id217" x="1665" y="470">
+			<name x="1655" y="440">select</name>
+			<committed/>
+		</location>
+		<location id="id218" x="1910" y="175">
+			<name x="1900" y="145">wait_task_arise</name>
+		</location>
+		<location id="id219" x="1880" y="875">
+			<committed/>
+		</location>
+		<location id="id220" x="1575" y="90">
+			<committed/>
+		</location>
+		<location id="id221" x="1660" y="1160">
+			<committed/>
+		</location>
+		<init ref="id214"/>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id214"/>
+			<label kind="guard" x="1683" y="468">isEmpty()</label>
+			<nail x="1819" y="535"/>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id217"/>
+			<label kind="guard" x="1709" y="667">activation_count[9]&gt;=1</label>
+			<label kind="synchronisation" x="1709" y="684">ioHWAb_RDigitalServiceReadLeft_add_server_task?</label>
+			<nail x="1691" y="612"/>
+			<nail x="1700" y="612"/>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id217"/>
+			<label kind="guard" x="1718" y="663">activation_count[6]&gt;=1</label>
+			<label kind="synchronisation" x="1718" y="680">ioHWAb_RDigitalServiceWrite_add_server_task?</label>
+			<nail x="1700" y="612"/>
+			<nail x="1708" y="612"/>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id217"/>
+			<label kind="guard" x="1726" y="658">activation_count[1]&gt;=1</label>
+			<label kind="synchronisation" x="1726" y="675">ioHWAb_RDigitalServiceReadRight_add_server_task?</label>
+			<nail x="1717" y="612"/>
+			<nail x="1708" y="612"/>
+		</transition>
+		<transition>
+			<source ref="id220"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1633" y="280">Release[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id220"/>
+			<label kind="synchronisation" x="1755" y="132">Wakeup[10]?</label>
+			<label kind="assignment" x="1755" y="142">scheduler_queue6_add(10),d=10</label>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="322">ioHWAb_RDigitalServiceWrite_add_server_task?</label>
+			<label kind="assignment" x="1800" y="332">scheduler_queue8_add(6),activation_count[6]=activation_count[6]+1</label>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1785" y="682">activation_count[6]&lt;1</label>
+			<label kind="synchronisation" x="1785" y="672">ioHWAb_RDigitalServiceWrite_add_server_task?</label>
+			<label kind="assignment" x="1785" y="692">scheduler_queue8_add(6),activation_count[6]=activation_count[6]+1</label>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id221"/>
+			<label kind="synchronisation" x="1648" y="970">Wakeup[10]?</label>
+			<label kind="assignment" x="1648" y="980">scheduler_queue6_add(10),d=10</label>
+		</transition>
+		<transition>
+			<source ref="id221"/>
+			<target ref="id219"/>
+			<label kind="synchronisation" x="1783" y="1017">Release[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id215"/>
+			<label kind="synchronisation" x="1465" y="702">ioHWAb_RDigitalServiceWrite_Invoke[1]?</label>
+			<label kind="assignment" x="1465" y="712">scheduler_queue6_remove(10),d=1</label>
+		</transition>
+		<transition>
+			<source ref="id215"/>
+			<target ref="id217"/>
+			<label kind="guard" x="1493" y="545">ioHWAb_RDigitalServiceWrite_have_wait[d]</label>
+			<label kind="synchronisation" x="1493" y="535">Wait!</label>
+			<label kind="assignment" x="1493" y="555">ioHWAb_RDigitalServiceWrite_have_wait[d]=false</label>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="837">activation_count[6]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="827">ioHWAb_RDigitalServiceWrite_add_server_task?</label>
+			<nail x="1785" y="824"/>
+			<nail x="1776" y="841"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="857">activation_count[6]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="847">ioHWAb_RDigitalServiceWrite_add_server_task?</label>
+			<label kind="assignment" x="1758" y="867">scheduler_queue8_add(6),activation_count[6]=activation_count[6]+1</label>
+			<nail x="1673" y="812"/>
+			<nail x="1808" y="860"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="342">ioHWAb_RDigitalServiceReadLeft_result_return[1]?</label>
+			<label kind="assignment" x="1800" y="352">scheduler_queue2_add(5),runnable_should_execute[5][1]=true,activation_count[5]=activation_count[5]+1</label>
+			<nail x="1840" y="241"/>
+			<nail x="1718" y="389"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="362">ioHWAb_RDigitalServiceReadLeft_add_server_task?</label>
+			<label kind="assignment" x="1800" y="372">scheduler_queue7_add(9),activation_count[9]=activation_count[9]+1</label>
+			<nail x="1863" y="260"/>
+			<nail x="1741" y="408"/>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1785" y="732">activation_count[9]&lt;1</label>
+			<label kind="synchronisation" x="1785" y="722">ioHWAb_RDigitalServiceReadLeft_add_server_task?</label>
+			<label kind="assignment" x="1785" y="742">scheduler_queue7_add(9),activation_count[9]=activation_count[9]+1</label>
+			<nail x="1709" y="575"/>
+			<nail x="1817" y="777"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="887">!runnable_should_execute[5][1]&amp;&amp;activation_count[5]&lt;11</label>
+			<label kind="synchronisation" x="1758" y="877">ioHWAb_RDigitalServiceReadLeft_result_return[1]?</label>
+			<label kind="assignment" x="1758" y="897">scheduler_queue2_add(5),runnable_should_execute[5][1]=true,activation_count[5]=activation_count[5]+1</label>
+			<nail x="1683" y="784"/>
+			<nail x="1818" y="832"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="917">runnable_should_execute[5][1]||activation_count[5]&gt;=11</label>
+			<label kind="synchronisation" x="1758" y="907">ioHWAb_RDigitalServiceReadLeft_result_return[1]?</label>
+			<nail x="1666" y="831"/>
+			<nail x="1801" y="879"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="937">activation_count[9]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="927">ioHWAb_RDigitalServiceReadLeft_add_server_task?</label>
+			<nail x="1690" y="765"/>
+			<nail x="1825" y="813"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="957">activation_count[9]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="947">ioHWAb_RDigitalServiceReadLeft_add_server_task?</label>
+			<label kind="assignment" x="1758" y="990">scheduler_queue7_add(9),activation_count[9]=activation_count[9]+1</label>
+			<nail x="1660" y="850"/>
+			<nail x="1795" y="898"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="382">ioHWAb_RDigitalServiceReadRight_result_return[1]?</label>
+			<label kind="assignment" x="1800" y="392">scheduler_queue1_add(4),runnable_should_execute[4][1]=true,activation_count[4]=activation_count[4]+1</label>
+			<nail x="1824" y="228"/>
+			<nail x="1702" y="376"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="402">ioHWAb_RDigitalServiceReadRight_add_server_task?</label>
+			<label kind="assignment" x="1800" y="412">scheduler_queue6_add(1),activation_count[1]=activation_count[1]+1</label>
+			<nail x="1878" y="273"/>
+			<nail x="1756" y="421"/>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1785" y="762">activation_count[1]&lt;1</label>
+			<label kind="synchronisation" x="1785" y="752">ioHWAb_RDigitalServiceReadRight_add_server_task?</label>
+			<label kind="assignment" x="1785" y="772">scheduler_queue6_add(1),activation_count[1]=activation_count[1]+1</label>
+			<nail x="1735" y="561"/>
+			<nail x="1843" y="763"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="1027">!runnable_should_execute[4][1]&amp;&amp;activation_count[4]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="1000">ioHWAb_RDigitalServiceReadRight_result_return[1]?</label>
+			<label kind="assignment" x="1758" y="1037">scheduler_queue1_add(4),runnable_should_execute[4][1]=true,activation_count[4]=activation_count[4]+1</label>
+			<nail x="1697" y="746"/>
+			<nail x="1832" y="794"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="1057">runnable_should_execute[4][1]||activation_count[4]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="1047">ioHWAb_RDigitalServiceReadRight_result_return[1]?</label>
+			<nail x="1653" y="868"/>
+			<nail x="1788" y="916"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="1077">activation_count[1]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="1067">ioHWAb_RDigitalServiceReadRight_add_server_task?</label>
+			<nail x="1703" y="727"/>
+			<nail x="1838" y="775"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="1097">activation_count[1]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="1087">ioHWAb_RDigitalServiceReadRight_add_server_task?</label>
+			<label kind="assignment" x="1758" y="1107">scheduler_queue6_add(1),activation_count[1]=activation_count[1]+1</label>
+			<nail x="1646" y="887"/>
+			<nail x="1781" y="935"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="422">Data_LeftDoorStatus_dataReceived?</label>
+			<label kind="assignment" x="1800" y="432">scheduler_queue5_add(2),runnable_should_execute[2][1]=true,activation_count[2]=activation_count[2]+1</label>
+			<nail x="1809" y="216"/>
+			<nail x="1687" y="364"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="1127">!runnable_should_execute[2][1]&amp;&amp;activation_count[2]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="1117">Data_LeftDoorStatus_dataReceived?</label>
+			<label kind="assignment" x="1758" y="1137">scheduler_queue5_add(2),runnable_should_execute[2][1]=true,activation_count[2]=activation_count[2]+1</label>
+			<nail x="1710" y="708"/>
+			<nail x="1845" y="756"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="1157">runnable_should_execute[2][1]||activation_count[2]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="1147">Data_LeftDoorStatus_dataReceived?</label>
+			<nail x="1640" y="906"/>
+			<nail x="1775" y="954"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="442">Data_LightStatus_dataReceived?</label>
+			<label kind="assignment" x="1800" y="452">scheduler_queue6_add(10),runnable_should_execute[10][1]=true,activation_count[10]=activation_count[10]+1</label>
+			<nail x="1894" y="286"/>
+			<nail x="1772" y="434"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="1177">!runnable_should_execute[10][1]&amp;&amp;activation_count[10]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="1167">Data_LightStatus_dataReceived?</label>
+			<label kind="assignment" x="1758" y="1187">scheduler_queue6_add(10),runnable_should_execute[10][1]=true,activation_count[10]=activation_count[10]+1</label>
+			<nail x="1717" y="689"/>
+			<nail x="1852" y="737"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="1207">runnable_should_execute[10][1]||activation_count[10]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="1197">Data_LightStatus_dataReceived?</label>
+			<nail x="1633" y="925"/>
+			<nail x="1768" y="973"/>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="462">Data_RightDoorStatus_dataReceived?</label>
+			<label kind="assignment" x="1800" y="472">scheduler_queue5_add(8),runnable_should_execute[8][1]=true,activation_count[8]=activation_count[8]+1</label>
+			<nail x="1793" y="203"/>
+			<nail x="1671" y="351"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="guard" x="1758" y="1227">!runnable_should_execute[8][1]&amp;&amp;activation_count[8]&lt;1</label>
+			<label kind="synchronisation" x="1758" y="1217">Data_RightDoorStatus_dataReceived?</label>
+			<label kind="assignment" x="1758" y="1237">scheduler_queue5_add(8),runnable_should_execute[8][1]=true,activation_count[8]=activation_count[8]+1</label>
+			<nail x="1723" y="671"/>
+			<nail x="1858" y="719"/>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1758" y="1257">runnable_should_execute[8][1]||activation_count[8]&gt;=1</label>
+			<label kind="synchronisation" x="1758" y="1247">Data_RightDoorStatus_dataReceived?</label>
+			<nail x="1626" y="944"/>
+			<nail x="1761" y="992"/>
+		</transition>
+		<transition>
+			<source ref="id214"/>
+			<target ref="id218"/>
+			<label kind="guard" x="1963" y="482">isEmpty()</label>
+		</transition>
+		<transition>
+			<source ref="id218"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1800" y="492">Activate?</label>
+			<nail x="1909" y="298"/>
+			<nail x="1787" y="446"/>
+		</transition>
+		<transition>
+			<source ref="id217"/>
+			<target ref="id216"/>
+			<label kind="guard" x="1637" y="591">!isEmpty()</label>
+			<label kind="synchronisation" x="1650" y="625">task_run!</label>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id214"/>
+			<label kind="synchronisation" x="1813" y="650">Terminate?</label>
+		</transition>
+		<transition>
+			<source ref="id214"/>
+			<target ref="id217"/>
+			<label kind="guard" x="1840" y="502">!isEmpty()</label>
+		</transition>
+		<transition>
+			<source ref="id216"/>
+			<target ref="id219"/>
+			<label kind="synchronisation" x="1758" y="1267">Activate?</label>
+			<nail x="1730" y="652"/>
+			<nail x="1865" y="700"/>
+		</transition>
+		<transition>
+			<source ref="id219"/>
+			<target ref="id217"/>
+			<label kind="synchronisation" x="1785" y="782">block!</label>
+			<nail x="1852" y="758"/>
+			<nail x="1744" y="556"/>
+		</transition>
+	</template>
+	<template>
+		<name>Data_RightDoorStatus_buffer</name>
+		<location id="id222" x="770" y="140">
+		</location>
+		<location id="id223" x="1130" y="90">
+			<committed/>
+		</location>
+		<init ref="id222"/>
+		<transition>
+			<source ref="id222"/>
+			<target ref="id222"/>
+			<label kind="synchronisation" x="770" y="140">LightManager_RightDoorStatus_read?</label>
+			<nail x="740" y="110"/>
+			<nail x="800" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id222"/>
+			<target ref="id223"/>
+			<label kind="synchronisation" x="963" y="115">RightDoorSensor_RightDoorStatus_write?</label>
+		</transition>
+		<transition>
+			<source ref="id223"/>
+			<target ref="id222"/>
+			<label kind="synchronisation" x="963" y="125">Data_RightDoorStatus_dataReceived!</label>
+			<nail x="1038" y="92"/>
+			<nail x="858" y="117"/>
+		</transition>
+	</template>
+	<system>system TaskReceiveLeftDoor,ioHWAb_RDigitalServiceWriteintra_non_schedule,Data_LightStatus_buffer,ioHWAb_RDigitalServiceReadLeft_server_rte,FrontLightActuator_RFrontLightActuator,Data_LeftDoorStatus_buffer,ioHWAb_RDigitalServiceWrite_server_rte,ioHWAb_RDigitalServiceReadRight_server_rte,RightDoorSensor_RGetResultDigitalServiceReadRight,ioHWAb_RDigitalServiceWrite,LightManager_RLightManagerReceiveRightDoor,TaskReadRight,TaskGetResultLeft,RightDoorSensor_RRightDoorSensor,ioHWAb_RDigitalServiceReadRightintra_non_schedule,TaskReceiveRightDoor,LeftDoorSensor_RGetResultDigitalServiceReadLeft,Tester_RightDoorSensor_RGetResultDigitalServiceReadRight_execute_time,ioHWAb_RDigitalServiceReadLeftintra_non_schedule,ioHWAb_RDigitalServiceReadLeft,TaskRightDoorSensor,Tester_RightDoorSensor_RRightDoorSensor_jitter,TaskGetResultRight,ioHWAb_RDigitalServiceReadRight,Tester_LeftDoorSensor_RGetResultDigitalServiceReadLeft_execute_time,LightManager_RLightManagerReceiveLeftDoor,TaskWrite,TaskLeftDoorSensor,Tester_LeftDoorSensor_RLeftDoorSensor_jitter,TaskReadLeft,TaskReceiveLightStatus,LeftDoorSensor_RLeftDoorSensor,FULL_SCHEDULE,Data_RightDoorStatus_buffer;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] Tester_RightDoorSensor_RGetResultDigitalServiceReadRight_execute_time.t&lt;=31</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not TaskLeftDoorSensorTimingEvent.error</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not TaskRightDoorSensorTimingEvent.error</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] Tester_LeftDoorSensor_RGetResultDigitalServiceReadLeft_execute_time.t&lt;=8</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not Tester_RightDoorSensor_RRightDoorSensor_jitter.error</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not Tester_LeftDoorSensor_RLeftDoorSensor_jitter.error</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
