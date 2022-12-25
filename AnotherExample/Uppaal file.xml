@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>int len_2 = 0;
+int queue_2[1];
+int len_1 = 0;
+int queue_1[1];
+chan Run[3][2];
+chan Stop[3][2];
+int runnable_should_execute[3][2];
+chan Finish[3][2];
+chan Release[3];
+int activation_count[3] = {0,0,0};
+chan wakeup[3];
+broadcast chan block;
+chan Terminate;
+chan task_run;
+chan Wait;
+chan Activate;
+int DeadLine[3]={0,50,50};
+chan Receiver_Data1_read;
+chan Sender_Data1_write;
+chan Receiver_Data1_write;
+broadcast chan TaskSender_jitter_first_time;
+chan Sender_RunnableSender_jitter_run;
+broadcast chan TaskReceiver_jitter_first_time;
+chan Receiver_RunnableReceiver_jitter_run;
+bool isEmpty_2()
+{
+   return len_2==0;
+}
+ 
+bool find_task_2(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_2;++i){
+      if(queue_2[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue2_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_2; ++i) {
+      if (queue_2[i]==id) {
+         for(j = i; j+1 &lt; len_2; ++j) {
+            queue_2[j] = queue_2[j+1];
+         }
+      }
+   }
+   queue_2[--len_2] = 0;
+}
+ 
+bool isEmpty_1()
+{
+   return len_1==0;
+}
+ 
+bool find_task_1(int id)
+{
+   bool find=false;
+   int i;
+   for(i=0;i&lt; len_1;++i){
+      if(queue_1[i]==id){
+         find=true;
+      }
+   }
+   return find;
+}
+ 
+void scheduler_queue1_remove(int id)
+{
+   int i,j;
+   for(i = 0; i &lt; len_1; ++i) {
+      if (queue_1[i]==id) {
+         for(j = i; j+1 &lt; len_1; ++j) {
+            queue_1[j] = queue_1[j+1];
+         }
+      }
+   }
+   queue_1[--len_1] = 0;
+}
+ 
+void scheduler_queue2_add(int id)
+{
+   if(!find_task_2(id)){
+      queue_2[len_2] = id;
+      len_2++;
+   }
+}
+ 
+void scheduler_queue1_add(int id)
+{
+   if(!find_task_1(id)){
+      queue_1[len_1] = id;
+      len_1++;
+   }
+}
+ 
+bool isEmpty()
+{
+return (isEmpty_2())&amp;&amp;(isEmpty_1());
+}
+ 
+int scheduler_queue_head()
+{
+if(!isEmpty_2()){return queue_2[0];}
+return queue_1[0];
+}
+ 
+</declaration>
+	<template>
+		<name>Tester_Sender_RunnableSender_jitter</name>
+		<declaration>clock t;
+const int jitter = 23;
+const int period = 200;
+bool haveoccurred;
+</declaration>
+		<location id="id0" x="40" y="80">
+			<name x="30" y="50">initial</name>
+		</location>
+		<location id="id1" x="190" y="80">
+			<name x="180" y="50">timing</name>
+			<label kind="invariant" x="180" y="95">t&lt;=period</label>
+		</location>
+		<location id="id2" x="190" y="230">
+			<name x="180" y="200">error</name>
+			<label kind="invariant" x="180" y="247">t'==0</label>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="55" y="65">TaskSender_jitter_first_time?</label>
+			<label kind="assignment" x="55" y="80">t=0</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="119" y="-34">t&lt;=jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="119" y="-17">Sender_RunnableSender_jitter_run?</label>
+			<label kind="assignment" x="119" y="0">haveoccurred=true</label>
+			<nail x="170" y="17"/>
+			<nail x="212" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id1"/>
+			<label kind="guard" x="263" y="51">t==period&amp;&amp;haveoccurred</label>
+			<label kind="assignment" x="263" y="68">t=0,haveoccurred=false</label>
+			<nail x="263" y="93"/>
+			<nail x="263" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="34" y="161">t&gt;jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="-42" y="144">Sender_RunnableSender_jitter_run?</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="guard" x="255" y="127">t==period&amp;&amp;!haveoccurred</label>
+			<nail x="263" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="131" y="278">Sender_RunnableSender_jitter_run?</label>
+			<nail x="161" y="263"/>
+			<nail x="221" y="263"/>
+		</transition>
+	</template>
+	<template>
+		<name>Receiver_RunnableReceiver</name>
+		<declaration>clock t;
+int Data_Data1_call_times = 0;
+</declaration>
+		<location id="id3" x="40" y="80">
+			<name x="30" y="50">Receiver_RunnableReceiver_passive</name>
+		</location>
+		<location id="id4" x="190" y="80">
+			<name x="180" y="50">Receiver_RunnableReceiver_read</name>
+			<urgent/>
+		</location>
+		<location id="id5" x="190" y="230">
+			<name x="180" y="200">Receiver_RunnableReceiver_active</name>
+			<label kind="invariant" x="180" y="245">t &lt;=5</label>
+		</location>
+		<location id="id6" x="40" y="230">
+			<name x="30" y="200">Receiver_RunnableReceiver_write</name>
+			<committed/>
+		</location>
+		<location id="id7" x="340" y="80">
+			<name x="330" y="50">Receiver_RunnableReceiver_active_block</name>
+			<label kind="invariant" x="330" y="95">t'==0</label>
+		</location>
+		<location id="id8" x="255" y="17">
+			<label kind="invariant" x="245" y="34">t'==0</label>
+		</location>
+		<location id="id9" x="-17" y="289">
+			<label kind="invariant" x="-27" y="306">t'==0</label>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-17" y="242">Run[2][1]?</label>
+			<nail x="-17" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="11" y="242">Stop[2][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="205" y="0">Run[2][1]?</label>
+			<nail x="187" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="208" y="31">Stop[2][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="55" y="65">Run[2][1]?</label>
+			<label kind="assignment" x="55" y="80">runnable_should_execute[2][1]=false,
+t=0,Data_Data1_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="144" y="161">Receiver_RunnableReceiver_jitter_run!</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="guard" x="55" y="200">t &gt;=0&amp;&amp;Data_Data1_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-20" y="140">Finish[2][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id5"/>
+			<label kind="guard" x="130" y="200">Data_Data1_call_times&lt;1</label>
+			<label kind="synchronisation" x="130" y="215">Receiver_Data1_read!</label>
+			<label kind="assignment" x="130" y="230">Data_Data1_call_times=Data_Data1_call_times+1</label>
+			<nail x="160" y="200"/>
+			<nail x="220" y="200"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="205" y="140">Stop[2][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="212" y="110">Run[2][1]?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Sender_RunnableSender</name>
+		<declaration>clock t;
+int Data_Data1_call_times = 0;
+</declaration>
+		<location id="id10" x="40" y="80">
+			<name x="30" y="50">Sender_RunnableSender_passive</name>
+		</location>
+		<location id="id11" x="190" y="80">
+			<name x="180" y="50">Sender_RunnableSender_read</name>
+			<urgent/>
+		</location>
+		<location id="id12" x="190" y="230">
+			<name x="180" y="200">Sender_RunnableSender_active</name>
+			<label kind="invariant" x="180" y="245">t &lt;=5</label>
+		</location>
+		<location id="id13" x="40" y="230">
+			<name x="30" y="200">Sender_RunnableSender_write</name>
+			<committed/>
+		</location>
+		<location id="id14" x="340" y="80">
+			<name x="330" y="50">Sender_RunnableSender_active_block</name>
+			<label kind="invariant" x="330" y="95">t'==0</label>
+		</location>
+		<location id="id15" x="280" y="0">
+			<label kind="invariant" x="270" y="17">t'==0</label>
+		</location>
+		<location id="id16" x="-25" y="289">
+			<label kind="invariant" x="-35" y="306">t'==0</label>
+		</location>
+		<init ref="id10"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-7" y="242">Run[1][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-7" y="212">Stop[1][1]?</label>
+			<nail x="-25" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="208" y="23">Run[1][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id15"/>
+			<label kind="synchronisation" x="213" y="-17">Stop[1][1]?</label>
+			<nail x="195" y="68"/>
+			<nail x="195" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="55" y="65">Run[1][1]?</label>
+			<label kind="assignment" x="55" y="80">runnable_should_execute[1][1]=false,
+t=0,Data_Data1_call_times = 0</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="136" y="110">Sender_RunnableSender_jitter_run!</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="guard" x="55" y="200">t &gt;=0&amp;&amp;Data_Data1_call_times==1</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-20" y="140">Finish[1][1]!</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id12"/>
+			<label kind="guard" x="130" y="200">Data_Data1_call_times&lt;1</label>
+			<label kind="synchronisation" x="130" y="215">Sender_Data1_write!</label>
+			<label kind="assignment" x="130" y="230">Data_Data1_call_times=Data_Data1_call_times+1</label>
+			<nail x="160" y="200"/>
+			<nail x="220" y="200"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="204" y="136">Stop[1][1]?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="314" y="161">Run[1][1]?</label>
+		</transition>
+	</template>
+	<template>
+		<name>FULL_SCHEDULE</name>
+		<declaration>int d;
+</declaration>
+		<location id="id17" x="40" y="80">
+			<name x="30" y="50">free</name>
+			<committed/>
+		</location>
+		<location id="id18" x="190" y="80">
+			<name x="180" y="50">wait_task_running</name>
+		</location>
+		<location id="id19" x="190" y="230">
+			<name x="180" y="200">select</name>
+			<committed/>
+		</location>
+		<location id="id20" x="40" y="230">
+			<name x="30" y="200">wait_task_arise</name>
+		</location>
+		<location id="id21" x="340" y="80">
+			<committed/>
+		</location>
+		<init ref="id17"/>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id17"/>
+			<label kind="guard" x="59" y="170">!isEmpty()</label>
+			<nail x="76" y="170"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-20" y="125">isEmpty()</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="55" y="215">Activate?</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id18"/>
+			<label kind="guard" x="127" y="161">!isEmpty()</label>
+			<label kind="synchronisation" x="130" y="140">task_run!</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="55" y="65">Terminate?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id19"/>
+			<label kind="guard" x="55" y="125">!isEmpty()</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="205" y="65">Activate?</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="205" y="140">block!</label>
+		</transition>
+	</template>
+	<template>
+		<name>TaskSender</name>
+		<declaration>int rid = 1;
+clock Alarm;
+const int start_time = 1;
+const int counter_base = 1;
+const int cycle_time = 50;
+int offset[2] = {0,0};
+int rperiod[2] = {0,200};
+int cycle[2] = {1,1};
+bool haveoffset[2] = {false,false};
+int Offset=start_time*counter_base;
+int period=cycle_time*counter_base;
+
+</declaration>
+		<location id="id22" x="-527" y="59">
+			<name x="-537" y="29">suspended</name>
+			<label kind="invariant" x="-561" y="68">Alarm&lt;=Offset</label>
+		</location>
+		<location id="id23" x="-306" y="59">
+			<name x="-316" y="29">suspended2</name>
+			<label kind="invariant" x="-316" y="74">Alarm&lt;=period</label>
+		</location>
+		<location id="id24" x="34" y="59">
+			<name x="24" y="29">ready</name>
+			<label kind="invariant" x="24" y="74">Alarm&lt;=DeadLine[1]</label>
+		</location>
+		<location id="id25" x="34" y="229">
+			<committed/>
+		</location>
+		<location id="id26" x="34" y="518">
+			<name x="24" y="488">running</name>
+			<label kind="invariant" x="24" y="533">Alarm&lt;=DeadLine[1]</label>
+		</location>
+		<location id="id27" x="340" y="229">
+			<name x="330" y="199">error</name>
+		</location>
+		<location id="id28" x="-306" y="518">
+			<committed/>
+		</location>
+		<location id="id29" x="102" y="595">
+			<name x="92" y="565">waiting</name>
+			<label kind="invariant" x="92" y="610">Alarm&lt;=DeadLine[1]</label>
+		</location>
+		<location id="id30" x="34" y="654">
+			<name x="24" y="624">ready2</name>
+			<label kind="invariant" x="24" y="669">Alarm&lt;=DeadLine[1]</label>
+		</location>
+		<location id="id31" x="-42" y="595">
+			<committed/>
+		</location>
+		<location id="id32" x="178" y="229">
+			<name x="153" y="195">ready4</name>
+			<label kind="invariant" x="168" y="244">Alarm&lt;=DeadLine[1]</label>
+		</location>
+		<location id="id33" x="34" y="595">
+			<committed/>
+		</location>
+		<location id="id34" x="-306" y="654">
+			<name x="-316" y="624">ready3</name>
+			<label kind="invariant" x="-316" y="671">Alarm&lt;=DeadLine[1]</label>
+		</location>
+		<init ref="id22"/>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id27"/>
+			<label kind="guard" x="-263" y="637">Alarm==DeadLine[1]</label>
+			<nail x="340" y="654"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id27"/>
+			<nail x="408" y="263"/>
+			<nail x="382" y="289"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="358" y="199">Finish[1][rid]?</label>
+			<nail x="408" y="204"/>
+			<nail x="408" y="238"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id27"/>
+			<label kind="synchronisation" x="357" y="182">task_run?</label>
+			<nail x="374" y="170"/>
+			<nail x="391" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id23"/>
+			<label kind="guard" x="-459" y="0">Alarm==Offset</label>
+			<label kind="synchronisation" x="-459" y="17">TaskSender_jitter_first_time!</label>
+			<label kind="assignment" x="-459" y="34">Alarm=period</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id24"/>
+			<label kind="guard" x="-221" y="0">Alarm==period</label>
+			<label kind="synchronisation" x="-221" y="17">Activate!</label>
+			<label kind="assignment" x="-221" y="34">scheduler_queue2_add(0),Alarm=0</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-59" y="110">scheduler_queue_head()==0</label>
+			<label kind="synchronisation" x="-59" y="127">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id27"/>
+			<label kind="guard" x="153" y="34">Alarm==DeadLine[1]</label>
+			<nail x="340" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-244" y="169">((rid!=1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0
+&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid!=1)&amp;&amp;(haveoffset[rid]
+&amp;&amp;cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="-244" y="262">cycle[rid]=cycle[rid]+1,rid=rid+1</label>
+			<nail x="-40" y="211"/>
+			<nail x="-40" y="245"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id26"/>
+			<label kind="guard" x="42" y="314">haveoffset[rid]&amp;&amp;
+cycle[rid]==(rperiod[rid]/(period))</label>
+			<label kind="synchronisation" x="42" y="357">Run[1][rid]!</label>
+			<label kind="assignment" x="42" y="374">cycle[rid]=1</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id26"/>
+			<label kind="guard" x="314" y="306">!haveoffset[rid]&amp;&amp;offset[rid]==0||
+!haveoffset[rid]&amp;&amp;offset[rid]!=0&amp;&amp;
+cycle[rid]==(offset[rid]/(period))</label>
+			<label kind="synchronisation" x="314" y="365">Run[1][rid]!</label>
+			<label kind="assignment" x="314" y="382">cycle[rid]=1,haveoffset[rid]=true</label>
+			<nail x="280" y="305"/>
+			<nail x="280" y="416"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-297" y="374">((rid==1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid==1)&amp;&amp;(haveoffset[rid]&amp;&amp;
+cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="-297" y="450">cycle[rid]=cycle[rid]+1,rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id25"/>
+			<label kind="guard" x="-85" y="339">rid!=1</label>
+			<label kind="synchronisation" x="-85" y="356">Finish[1][rid]?</label>
+			<label kind="assignment" x="-85" y="373">rid=rid+1</label>
+			<nail x="-8" y="382"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-127" y="476">rid==1</label>
+			<label kind="synchronisation" x="-127" y="493">Finish[1][rid]?</label>
+			<label kind="assignment" x="-127" y="518">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="guard" x="204" y="493">Alarm==DeadLine[1]</label>
+			<nail x="340" y="518"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="59" y="552">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="49" y="639">Release[1]?</label>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id27"/>
+			<label kind="guard" x="136" y="578">Alarm==DeadLine[1]</label>
+			<nail x="340" y="595"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id31"/>
+			<label kind="guard" x="-204" y="603">scheduler_queue_head()==0</label>
+			<label kind="synchronisation" x="-110" y="620">task_run?</label>
+			<nail x="-42" y="654"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id27"/>
+			<label kind="guard" x="187" y="637">Alarm==DeadLine[1]</label>
+			<nail x="340" y="654"/>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-76" y="535">Run[1][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id23"/>
+			<label kind="synchronisation" x="-416" y="272">Terminate!</label>
+			<label kind="assignment" x="-415" y="290">scheduler_queue2_remove(0)</label>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id32"/>
+			<label kind="synchronisation" x="85" y="178">block?</label>
+			<nail x="102" y="195"/>
+		</transition>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id25"/>
+			<label kind="guard" x="68" y="212">scheduler_queue_head()==0</label>
+			<label kind="synchronisation" x="68" y="229">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id32"/>
+			<target ref="id27"/>
+			<label kind="guard" x="187" y="229">Alarm==DeadLine[1]</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id33"/>
+			<label kind="synchronisation" x="0" y="552">block?</label>
+		</transition>
+		<transition>
+			<source ref="id33"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="0" y="612">Stop[1][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id31"/>
+			<target ref="id30"/>
+			<label kind="synchronisation" x="-25" y="612">block?</label>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id34"/>
+			<label kind="synchronisation" x="-280" y="586">block?</label>
+			<nail x="-272" y="586"/>
+		</transition>
+		<transition>
+			<source ref="id34"/>
+			<target ref="id28"/>
+			<label kind="guard" x="-467" y="561">scheduler_queue_head()==0</label>
+			<label kind="synchronisation" x="-467" y="578">task_run?</label>
+			<nail x="-340" y="586"/>
+		</transition>
+	</template>
+	<template>
+		<name>TaskReceiver</name>
+		<declaration>int rid = 1;
+clock Alarm;
+const int start_time = 1;
+const int counter_base = 1;
+const int cycle_time = 50;
+int offset[2] = {0,0};
+int rperiod[2] = {0,100};
+int cycle[2] = {1,1};
+bool haveoffset[2] = {false,false};
+int Offset=start_time*counter_base;
+int period=cycle_time*counter_base;</declaration>
+		<location id="id35" x="-374" y="85">
+			<name x="-417" y="51">suspended</name>
+			<label kind="invariant" x="-384" y="100">Alarm&lt;=Offset</label>
+		</location>
+		<location id="id36" x="-119" y="85">
+			<name x="-153" y="51">suspended2</name>
+			<label kind="invariant" x="-129" y="100">Alarm&lt;=period</label>
+		</location>
+		<location id="id37" x="195" y="85">
+			<name x="185" y="55">ready</name>
+			<label kind="invariant" x="185" y="100">Alarm&lt;=DeadLine[2]</label>
+		</location>
+		<location id="id38" x="195" y="238">
+			<committed/>
+		</location>
+		<location id="id39" x="195" y="510">
+			<name x="185" y="480">running</name>
+			<label kind="invariant" x="185" y="525">Alarm&lt;=DeadLine[2]</label>
+		</location>
+		<location id="id40" x="518" y="238">
+			<name x="508" y="208">error</name>
+		</location>
+		<location id="id41" x="-119" y="510">
+			<committed/>
+		</location>
+		<location id="id42" x="272" y="586">
+			<name x="262" y="556">waiting</name>
+			<label kind="invariant" x="262" y="601">Alarm&lt;=DeadLine[2]</label>
+		</location>
+		<location id="id43" x="195" y="654">
+			<name x="185" y="624">ready2</name>
+			<label kind="invariant" x="185" y="669">Alarm&lt;=DeadLine[2]</label>
+		</location>
+		<location id="id44" x="119" y="586">
+			<committed/>
+		</location>
+		<location id="id45" x="374" y="238">
+			<name x="357" y="204">ready4</name>
+			<label kind="invariant" x="364" y="253">Alarm&lt;=DeadLine[2]</label>
+		</location>
+		<location id="id46" x="195" y="586">
+			<committed/>
+		</location>
+		<location id="id47" x="-119" y="654">
+			<name x="-129" y="624">ready3</name>
+			<label kind="invariant" x="-129" y="671">Alarm&lt;=DeadLine[2]</label>
+		</location>
+		<init ref="id35"/>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id40"/>
+			<nail x="527" y="246"/>
+			<nail x="569" y="272"/>
+			<nail x="552" y="289"/>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="530" y="228">Finish[2][rid]?</label>
+			<nail x="569" y="229"/>
+			<nail x="569" y="246"/>
+		</transition>
+		<transition>
+			<source ref="id40"/>
+			<target ref="id40"/>
+			<label kind="synchronisation" x="539" y="186">task_run?</label>
+			<nail x="527" y="229"/>
+			<nail x="552" y="178"/>
+			<nail x="569" y="195"/>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id40"/>
+			<label kind="guard" x="-85" y="637">Alarm==DeadLine[2]</label>
+			<nail x="518" y="654"/>
+		</transition>
+		<transition>
+			<source ref="id35"/>
+			<target ref="id36"/>
+			<label kind="guard" x="-323" y="51">Alarm==Offset</label>
+			<label kind="synchronisation" x="-323" y="68">TaskReceiver_jitter_first_time!</label>
+			<label kind="assignment" x="-323" y="85">Alarm=period</label>
+		</transition>
+		<transition>
+			<source ref="id36"/>
+			<target ref="id37"/>
+			<label kind="guard" x="25" y="34">Alarm==period</label>
+			<label kind="synchronisation" x="25" y="51">Activate!</label>
+			<label kind="assignment" x="-8" y="68">scheduler_queue1_add(1),Alarm=0</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id38"/>
+			<label kind="guard" x="195" y="127">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="195" y="144">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id37"/>
+			<target ref="id40"/>
+			<label kind="guard" x="357" y="93">Alarm==DeadLine[2]</label>
+			<nail x="518" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id38"/>
+			<label kind="guard" x="-93" y="195">((rid!=1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0
+&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid!=1)&amp;&amp;(haveoffset[rid]
+&amp;&amp;cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="-93" y="289">cycle[rid]=cycle[rid]+1,rid=rid+1</label>
+			<nail x="127" y="212"/>
+			<nail x="127" y="255"/>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id39"/>
+			<label kind="guard" x="425" y="357">haveoffset[rid]&amp;&amp;
+cycle[rid]==(rperiod[rid]/(period))</label>
+			<label kind="synchronisation" x="425" y="399">Run[2][rid]!</label>
+			<label kind="assignment" x="425" y="416">cycle[rid]=1</label>
+			<nail x="416" y="280"/>
+			<nail x="416" y="459"/>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id39"/>
+			<label kind="guard" x="204" y="323">!haveoffset[rid]&amp;&amp;offset[rid]==0||
+!haveoffset[rid]&amp;&amp;offset[rid]!=0&amp;&amp;
+cycle[rid]==(offset[rid]/(period))</label>
+			<label kind="synchronisation" x="204" y="382">Run[2][rid]!</label>
+			<label kind="assignment" x="204" y="399">cycle[rid]=1,haveoffset[rid]=true</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id41"/>
+			<label kind="guard" x="-102" y="348">((rid==1)&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid==1)&amp;&amp;(haveoffset[rid]&amp;&amp;
+cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="-102" y="425">cycle[rid]=cycle[rid]+1,rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id38"/>
+			<label kind="guard" x="85" y="425">rid!=1</label>
+			<label kind="synchronisation" x="85" y="442">Finish[2][rid]?</label>
+			<label kind="assignment" x="85" y="459">rid=rid+1</label>
+			<nail x="144" y="365"/>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id41"/>
+			<label kind="guard" x="25" y="459">rid==1</label>
+			<label kind="synchronisation" x="25" y="476">Finish[2][rid]?</label>
+			<label kind="assignment" x="25" y="493">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id40"/>
+			<label kind="guard" x="365" y="484">Alarm==DeadLine[2]</label>
+			<nail x="518" y="510"/>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id42"/>
+			<label kind="synchronisation" x="238" y="544">Wait?</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="238" y="620">Release[2]?</label>
+		</transition>
+		<transition>
+			<source ref="id42"/>
+			<target ref="id40"/>
+			<label kind="guard" x="374" y="561">Alarm==DeadLine[2]</label>
+			<nail x="518" y="586"/>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id44"/>
+			<label kind="guard" x="0" y="654">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="0" y="671">task_run?</label>
+			<nail x="119" y="654"/>
+		</transition>
+		<transition>
+			<source ref="id43"/>
+			<target ref="id40"/>
+			<label kind="guard" x="374" y="629">Alarm==DeadLine[2]</label>
+			<nail x="518" y="654"/>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id39"/>
+			<label kind="synchronisation" x="102" y="518">Run[2][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id36"/>
+			<label kind="synchronisation" x="-306" y="221">Terminate!</label>
+			<label kind="assignment" x="-306" y="238">scheduler_queue1_remove(1)</label>
+		</transition>
+		<transition>
+			<source ref="id38"/>
+			<target ref="id45"/>
+			<label kind="synchronisation" x="272" y="187">block?</label>
+			<nail x="280" y="204"/>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id38"/>
+			<label kind="guard" x="229" y="229">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="229" y="246">task_run?</label>
+		</transition>
+		<transition>
+			<source ref="id45"/>
+			<target ref="id40"/>
+			<label kind="guard" x="382" y="212">Alarm==DeadLine[2]</label>
+		</transition>
+		<transition>
+			<source ref="id39"/>
+			<target ref="id46"/>
+			<label kind="synchronisation" x="170" y="544">block?</label>
+		</transition>
+		<transition>
+			<source ref="id46"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="170" y="603">Stop[2][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id44"/>
+			<target ref="id43"/>
+			<label kind="synchronisation" x="136" y="603">block?</label>
+		</transition>
+		<transition>
+			<source ref="id41"/>
+			<target ref="id47"/>
+			<label kind="synchronisation" x="-76" y="569">block?</label>
+			<nail x="-76" y="578"/>
+		</transition>
+		<transition>
+			<source ref="id47"/>
+			<target ref="id41"/>
+			<label kind="guard" x="-297" y="544">scheduler_queue_head()==1</label>
+			<label kind="synchronisation" x="-297" y="561">task_run?</label>
+			<nail x="-161" y="578"/>
+		</transition>
+	</template>
+	<template>
+		<name>Data_Data1_buffer</name>
+		<declaration>int i;</declaration>
+		<location id="id48" x="40" y="80">
+			<name x="30" y="50">initial</name>
+		</location>
+		<init ref="id48"/>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id48"/>
+			<label kind="guard" x="17" y="-25">i&gt;0</label>
+			<label kind="synchronisation" x="17" y="-8">Receiver_Data1_read?</label>
+			<label kind="assignment" x="17" y="8">i=i-1</label>
+			<nail x="8" y="25"/>
+			<nail x="68" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id48"/>
+			<label kind="guard" x="-59" y="51">i&lt;=0</label>
+			<label kind="synchronisation" x="-170" y="68">Receiver_Data1_read?</label>
+			<nail x="-25" y="51"/>
+			<nail x="-25" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id48"/>
+			<label kind="guard" x="8" y="136">i&lt;2</label>
+			<label kind="synchronisation" x="8" y="153">Sender_Data1_write?</label>
+			<label kind="assignment" x="8" y="170">i=i+1</label>
+			<nail x="8" y="136"/>
+			<nail x="68" y="136"/>
+		</transition>
+		<transition>
+			<source ref="id48"/>
+			<target ref="id48"/>
+			<label kind="guard" x="102" y="51">i&gt;=2</label>
+			<label kind="synchronisation" x="102" y="68">Sender_Data1_write?</label>
+			<nail x="102" y="102"/>
+			<nail x="102" y="51"/>
+		</transition>
+	</template>
+	<template>
+		<name>Tester_Receiver_RunnableReceiver_jitter</name>
+		<declaration>clock t;
+const int jitter = 44;
+const int period = 100;
+bool haveoccurred;
+</declaration>
+		<location id="id49" x="40" y="80">
+			<name x="30" y="50">initial</name>
+		</location>
+		<location id="id50" x="190" y="80">
+			<name x="180" y="50">timing</name>
+			<label kind="invariant" x="180" y="95">t&lt;=period</label>
+		</location>
+		<location id="id51" x="190" y="230">
+			<name x="180" y="200">error</name>
+			<label kind="invariant" x="180" y="247">t'==0</label>
+		</location>
+		<init ref="id49"/>
+		<transition>
+			<source ref="id49"/>
+			<target ref="id50"/>
+			<label kind="synchronisation" x="55" y="65">TaskReceiver_jitter_first_time?</label>
+			<label kind="assignment" x="55" y="80">t=0</label>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id50"/>
+			<label kind="guard" x="119" y="-34">t&lt;=jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="119" y="-17">Receiver_RunnableReceiver_jitter_run?</label>
+			<label kind="assignment" x="119" y="0">haveoccurred=true</label>
+			<nail x="170" y="17"/>
+			<nail x="212" y="17"/>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id50"/>
+			<label kind="guard" x="263" y="51">t==period&amp;&amp;haveoccurred</label>
+			<label kind="assignment" x="263" y="68">t=0,haveoccurred=false</label>
+			<nail x="263" y="93"/>
+			<nail x="263" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id51"/>
+			<label kind="guard" x="34" y="161">t&gt;jitter&amp;&amp;!haveoccurred</label>
+			<label kind="synchronisation" x="-59" y="144">Receiver_RunnableReceiver_jitter_run?</label>
+		</transition>
+		<transition>
+			<source ref="id50"/>
+			<target ref="id51"/>
+			<label kind="guard" x="255" y="127">t==period&amp;&amp;!haveoccurred</label>
+			<nail x="263" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id51"/>
+			<target ref="id51"/>
+			<label kind="synchronisation" x="131" y="278">Receiver_RunnableReceiver_jitter_run?</label>
+			<nail x="161" y="263"/>
+			<nail x="221" y="263"/>
+		</transition>
+	</template>
+	<system>system Tester_Sender_RunnableSender_jitter,Receiver_RunnableReceiver,Sender_RunnableSender,FULL_SCHEDULE,TaskSender,TaskReceiver,Data_Data1_buffer,Tester_Receiver_RunnableReceiver_jitter;</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not TaskReceiver.error</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not TaskSender.error</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
