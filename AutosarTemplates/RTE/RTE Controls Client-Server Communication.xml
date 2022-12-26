@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.</declaration>
+	<template>
+		<name x="5" y="5">Scenario(16)-RTE</name>
+		<declaration>// Place local declarations here.
+int d;</declaration>
+		<location id="id0" x="0" y="0">
+		</location>
+		<location id="id1" x="-229" y="-136">
+			<committed/>
+		</location>
+		<location id="id2" x="-204" y="136">
+			<committed/>
+		</location>
+		<location id="id3" x="-144" y="93">
+			<committed/>
+		</location>
+		<location id="id4" x="119" y="204">
+			<committed/>
+		</location>
+		<location id="id5" x="221" y="-178">
+			<committed/>
+		</location>
+		<location id="id6" x="85" y="136">
+			<committed/>
+		</location>
+		<location id="id7" x="306" y="-34">
+			<committed/>
+		</location>
+		<location id="id8" x="357" y="136">
+			<committed/>
+		</location>
+		<location id="id9" x="229" y="85">
+			<committed/>
+		</location>
+		<location id="id10" x="382" y="51">
+			<committed/>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-357" y="-59">{clen}&gt;={maxlength}||
+{inbuffer}({intraATcid})</label>
+			<label kind="synchronisation" x="-357" y="-25">{InvoketoRTE}[{intraATcid}]?</label>
+			<nail x="-221" y="-34"/>
+			<nail x="-221" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="247" y="34">{StartTimer}[d]!</label>
+			<nail x="229" y="51"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id10"/>
+			<label kind="guard" x="330" y="1">{clen}&gt;={maxlength}||
+{inbuffer}({intraSTcid})</label>
+			<label kind="synchronisation" x="331" y="43">{InvoketoRTE}[{intraSTcid}]?</label>
+			<label kind="assignment" x="331" y="59">d={intraSTcid},{isTimeout}[{intraSTcid}]=false</label>
+			<nail x="221" y="8"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="144" y="51">{ValidInvoke}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="306" y="102">{StartTimer}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id8"/>
+			<label kind="guard" x="255" y="153">{clen}&lt;{maxlength}&amp;&amp;
+!{inbuffer}({intraSTcid})</label>
+			<label kind="synchronisation" x="255" y="187">{InvoketoRTE}[{intraSTcid}]?</label>
+			<label kind="assignment" x="255" y="204">d={intraSTcid},
+{addtoserverqueue}({intraSTcid}),
+{isTimeout}[{intraSTcid}]=false</label>
+			<nail x="289" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="select" x="93" y="-178">a:int[{intraScid},{intraAcid}]</label>
+			<label kind="synchronisation" x="93" y="-161">{Result}[a]?</label>
+			<label kind="assignment" x="93" y="-144">d=a</label>
+			<nail x="102" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-357" y="51">{clen}&gt;={maxlength}</label>
+			<label kind="synchronisation" x="-357" y="68">{InvoketoRTE}[{intraScid}]?</label>
+			<nail x="-238" y="42"/>
+			<nail x="-230" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="247" y="-8">{ValidInvoke}[d]!</label>
+			<nail x="238" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id7"/>
+			<label kind="guard" x="178" y="-102">{clen}&lt;{maxlength}</label>
+			<label kind="synchronisation" x="178" y="-85">{InvoketoRTE}[{intraScid}]?</label>
+			<label kind="assignment" x="178" y="-68">d={intraScid},{addtoserverqueue}({intraScid})</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="25" y="170">{StopTimer}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="select" x="-60" y="229">a:int[{intraATcid},{intraSTcid}]</label>
+			<label kind="guard" x="-60" y="246">{isTimeout}[a]</label>
+			<label kind="synchronisation" x="-60" y="263">{Result}[a]?</label>
+			<nail x="17" y="229"/>
+			<nail x="-9" y="229"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="93" y="-119">{ResultBack}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="17" y="93">{ResultBack}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+			<label kind="select" x="127" y="127">a:int[{intraATcid},{intraSTcid}]</label>
+			<label kind="guard" x="127" y="144">{timer}[a]&lt;{timeout}[a]
+&amp;&amp;!{isTimeout}[a]</label>
+			<label kind="synchronisation" x="127" y="178">{Result}[a]?</label>
+			<label kind="assignment" x="136" y="195">d=a</label>
+			<nail x="127" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-255" y="102">{StartTimer}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-144" y="42">{ValidInvoke}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-237" y="145">{clen}&lt;{maxlength}&amp;&amp;
+!{inbuffer}({intraATcid})</label>
+			<label kind="synchronisation" x="-237" y="187">{InvoketoRTE}[{intraATcid}]?</label>
+			<label kind="assignment" x="-238" y="204">d={intraATcid},
+{addtoserverqueue}({intraATcid}),
+{isTimeout}[{intraATcid}]=false</label>
+			<nail x="-93" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-42" y="-246">{clen}&gt;={maxlength}||
+{inbuffer}({intraAcid})</label>
+			<label kind="synchronisation" x="-42" y="-204">{InvoketoRTE}[{intraAcid}]?</label>
+			<nail x="-17" y="-179"/>
+			<nail x="17" y="-178"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-280" y="-85">{ValidInvoke}[d]!</label>
+			<nail x="-153" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-195" y="-195">{clen}&lt;{maxlength}&amp;&amp;
+!{inbuffer}({intraAcid})</label>
+			<label kind="synchronisation" x="-195" y="-153">{InvoketoRTE}[{intraAcid}]?</label>
+			<label kind="assignment" x="-195" y="-136">d={intraAcid},{addtoserverqueue}({intraAcid})</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(16)-Timer</name>
+		<parameter>const cid id</parameter>
+		<declaration>const int M = {number of clients};
+typedef int[1,M] cid;</declaration>
+		<location id="id11" x="0" y="0">
+		</location>
+		<location id="id12" x="0" y="-110">
+			<label kind="invariant" x="-68" y="-144">{timer}[d]&lt;={timeout}[d]</label>
+		</location>
+		<init ref="id11"/>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-153" y="-110">{timer}[d]&lt;{timeout}[d]</label>
+			<label kind="synchronisation" x="-153" y="-93">{StopTimer}[d]?</label>
+			<label kind="assignment" x="-153" y="-76">{timer}[d]=0</label>
+			<nail x="-68" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id11"/>
+			<label kind="guard" x="34" y="-127">{timer}[d]=={timeout}[d]</label>
+			<label kind="synchronisation" x="34" y="-110">{Timeout}[d]!</label>
+			<label kind="assignment" x="34" y="-93">{isTimeout}[d]=true,{timer}[d]=0</label>
+			<nail x="68" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="0" y="-51">{StartTimer}[id]?</label>
+			<label kind="assignment" x="0" y="-34">{timer}[id]=0,d=id</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(17)-client RTE</name>
+		<declaration>int d;
+//in this case, the initial value of the array {isTimeout}[] is true.</declaration>
+		<location id="id13" x="479" y="187">
+		</location>
+		<location id="id14" x="756" y="374">
+			<committed/>
+		</location>
+		<location id="id15" x="17" y="187">
+			<committed/>
+		</location>
+		<location id="id16" x="901" y="187">
+			<committed/>
+		</location>
+		<location id="id17" x="297" y="493">
+			<committed/>
+		</location>
+		<location id="id18" x="365" y="382">
+			<committed/>
+		</location>
+		<location id="id19" x="901" y="93">
+			<committed/>
+		</location>
+		<location id="id20" x="246" y="-17">
+			<committed/>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="select" x="723" y="425">a:int[{interATcid},{interSTcid}]</label>
+			<label kind="guard" x="723" y="442">{r}[a]=={server}_e%{maxlength}
+&amp;&amp;{timer}[a]=={timeout}[a]</label>
+			<label kind="synchronisation" x="723" y="476">{ReturnResult}[a]?</label>
+			<nail x="723" y="442"/>
+			<nail x="697" y="459"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="select" x="51" y="272">a:int[{interAcid},{interScid}]</label>
+			<label kind="guard" x="51" y="289">{clen}&gt;={maxlength}&amp;&amp;!{inbuffer}(a)
+||{inbuffer}(a)</label>
+			<label kind="synchronisation" x="51" y="331">{InvoketoRTE}[a]?</label>
+			<nail x="246" y="289"/>
+			<nail x="263" y="340"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="178" y="25">{StartTimer}[d]!</label>
+			<nail x="289" y="76"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id20"/>
+			<label kind="guard" x="323" y="-25">{clen}&gt;={maxlength}</label>
+			<label kind="synchronisation" x="323" y="-8">{InvoketoRTE}[{interSTcid}]?</label>
+			<label kind="assignment" x="323" y="9">{overflow}[{interSTcid}]=true,
+d={interSTcid}</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="578" y="59">{InformtoServerRTE}[d]!</label>
+			<label kind="assignment" x="578" y="76">{isTimeout}[d]=false,
+{addtoserverqueue}((d-1)*{maxlength}+
+{request}[d]%{maxlength}),
+{request}[d]=({request}[d]+1)%{maxlength}</label>
+			<nail x="595" y="93"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="909" y="119">{StartTimer}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id16"/>
+			<label kind="select" x="705" y="187">a:int[{interATcid},{interSTcid}]</label>
+			<label kind="guard" x="705" y="204">{clen}&lt;{maxlength}&amp;&amp;{isTimeout}[a]</label>
+			<label kind="synchronisation" x="705" y="221">{InvoketoRTE}[a]?</label>
+			<label kind="assignment" x="705" y="238">d=a</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="331" y="442">{StopTimer}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="561" y="-17">{clen}&lt;{maxlength}&amp;&amp;!{isTimeout}[{interATcid}]||{clen}&gt;={maxlength}</label>
+			<label kind="synchronisation" x="561" y="0">{InvoketoRTE}[{interATcid}]?</label>
+			<nail x="552" y="17"/>
+			<nail x="577" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="select" x="501" y="510">a:int[{interATcid},{interSTcid}]</label>
+			<label kind="guard" x="501" y="527">{r}[a]!={server}_e%{maxlength}</label>
+			<label kind="synchronisation" x="501" y="544">{ReturnResult}[a]?</label>
+			<nail x="518" y="510"/>
+			<nail x="552" y="510"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="382" y="323">{ResultBack}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id17"/>
+			<label kind="select" x="17" y="399">a:int[{interATcid},{interSTcid}]</label>
+			<label kind="guard" x="17" y="416">{r}[a]=={server}_e%{maxlength}
+&amp;&amp;{timer}[a]&lt;{timeout}[a]</label>
+			<label kind="synchronisation" x="17" y="450">{ReturnResult}[a]?</label>
+			<label kind="assignment" x="17" y="467">{r}[a]=({r}[a]+1)%{maxlength},d=a,
+{isTimeout}[a]=true</label>
+			<nail x="331" y="314"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="170" y="170">{InformtoServerRTE}[d]!</label>
+			<label kind="assignment" x="170" y="187">{addtoserverqueue}(d)</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="select" x="25" y="76">a:int[{interAcid},{interScid}]</label>
+			<label kind="guard" x="25" y="93">{clen}&lt;{maxlength}&amp;&amp;!{inbuffer}(a)</label>
+			<label kind="synchronisation" x="25" y="110">{InvoketoRTE}[a]?</label>
+			<label kind="assignment" x="25" y="127">d=a</label>
+			<nail x="331" y="153"/>
+			<nail x="17" y="153"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="637" y="314">{ResultBack}[d]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="select" x="739" y="288">a:int[{interAcid},{interScid}]</label>
+			<label kind="synchronisation" x="739" y="305">{ReturnResult}[a]?</label>
+			<label kind="assignment" x="739" y="322">d=a</label>
+			<nail x="722" y="297"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(17)-server RTE</name>
+		<declaration>int d;</declaration>
+		<location id="id21" x="360" y="115">
+		</location>
+		<location id="id22" x="496" y="115">
+			<committed/>
+		</location>
+		<location id="id23" x="357" y="246">
+			<committed/>
+		</location>
+		<location id="id24" x="229" y="110">
+			<committed/>
+		</location>
+		<location id="id25" x="357" y="8">
+			<committed/>
+		</location>
+		<init ref="id21"/>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="382" y="17">{ValidInvoke}[d]!</label>
+			<nail x="365" y="17"/>
+			<nail x="399" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id21"/>
+			<label kind="guard" x="212" y="119">{ServerAct}==false</label>
+			<label kind="synchronisation" x="212" y="136">{ValidInvoke}[d]!</label>
+			<nail x="289" y="136"/>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="119" y="187">{ReturnResult}[d/{maxlength}+1]!</label>
+			<nail x="323" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id23"/>
+			<label kind="select" x="399" y="170">a:int[{MinInterTInvoc},{MaxInterTInvoc}]</label>
+			<label kind="synchronisation" x="399" y="187">{Result}[a]?</label>
+			<label kind="assignment" x="399" y="204">d=a</label>
+			<nail x="399" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id24"/>
+			<label kind="select" x="110" y="68">a:int[{interATcid},{interSTcid}]</label>
+			<label kind="synchronisation" x="110" y="85">{InformtoServerRTE}[a]?</label>
+			<label kind="assignment" x="110" y="102">d=a</label>
+			<nail x="289" y="93"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="385" y="132">{ReturnResult}[d]!</label>
+			<nail x="428" y="140"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id22"/>
+			<label kind="select" x="442" y="34">a:int[{interAcid},{interScid}]</label>
+			<label kind="synchronisation" x="442" y="51">{Result}[a]?</label>
+			<label kind="assignment" x="442" y="68">d=a,{server}_e={ServerQueueHead}()</label>
+			<nail x="428" y="81"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id25"/>
+			<label kind="select" x="187" y="-17">a:int[{interAcid,interScid}]</label>
+			<label kind="synchronisation" x="187" y="0">{InformtoServerRTE}[a]?</label>
+			<label kind="assignment" x="187" y="17">d=a</label>
+			<nail x="314" y="59"/>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(16)&amp;Scenario(17)</name>
+		<location id="id26" x="0" y="0">
+		</location>
+		<location id="id27" x="0" y="-85">
+			<committed/>
+		</location>
+		<location id="id28" x="0" y="102">
+			<committed/>
+		</location>
+		<init ref="id26"/>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id26"/>
+			<label kind="select" x="93" y="-34">a:int[{Mincid},{Maxcid}]</label>
+			<label kind="guard" x="93" y="-17">{ShouldEx}[{servertaskId}][{serverrunId}]!=0</label>
+			<label kind="synchronisation" x="93" y="0">{ValidInvoke}[a]?</label>
+			<label kind="assignment" x="93" y="17">{ShouldEx}[{servertaskId}][{serverrunId}]={ShouldEx}[{servertaskId}][{serverrunId}]+1</label>
+			<nail x="85" y="-25"/>
+			<nail x="85" y="25"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id26"/>
+			<label kind="guard" x="-357" y="-17">{ShouldEx}[{servertaskId}][{serverrunId}]==0</label>
+			<label kind="synchronisation" x="-187" y="0">{StartServer}?</label>
+			<nail x="-85" y="34"/>
+			<nail x="-85" y="-25"/>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-119" y="42">{AddServerTask}!</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id28"/>
+			<label kind="guard" x="59" y="42">{ShouldEx}[{servertaskId}][{serverrunId}]!=0</label>
+			<label kind="synchronisation" x="59" y="59">{StartServer}?</label>
+			<nail x="51" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="42" y="-68">{AddServerTask}!</label>
+			<label kind="assignment" x="42" y="-51">{ShouldEx}[{servertaskId}][{serverrunId}]=1</label>
+			<nail x="42" y="-42"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="select" x="-221" y="-127">a:int[{Mincid},{Maxcid}]</label>
+			<label kind="guard" x="-221" y="-110">{ShouldEx}[{servertaskId}][{serverrunId}]==0</label>
+			<label kind="synchronisation" x="-221" y="-93">{ValidInvoke}[a]?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(17)-Timer</name>
+		<parameter>const cid id</parameter>
+		<declaration>const int M = 1;          // Number of clients
+typedef int[1,M] cid;
+bool isTimeout[M+1]={true};
+int d;</declaration>
+		<location id="id29" x="0" y="-110">
+			<label kind="invariant" x="-68" y="-144">{timer}[d]&lt;={timeout}[d]</label>
+		</location>
+		<location id="id30" x="0" y="0">
+		</location>
+		<init ref="id30"/>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id30"/>
+			<label kind="guard" x="153" y="-42">{timer}[d]=={timeout}[d]&amp;&amp;{overflow}[d]</label>
+			<label kind="synchronisation" x="153" y="-25">{Timeout}[d]!</label>
+			<label kind="assignment" x="153" y="-8">{isTimeout}[d]=true,{overflow}[d]=false,{timer}[d]=0</label>
+			<nail x="161" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id30"/>
+			<label kind="guard" x="-153" y="-110">{timer}[d]&lt;{timeout}[d]</label>
+			<label kind="synchronisation" x="-153" y="-93">{StopTimer}[d]?</label>
+			<label kind="assignment" x="-153" y="-76">{timer}[d]=0</label>
+			<nail x="-68" y="-51"/>
+		</transition>
+		<transition>
+			<source ref="id29"/>
+			<target ref="id30"/>
+			<label kind="guard" x="110" y="-170">{timer}[d]=={timeout}[d]&amp;&amp;!{overflow}[d]</label>
+			<label kind="synchronisation" x="110" y="-153">{Timeout}[d]!</label>
+			<label kind="assignment" x="110" y="-136">{isTimeout}[d]=true,{r}[a]=({r}[a]+1)%{maxlength},{timer}[d]=0</label>
+			<nail x="161" y="-110"/>
+		</transition>
+		<transition>
+			<source ref="id30"/>
+			<target ref="id29"/>
+			<label kind="synchronisation" x="0" y="-51">{StartTimer}[id]?</label>
+			<label kind="assignment" x="0" y="-34">{timer}[id]=0,d=id</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+// List one or more processes to be composed into a system.
+system Process;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

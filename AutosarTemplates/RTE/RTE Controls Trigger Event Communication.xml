@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>int p,q,w;
+int c_t1,c_t2;
+int counter;
+chan	done[5], ready, run, stop;
+clock 	time;
+broadcast chan continue1[2];
+broadcast chan block2[2];
+int i2;
+int i1;
+chan data3_write;
+chan data3_write_continue;
+chan data3_read_continue;
+chan data3_read;
+chan data4_write;
+chan data4_read;
+chan run2_1;
+chan run2_2;
+chan run1;
+chan run2_runnable1;
+chan run2_runnable2;
+chan runnable1_finish;
+chan trigger[4];
+chan finish2_1;
+chan run4;
+int trigger_finish;
+int c3_1,c3_2,c4;
+broadcast chan finish3_1;
+broadcast chan finish3_2;
+chan run3_1;
+chan run3_2;
+chan runnbale4_finish;
+chan run2;
+chan trigger2[3];
+int counter2;
+chan active,active2;
+int task[5];
+chan trigger_occur1;
+chan trigger_occur2;
+//int E=20;		// 
+//int L=20;		// [ E[i] , L[i] ] Ready interval
+//int D=20;		// Deadlines
+
+//int E=6;
+//int L=6;
+//int D=6;
+int E[3]={0,20,25};
+int L[3]={0,20,25};
+int D[3]={0,20,25};
+int P[5] = {0,3,2,1,4};		// Priorities
+int C[5] = {0,5,3,4,3}; 
+// Task queue
+int queue[10]={1,2,0,0,0,0,0,0,0,0};
+int[0,10] len = 2;
+
+void initialize()
+{
+ int i;
+int temp;
+  // Bubble-sort tasks into the queue.
+  if(len==2)
+  if(queue[0]==0){
+  temp=queue[0];
+   queue[0]=queue[1];
+  queue[1]=temp;
+
+} 
+
+}
+
+int head()   { return queue[0]; }
+bool isEmpty() { return len == 0; }
+
+bool findtask(int id){
+bool find=false;
+int i;
+for(i=0;i&lt;len;++i){
+   if(queue[i]==id){
+   find=true;
+}
+}
+ return find;
+}
+
+
+void add(int id)
+{
+  int i, tmp;
+  
+  if(findtask(id)){
+ 
+ }
+  else{
+queue[len] = id;
+  for(i = len ; i &gt; 0 &amp;&amp; P[queue[i]] &gt; P[queue[i-1]]; --i)
+  {
+    tmp = queue[i];
+    queue[i] = queue[i-1];
+    queue[i-1] = tmp;
+  }
+  len++;
+}
+}
+
+
+void remove()
+{
+  int i;
+  for(i = 0; i+1 &lt; len; ++i) { queue[i] = queue[i+1]; }
+  queue[--len] = 0;
+}
+
+void removeelement(int id)
+{
+  int i;
+  int j;
+//  for(i = 0; i+1 &lt; N; ++i)
+for(i = 0; i &lt; len; ++i)
+   {
+      if (queue[i]==id)
+      {
+       for(j = i; j+1 &lt; len; ++j)
+        queue[j] = queue[j+1];
+      }
+      
+    } 
+queue[--len] = 0;
+//{ queue[i] = queue[i+1]; }
+  //queue[--len] = 0;
+}
+
+int request1,request2,request3;
+int n;
+clock t1,t2,t3;
+//typedef scalar[10] s_t;
+chan runnable1_operation1_Invoke,runnable2_operation1_Invoke,finish,operation1_start,run3,operation1_finish,swc_runnable1_start,swc_runnable2_start,swc_runnable3_start,operation1_Invoke,operation1_Invoke2,operation1_Invoke1,operation1_Invoke3,operation1_Invoke1_buffer_error,operation1_Invoke2_buffer_error,operation1_Invoke3_buffer_error,operation1_okok1,operation1_okok2,operation1_okok3,operation1_ok1,operation1_ok2,operation1_ok3,client1_timeout,client2_timeout,client3_timeout,client3_ignore,client2_ignore,client1_ignore;
+//broadcast chan operation1_ok[3];
+chan operation1_ok[3];
+//broadcast chan wait_Client_resume,wait_Client,swc_runnable1_finish,swc_runnable2_finish,swc_runnable3_finish;
+
+//chan priority operation1_ok[0]&lt;client1_timeout;
+//chan priority operation1_ok[1]&lt;client2_timeout;
+//chan priority operation1_ok[2]&lt;client3_timeout;
+chan finish1;
+chan startclient2;
+int c;
+const int M = 3;          // Number of tasks.
+typedef int[0,M-1] sid_t; // Process IDs.
+
+//const int E[pid_t] = { 20, 20, 10, 10 };		// 
+//const int L[pid_t] = { 40, 20, 10, 10 };		// [ E[i] , L[i] ] Ready interval
+//const int D[pid_t] = { 40, 20, 10, 10 };		// Deadlines
+//const int C[pid_t] = {  5,  4,  2,  1 };    	// Computation Times
+//const int P[pid_t] = {  1,  2,  3,  4 };		// Priorities
+
+// Task queue
+sid_t queue2[sid_t];
+int[0,2] len2 = 0;
+
+sid_t head2()   { return queue2[0]; }
+bool isEmpty2() { return len2 == 0; }
+
+void add2(sid_t id)
+{
+  //pid_t i, tmp;
+  queue2[len2] = id;
+  //for(i = len ; i &gt; 0 &amp;&amp; P[queue[i]] &gt; P[queue[i-1]]; --i)
+  //{
+    //tmp = queue[i];
+    //queue[i] = queue[i-1];
+    //queue[i-1] = tmp;
+  //}
+  len2++;
+}
+
+void remove2()
+{
+  int i;
+  for(i = 0; i+1 &lt; M; ++i) { queue2[i] = queue2[i+1]; }
+  queue2[--len2] = 0;
+}
+void removeelement2(sid_t id)
+{
+  int i;
+int j;
+  for(i = 0; i+1 &lt; M; ++i)
+   {
+      if (queue2[i]==id)
+      {
+       for(j = i; j+1 &lt; len2; ++j)
+        queue2[j] = queue2[j+1];
+      }
+      queue2[--len2] = 0;
+    } 
+//{ queue[i] = queue[i+1]; }
+  //queue[--len] = 0;
+}
+
+bool havebuffered2(sid_t id) 
+//bool havebuffered(int id) 
+{ 
+int j=-1;
+int i;
+  for(i = 0; i &lt; len2; ++i) 
+  {
+    if(queue2[i]==id)
+    {
+     j=i;
+    }
+  }
+  if(j==-1){return false;}
+  else{return true;}
+
+}</declaration>
+	<template>
+		<name>Scenario(18)</name>
+		<declaration>int {counter};</declaration>
+		<location id="id0" x="0" y="0">
+		</location>
+		<location id="id1" x="170" y="42">
+			<committed/>
+		</location>
+		<location id="id2" x="68" y="127">
+			<committed/>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="59" y="76">{TriggerQueue}!</label>
+			<nail x="51" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="59" y="42">{TriggerQueue}!</label>
+			<nail x="68" y="34"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="127" y="-34">{counter}==0</label>
+			<label kind="synchronisation" x="127" y="-17">{Trigger}?</label>
+			<label kind="assignment" x="127" y="0">{counter}={counter}+1</label>
+			<nail x="85" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-110" y="34">{counter}==1</label>
+			<label kind="synchronisation" x="-110" y="51">{LastRunFinish}?</label>
+			<label kind="assignment" x="-110" y="68">{counter}={counter}-1</label>
+			<nail x="-68" y="42"/>
+			<nail x="-42" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-17" y="119">{counter}!=1</label>
+			<label kind="synchronisation" x="-17" y="136">{LastRunFinish}?</label>
+			<label kind="assignment" x="-17" y="153">{counter}={counter}-1</label>
+			<nail x="8" y="68"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-93" y="-93">{counter}&gt;={maxlength}</label>
+			<label kind="synchronisation" x="-93" y="-76">{Trigger}?</label>
+			<nail x="-25" y="-68"/>
+			<nail x="-59" y="-42"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id0"/>
+			<label kind="guard" x="59" y="-119">{counter}&lt;{maxlength}&amp;&amp;{counter}&gt;=1</label>
+			<label kind="synchronisation" x="59" y="-102">{Trigger}?</label>
+			<label kind="assignment" x="59" y="-85">{counter}={counter}+1</label>
+			<nail x="59" y="-68"/>
+			<nail x="85" y="-42"/>
+		</transition>
+	</template>
+	<system>system Task1,Task2,Scheduler,trigger_runnable1,triggered_runnable3_1,triggered_runnable3_2,triggered_runnable4,Task3,trigger_runnable2,QUEUE1,QUEUE2,Task4;
+
+</system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock
+</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] forall(i : pid_t) not Task(i).Error
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
