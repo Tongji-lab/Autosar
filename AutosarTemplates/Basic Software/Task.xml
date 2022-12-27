@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+int p,q;
+chan	done[25], ready, run, stop;
+broadcast chan continue1[2];
+broadcast chan block2[2];
+int counter2;
+int c21_2;
+int c21_1;
+chan finish22;
+int c22;
+broadcast chan finish21_2;
+broadcast chan finish21_1;
+chan finish20;
+chan finish19;
+chan ready_task19;
+int i2;
+int i1;
+int H3=2;
+int L3=1;
+int H4=2;
+int L4=1;
+int H5=2;
+int L5=1;
+int H6=2;
+int L6=1;
+int c18;
+int w;
+int cycle1,cycle20,cycle19,cycle9_1,cycle9_2,cycle10,cycle11,cycle15,cycle16;
+bool offset9_1;
+chan trigger[4];
+chan trigger2[4];
+chan trigger3[4];
+chan trigger4[4];
+chan data3_write;
+chan data3_write_continue;
+chan data3_read_continue;
+chan data3_read;
+chan data4_write;
+chan data4_read;
+chan run2;
+chan run1;
+chan run2_runnable1;
+chan run2_runnable2;
+chan runnable1_finish;
+chan finish_r1;
+chan run4;
+chan run5;
+chan run23;
+int counter;
+int c_t1;
+chan run16;
+int c_t2;
+chan run20;	
+chan run24; 
+chan run21_1;
+chan run21_2;
+chan run22;
+chan run16_1;
+chan finish16_1;
+chan run16_2;
+chan run17;
+chan run18;
+chan run19;
+chan run15;
+chan run6;
+chan run7;
+chan run8;
+chan run9_1;
+chan run9_2;
+chan run10;
+chan run11;
+chan run12;
+chan run13;
+chan run14;
+chan operation_Invoke1;
+chan operation_Invoke2;
+chan operation_Invoke3;
+chan operation_finish1;
+chan operation_finish2;
+chan operation_finish3;
+int counter_P1_I1_D1_read;
+int counter_P2_I2_D2_read;
+int counter_P3_I3_D3_read;
+int counter_P4_I4_D4_read;
+int counter_P5_I5_D5_read;
+int counter_P6_I6_D6_read;
+int counter_P7_I7_D7_read;
+int counter_P8_I8_D8_read;
+int counter_P9_I9_D9_read;
+int counter_P10_I10_D10_read;
+
+int counter_P1_I1_D1_write;
+int counter_P2_I2_D2_write;
+int counter_P3_I3_D3_write;
+int counter_P4_I4_D4_write;
+int counter_P5_I5_D5_write;
+int counter_P6_I6_D6_write;
+int counter_P7_I7_D7_write;
+int counter_P8_I8_D8_write;
+int counter_P9_I9_D9_write;
+int counter_P10_I10_D10_write;
+
+chan C1_P1_I1_D1_read;
+chan C1_P2_I2_D2_read;
+chan C1_P3_I3_D3_read;
+chan C1_P4_I4_D4_read;
+chan C1_P5_I5_D5_read;
+chan C1_P6_I6_D6_read;
+chan C1_P7_I7_D7_read;
+chan C1_P8_I8_D8_read;
+chan C1_P9_I9_D9_read;
+chan C1_P10_I10_D10_read;
+
+chan C1_P1_I1_D1_write;
+chan C1_P2_I2_D2_write;
+chan C1_P3_I3_D3_write;
+chan C1_P4_I4_D4_write;
+chan C1_P5_I5_D5_write;
+chan C1_P6_I6_D6_write;
+chan C1_P7_I7_D7_write;
+chan C1_P8_I8_D8_write;
+chan C1_P9_I9_D9_write;
+chan C1_P10_I10_D10_write;
+chan C1_P7_I7_D7_read_continue;
+chan C1_P8_I8_D8_write_continue;
+
+int w_finish;
+int i7,i8;
+int i5,i6;
+broadcast chan ready_task1;
+broadcast chan ready_task23;
+broadcast chan ready_task20;
+broadcast chan ready_task15;
+broadcast chan ready_task16;
+broadcast chan ready_task9;
+broadcast chan ready_task10;
+broadcast chan ready_task11;
+int c17_1;
+int c17_2;
+chan finish17_2;
+chan finish17_1;
+chan run17_2;
+chan run17_1;
+chan finish18;
+chan finish6;
+chan finish8;
+chan finish9_1;
+chan finish9_2;
+chan finish10;
+chan finish11;
+chan finish15;
+int triggered[4];
+int triggered2[3];
+int triggered3[4];
+int triggered4[3];
+chan finish16;
+int counter_P11_I11_D11_write;
+chan finish23;
+chan C1_P11_I11_D11_read;
+chan C1_P11_I11_D11_write;
+int i11;
+int counter_P11_I11_D11_read;
+//int L=20;		// [ E[i] , L[i] ] Ready interval
+//int D=20;		// Deadlines
+
+//int E=6;
+//int L=6;
+//int D=6;
+int E[25]={0,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+int L[25]={0,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+int D[25]={0,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100};
+//int P5] = {  2,5,4,1,3};		// Priorities
+int P[25]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
+int C[25]={0,5,0,0,0,0,5,0,5,5,5,5,0,0,0,5,5,5,5,5,5,5,5,5,5}; 
+// Task queue
+int queue[23]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int[0,23] len = 0;
+
+void initialize()
+{
+ int i;
+int temp;
+  // Bubble-sort tasks into the queue.
+  if(len==2)
+  if(queue[0]==0){
+  temp=queue[0];
+   queue[0]=queue[1];
+  queue[1]=temp;
+
+} 
+
+}
+
+int head()   { return queue[0]; }
+bool isEmpty() { return len == 0; }
+
+void add(int id)
+{
+  int i, tmp;
+  queue[len] = id;
+  for(i = len ; i &gt; 0 &amp;&amp; P[queue[i]] &gt; P[queue[i-1]]; --i)
+  {
+    tmp = queue[i];
+    queue[i] = queue[i-1];
+    queue[i-1] = tmp;
+  }
+  len++;
+}
+
+
+bool findtask(int id){
+bool find=false;
+int i;
+for(i=0;i&lt;len;++i){
+   if(queue[i]==id){
+   find=true;
+}
+}
+ return find;
+}
+
+void triggeradd(int id){
+
+if(findtask(id)){}
+else{
+
+add(id);
+}
+
+
+
+
+}
+
+void remove()
+{
+  int i;
+  for(i = 0; i+1 &lt; len; ++i) { queue[i] = queue[i+1]; }
+  queue[--len] = 0;
+}
+
+void removeelement(int id)
+{
+  int i;
+  int j;
+//  for(i = 0; i+1 &lt; N; ++i)
+for(i = 0; i &lt; len; ++i)
+   {
+      if (queue[i]==id)
+      {
+       for(j = i; j+1 &lt; len; ++j)
+        queue[j] = queue[j+1];
+      }
+      
+    } 
+queue[--len] = 0;
+//{ queue[i] = queue[i+1]; }
+  //queue[--len] = 0;
+}
+
+int request1,request2,request3;
+int n;
+clock t1,t2,t3;
+//typedef scalar[10] s_t;
+chan runnable1_operation1_Invoke,runnable2_operation1_Invoke,finish,operation1_start,run3,operation1_finish,swc_runnable1_start,swc_runnable2_start,swc_runnable3_start,operation1_Invoke,operation1_Invoke2,operation1_Invoke1,operation1_Invoke3,operation1_Invoke1_buffer_error,operation1_Invoke2_buffer_error,operation1_Invoke3_buffer_error,operation1_okok1,operation1_okok2,operation1_okok3,operation1_ok1,operation1_ok2,operation1_ok3,client1_timeout,client2_timeout,client3_timeout,client3_ignore,client2_ignore,client1_ignore;
+//broadcast chan operation1_ok[3];
+chan operation1_ok[3];
+//broadcast chan wait_Client_resume,wait_Client,swc_runnable1_finish,swc_runnable2_finish,swc_runnable3_finish;
+
+//chan priority operation1_ok[0]&lt;client1_timeout;
+//chan priority operation1_ok[1]&lt;client2_timeout;
+//chan priority operation1_ok[2]&lt;client3_timeout;
+chan finish1;
+chan startclient2;
+int c;
+const int M = 3;          // Number of tasks.
+typedef int[0,M-1] sid_t; // Process IDs.
+
+//const int E[pid_t] = { 20, 20, 10, 10 };		// 
+//const int L[pid_t] = { 40, 20, 10, 10 };		// [ E[i] , L[i] ] Ready interval
+//const int D[pid_t] = { 40, 20, 10, 10 };		// Deadlines
+//const int C[pid_t] = {  5,  4,  2,  1 };    	// Computation Times
+//const int P[pid_t] = {  1,  2,  3,  4 };		// Priorities
+
+// Task queue
+sid_t queue2[sid_t];
+int[0,2] len2 = 0;
+
+sid_t head2()   { return queue2[0]; }
+bool isEmpty2() { return len2 == 0; }
+
+void add2(sid_t id)
+{
+  //pid_t i, tmp;
+  queue2[len2] = id;
+  //for(i = len ; i &gt; 0 &amp;&amp; P[queue[i]] &gt; P[queue[i-1]]; --i)
+  //{
+    //tmp = queue[i];
+    //queue[i] = queue[i-1];
+    //queue[i-1] = tmp;
+  //}
+  len2++;
+}
+
+void remove2()
+{
+  int i;
+  for(i = 0; i+1 &lt; M; ++i) { queue2[i] = queue2[i+1]; }
+  queue2[--len2] = 0;
+}
+void removeelement2(sid_t id)
+{
+  int i;
+int j;
+  for(i = 0; i+1 &lt; M; ++i)
+   {
+      if (queue2[i]==id)
+      {
+       for(j = i; j+1 &lt; len2; ++j)
+        queue2[j] = queue2[j+1];
+      }
+      queue2[--len2] = 0;
+    } 
+//{ queue[i] = queue[i+1]; }
+  //queue[--len] = 0;
+}
+
+bool havebuffered2(sid_t id) 
+//bool havebuffered(int id) 
+{ 
+int j=-1;
+int i;
+  for(i = 0; i &lt; len2; ++i) 
+  {
+    if(queue2[i]==id)
+    {
+     j=i;
+    }
+  }
+  if(j==-1){return false;}
+  else{return true;}
+
+}</declaration>
+	<template>
+		<name>Scenario(19)</name>
+		<declaration>int rid = 1;
+clock Alarm;
+const int start_time;
+const int counter_base;
+const int cycle_time;
+int offset[{maxrid}+1];
+int rperiod[{maxrid}+1];
+int cycle[{maxrid}+1];
+bool haveoffset[{maxrid}+1];
+int Offset=start_time*counter_base;
+int period=cycle_time*counter_base;
+</declaration>
+		<location id="id0" x="34" y="93">
+			<name x="24" y="63">suspended2</name>
+			<label kind="invariant" x="51" y="76">Alarm&lt;=period</label>
+		</location>
+		<location id="id1" x="34" y="195">
+			<name x="19" y="156">ready</name>
+			<label kind="invariant" x="-25" y="204">Alarm&lt;={DeadLine}[{tid}]</label>
+		</location>
+		<location id="id2" x="34" y="603">
+			<name x="10" y="571">running</name>
+			<label kind="invariant" x="-119" y="586">Alarm&lt;={DeadLine}[{tid}]</label>
+		</location>
+		<location id="id3" x="34" y="272">
+			<committed/>
+		</location>
+		<location id="id4" x="-484" y="603">
+			<committed/>
+		</location>
+		<location id="id5" x="34" y="0">
+			<name x="24" y="-34">suspended</name>
+			<label kind="invariant" x="59" y="-17">Alarm&lt;=Offset</label>
+		</location>
+		<location id="id6" x="544" y="195">
+			<name x="534" y="161">error</name>
+		</location>
+		<location id="id7" x="-25" y="663">
+			<name x="-76" y="646">waiting</name>
+			<label kind="invariant" x="-119" y="671">Alarm&lt;={DeadLine}[{tid}]</label>
+		</location>
+		<location id="id8" x="93" y="663">
+			<committed/>
+		</location>
+		<location id="id9" x="34" y="722">
+			<name x="24" y="688">ready2</name>
+			<label kind="invariant" x="-8" y="731">Alarm&lt;={DeadLine}[{tid}]</label>
+		</location>
+		<location id="id10" x="187" y="272">
+			<name x="177" y="238">ready4</name>
+			<label kind="invariant" x="161" y="280">Alarm&lt;={DeadLine}[{tid}]</label>
+		</location>
+		<location id="id11" x="34" y="663">
+			<committed/>
+		</location>
+		<location id="id12" x="-484" y="680">
+			<name x="-494" y="646">ready3</name>
+			<label kind="invariant" x="-510" y="697">Alarm&lt;={DeadLine}[{tid}]</label>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id6"/>
+			<nail x="569" y="263"/>
+			<nail x="595" y="246"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="562" y="157">Finish[{tid}][rid]?</label>
+			<nail x="612" y="153"/>
+			<nail x="612" y="212"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="519" y="119">{Start}?</label>
+			<nail x="501" y="136"/>
+			<nail x="595" y="136"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="42" y="663">{Preempt}?</label>
+			<nail x="51" y="680"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id6"/>
+			<label kind="guard" x="-340" y="680">Alarm=={DeadLine}[{tid}]</label>
+			<nail x="544" y="680"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-476" y="637">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="-476" y="654">{Start}?</label>
+			<nail x="-442" y="646"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-552" y="612">{Preempt}?</label>
+			<nail x="-527" y="646"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="34" y="688">Stop[{tid}][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="34" y="616">{Preempt}?</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id6"/>
+			<label kind="guard" x="331" y="255">Alarm=={DeadLine}[{tid}]</label>
+			<nail x="544" y="272"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id3"/>
+			<label kind="guard" x="76" y="297">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="76" y="314">{Start}?</label>
+			<nail x="110" y="297"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="110" y="246">{Preempt}?</label>
+			<nail x="110" y="246"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id6"/>
+			<label kind="guard" x="340" y="722">Alarm=={DeadLine}[{tid}]</label>
+			<nail x="544" y="722"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="340" y="663">Alarm=={DeadLine}[{tid}]</label>
+			<nail x="544" y="663"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="85" y="629">Run[{tid}][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id8"/>
+			<label kind="guard" x="76" y="680">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="76" y="697">{Start}?</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="synchronisation" x="-85" y="697">{Release}[{tid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-42" y="629">{Wait}?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-93" y="365">rid!={maxrid}</label>
+			<label kind="synchronisation" x="-93" y="382">Finish[{tid}][rid]?</label>
+			<label kind="assignment" x="-93" y="399">rid=rid+1</label>
+			<nail x="-17" y="382"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-467" y="365">((rid=={maxrid})&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid=={maxrid})&amp;&amp;(haveoffset[rid]&amp;&amp;
+cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="-467" y="442">cycle[rid]=cycle[rid]+1,rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id6"/>
+			<label kind="guard" x="170" y="178">Alarm=={DeadLine}[{tid}]</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id6"/>
+			<label kind="guard" x="340" y="603">Alarm=={DeadLine}[{tid}]</label>
+			<nail x="544" y="603"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id0"/>
+			<label kind="guard" x="42" y="17">Alarm==Offset</label>
+			<label kind="assignment" x="42" y="34">Alarm=period</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="314" y="425">!haveoffset[rid]&amp;&amp;offset[rid]==0||
+!haveoffset[rid]&amp;&amp;offset[rid]!=0&amp;&amp;
+cycle[rid]==(offset[rid]/(period))</label>
+			<label kind="synchronisation" x="314" y="493">Run[{tid}][rid]!</label>
+			<label kind="assignment" x="314" y="518">cycle[rid]=1,haveoffset[rid]=true</label>
+			<nail x="399" y="366"/>
+			<nail x="399" y="527"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-459" y="75">{Terminate}!</label>
+			<label kind="assignment" x="-466" y="93">{scheduler_queue_remove}({tid})</label>
+			<nail x="-484" y="93"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-314" y="187">((rid!={maxrid})&amp;&amp;(!haveoffset[rid]&amp;&amp;
+offset[rid]!=0
+&amp;&amp;cycle[rid]!=(offset[rid]/(period))))
+||((rid!={maxrid})&amp;&amp;(haveoffset[rid]
+&amp;&amp;cycle[rid]!=(rperiod[rid]/(period))))</label>
+			<label kind="assignment" x="-314" y="289">cycle[rid]=cycle[rid]+1,
+rid=rid+1</label>
+			<nail x="-85" y="246"/>
+			<nail x="-85" y="297"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-289" y="552">rid=={maxrid}</label>
+			<label kind="synchronisation" x="-289" y="569">Finish[{tid}][rid]?</label>
+			<label kind="assignment" x="-289" y="586">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="34" y="459">haveoffset[rid]&amp;&amp;
+cycle[rid]==(rperiod[rid]/(period))</label>
+			<label kind="synchronisation" x="34" y="501">Run[{tid}][rid]!</label>
+			<label kind="assignment" x="34" y="518">cycle[rid]=1</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="42" y="110">Alarm==period</label>
+			<label kind="synchronisation" x="42" y="127">{Activate}!</label>
+			<label kind="assignment" x="42" y="144">{scheduler_queue_add}({tid}),Alarm=0</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="42" y="221">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="42" y="238">{Start}?</label>
+		</transition>
+	</template>
+	<template>
+		<name>Scenario(20)</name>
+		<declaration>int rid = 1;
+</declaration>
+		<location id="id13" x="34" y="195">
+			<name x="19" y="164">{Ready}</name>
+		</location>
+		<location id="id14" x="34" y="484">
+			<name x="8" y="450">{Running}</name>
+		</location>
+		<location id="id15" x="34" y="314">
+			<name x="0" y="280">{BeforeRunning}</name>
+			<committed/>
+		</location>
+		<location id="id16" x="-280" y="484">
+			<name x="-290" y="450">{BeforeReady}</name>
+			<committed/>
+		</location>
+		<location id="id17" x="34" y="586">
+			<name x="8" y="595">{Ready}</name>
+		</location>
+		<location id="id18" x="-25" y="535">
+			<name x="-51" y="509">{Waiting}</name>
+		</location>
+		<location id="id19" x="93" y="535">
+			<name x="102" y="510">{ReadyRunning}</name>
+			<committed/>
+		</location>
+		<location id="id20" x="119" y="314">
+			<name x="136" y="305">{Ready}</name>
+		</location>
+		<location id="id21" x="-280" y="569">
+			<name x="-297" y="586">{Ready}</name>
+		</location>
+		<location id="id22" x="34" y="535">
+			<name x="-8" y="518">{AfterRunning}</name>
+			<committed/>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="42" y="569">{Preempt}?</label>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="34" y="544">Stop[{tid}][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id22"/>
+			<label kind="synchronisation" x="34" y="501">{Preempt}?</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-263" y="518">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="-263" y="531">{Start}?</label>
+			<nail x="-246" y="527"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id21"/>
+			<label kind="synchronisation" x="-357" y="510">{Preempt}?</label>
+			<nail x="-314" y="527"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id15"/>
+			<label kind="guard" x="85" y="322">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="85" y="339">{Start}?</label>
+			<nail x="76" y="339"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id20"/>
+			<label kind="synchronisation" x="85" y="280">{Preempt}?</label>
+			<nail x="76" y="288"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="55" y="488">Run[{tid}][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id19"/>
+			<label kind="guard" x="102" y="561">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="102" y="578">{Start}?</label>
+			<nail x="93" y="586"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="-85" y="561">{Release}[{tid}]?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="-8" y="493">{Wait}?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-85" y="382">rid!={maxrid}</label>
+			<label kind="synchronisation" x="-85" y="399">Finish[{tid}][rid]?</label>
+			<label kind="assignment" x="-85" y="416">rid=rid+1</label>
+			<nail x="-8" y="382"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-238" y="348">!{ShouldEx}[{tid}][rid]&amp;&amp;
+rid=={maxrid}</label>
+			<label kind="assignment" x="-238" y="382">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="-263" y="170">{Terminate}!</label>
+			<label kind="assignment" x="-262" y="193">{scheduler_queue_remove}({tid})</label>
+			<nail x="-280" y="195"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-127" y="271">!{ShouldEx}[{tid}][rid]&amp;&amp;
+rid!={maxrid}</label>
+			<label kind="assignment" x="-127" y="305">rid=rid+1</label>
+			<nail x="-34" y="288"/>
+			<nail x="-34" y="331"/>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-195" y="467">rid=={maxrid}</label>
+			<label kind="synchronisation" x="-195" y="484">Finish[{tid}][rid]?</label>
+			<label kind="assignment" x="-195" y="501">rid=1</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id14"/>
+			<label kind="guard" x="42" y="408">{ShouldEx}[{tid}][rid]</label>
+			<label kind="synchronisation" x="42" y="425">Run[{tid}][rid]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="guard" x="42" y="204">{scheduler_queue_head}()=={tid}</label>
+			<label kind="synchronisation" x="42" y="221">{Start}?</label>
+			<label kind="assignment" x="42" y="238">{activation}[{tid}]={activation}[{tid}]-1</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+//Process = Template();
+// List one or more processes to be composed into a system.
+system task1,task6,task8,task9,task11,Scheduler,data_access_runnable1,buffer1,buffer2,buffer3,buffer4,buffer5,
+buffer6,buffer9,actived_implicit_read_runnable6,buffer10,actived_explicit_read_runnable_nonqueue8,
+concurrent_client1_runnable9,concurrent_client2_runnable10,concurrent_client3_runnable11,concurrent_server1_runnable12,concurrent_server2_runnable13,concurrent_server3_runnable14,clock1,clock9,clock10,clock11,
+clock15,clock16,task15,task16,task17,task18,trigger_runnable15,trigger_runnable16,triggered_runnable17_1,triggered_runnable17_2,triggered_runnable18,task19,task20,task21,trigger_runnable19,trigger_runnable20,triggered_runnable21_1,triggered_runnable21_2,triggered_runnable22,
+Q1,Q2,clock19,clock20,task22,task23,buffer11,actived_explicit_read_runnable_queue23;
+    </system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
